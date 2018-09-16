@@ -1,0 +1,175 @@
+[INCLUDE]
+INCLUDE=common/conditions.ini
+
+[LIGHT_SERIES_0]
+MESHES=Object345
+DESCRIPTION=Pits
+OFFSET=0,1.35,-1.2
+CLUSTER_THRESHOLD=4
+COLOR=1.2, 1.2, 1, 4
+SPOT=110
+RANGE=10
+FADE_AT=150
+FADE_SMOOTH=50
+SPOT_SHARPNESS=0.7
+DIRECTION=0,-1,0
+
+; defines color and brightness for light turned off, for smooth gradient
+; if omitted, it’ll be COLOR with brighteness set to zero
+COLOR_OFF=1.2, 1.2, 0.8, 0
+
+; if condition is missing, weather ambient will be checked against 
+; AMBIENT_BASED_TRACK_THRESHOLD from lighting_fx.ini as condition
+CONDITION=NIGHT_SHARP
+
+[LIGHT_SERIES_1]
+MATERIALS=light_emissive
+DESCRIPTION=Starting lane spotlghts
+OFFSET=0,0,0
+CLUSTER_THRESHOLD=8
+COLOR=0.8, 0.8, 1, 10
+SPOT=150
+RANGE=35
+RANGE_GRADIENT_OFFSET=0.6
+FADE_AT=400
+FADE_SMOOTH=10
+SPOT_SHARPNESS=0.7
+DIRECTION=NORMAL
+CONDITION=NIGHT_SMOOTH_HEATING
+SINGLE_FREQUENCY=0
+
+[_LIGHT_SERIES_1]
+; spotlights
+; if it would be an original track, without MODEL_REPLACEMENT sections,
+; that’s how it could be set, with UV_FILTER
+MESHES=light_A_LODB_?b_KSLAYER1
+OFFSET=0,0,0
+CLUSTER_THRESHOLD=8
+COLOR=0.8, 0.8, 1, 10
+SPOT=150
+RANGE=35
+RANGE_GRADIENT_OFFSET=0.6
+FADE_AT=400
+FADE_SMOOTH=10
+SPOT_SHARPNESS=0.7
+DIRECTION=NORMAL
+
+; for those meshes, all interesting vertices are in the corners
+; number can vary
+UV_FILTER_0=-0.001,-1.001,0.002,0.002
+UV_FILTER_1=-0.001,-0.001,0.002,0.002
+UV_FILTER_2=0.999,-1.001,0.002,0.002
+UV_FILTER_3=0.999,-0.001,0.002,0.002
+
+[LIGHT_SERIES_2]
+MESHES=Box135_KSLAYER1,Object365,Object364_KSLAYER1
+DESCRIPTION=Marshall boxes
+OFFSET=0,1,0
+CLUSTER_THRESHOLD=30
+COLOR=18, 15, 11, 0.3
+SPOT=170
+RANGE=10
+RANGE_GRADIENT_OFFSET=0.55
+FADE_AT=400
+FADE_SMOOTH=10
+SPOT_SHARPNESS=0.8
+DIRECTION=0,-1,0
+CONDITION=NIGHT_SHARP
+SPECULAR_MULT=0.0
+DIFFUSE_CONCENTRATION=0.5
+
+[MODEL_REPLACEMENT_0]
+; replace some meshes with meshes from another KN5 file. for that,
+; of course, hot reloading won’t work.
+
+; this one replaces light projectors with a mesh with emissive bits
+; separated.
+
+; (optional) in which file make replacements, for multi-layout tracks
+FILE=ks_brands_hatch.kn5
+
+; (optional) which nodes to hide from the original file, separated by
+; commas, could be masks
+HIDE=light_A_LODB_?b_KSLAYER1
+
+; (optional) add a custom KN5 with some stuff
+INSERT=ks_brands_hatch__emissive.kn5
+
+; (required with INSERT) after which node to load custom KN5
+INSERT_AFTER=light_A_LODB_2b_KSLAYER1
+
+[MODEL_REPLACEMENT_1]
+; and this one replaces mesh box6_LODA_5 with both darker and brighter
+; windows joined by two separate meshes, so they could be lit up evenly
+FILE=ks_brands_hatch.kn5
+HIDE=box6_LODA_5, box6_LODB_5_KSLAYER1
+INSERT=ks_brands_hatch__splitwindows.kn5
+INSERT_AFTER=box6_LODA_5
+
+[MATERIAL_ADJUSTMENT_0]
+; non-transparent windows
+; MATERIALS=glass_black
+MESHES=box6_LODA_5_DARKERWINDOWS
+CONDITION=NIGHT_SMOOTH
+KEY_0=ksEmissive
+
+; even though ksEmissive requires three numbers, you can add
+; the forth one, it’ll be used as a multiplier, allowing to adjust
+; brightness easier
+VALUE_0=70, 50, 30, 0.7
+
+; for CONDITION
+VALUE_0_OFF=0, 0, 0
+
+[MATERIAL_ADJUSTMENT_1]
+; non-transparent windows from behind
+; brighter texture, so the value should be lower
+MESHES=box6_LODA_5
+CONDITION=NIGHT_SMOOTH
+KEY_0=ksEmissive
+VALUE_0=14, 10, 6, 0.7
+
+; for CONDITION
+VALUE_0_OFF=0, 0, 0
+
+[MATERIAL_ADJUSTMENT_2]
+; transparent windows
+; MATERIALS=glass_blend
+MESHES=box6_LODA_1
+CONDITION=NIGHT_SMOOTH
+KEY_0=ksEmissive
+VALUE_0=21, 15, 9, 2
+VALUE_0_OFF=0, 0, 0
+
+[MATERIAL_ADJUSTMENT_3]
+; marshall boxes
+; MATERIALS=glass_blend
+MESHES=Box135_KSLAYER1,Object365,Object364_KSLAYER1
+CONDITION=NIGHT_SHARP
+KEY_0=ksEmissive
+VALUE_0=7, 5, 3
+VALUE_0_OFF=0, 0, 0
+
+[MATERIAL_ADJUSTMENT_10]
+; lights from MODEL_REPLACEMENT_0
+MATERIALS=light_emissive
+CONDITION=NIGHT_SMOOTH_HEATING
+KEY_0=ksEmissive
+VALUE_0=140, 140, 200
+VALUE_0_OFF=0, 0, 0
+
+[MATERIAL_ADJUSTMENT_11]
+; that screen on top of a starting line, as an example 
+; of a static adjustment
+MATERIALS=display
+KEY_0=ksEmissive
+
+; you can use a single number as well, it’ll be copied
+VALUE_0=10
+
+[_MATERIAL_ADJUSTMENT_12]
+; just a test to check if adjusting materials would work
+; on per-object basis
+MESHES=grail_HI_38_KSLAYER5
+KEY_0=ksEmissive
+VALUE_0=10

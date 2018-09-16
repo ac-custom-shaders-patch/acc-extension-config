@@ -1,0 +1,21 @@
+# reference: https://en.wikipedia.org/wiki/Racing_flags
+
+ 0 | 0, 0, 0        # no flag is shown, not a race
+ 1 | 0, 1, 0        # type=1: start of race, everything is all right
+ 2 | 1, 1, 0        # type=2: caution, yellow flag
+ 3 | 1, 0.5, 0      # type=3: slippery track surface¹²
+ 4 | 1, 0.3, 0      # type=4: pit lane closed¹²
+ 5 | 1, 0, 0        # type=5: session stopped²
+ 6 | 0.7, 0.7, 0.7  # type=6: slow vehicle on a track²
+ 7 | 1, 0.5, 0.5    # type=7: ambulance on course/final lap¹²
+ 8 | 0.1, 0.1, 0.1  # type=8: return to pits¹²³
+ 9 | 0, 0, 0.1      # type=9: return to pits due to a mechanical problem¹²³
+10 | 0.5, 0.5, 0.5  # type=10: unsportsmanlike conduct¹²
+11 | 0.5, 0.5, 0.5  # type=11: ignoring black flag¹²
+12 | 0, 0, 1        # type=12: faster car approaching
+13 | 0, 0, 0        # type=13: session finished
+14 | 1, 1, 1        # type=14: one lap left
+
+# ¹ requires a drawing of some sorts
+# ² not supported yet; listed here just to have all IDs already assigned
+# ³ requires a car number on a board
