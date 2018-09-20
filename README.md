@@ -1,5 +1,3 @@
-# acc-extension-config
-
 Configuration files for Assetto Corsa Custom Shaders Patch
 
 features, in pre-something status
@@ -29,3 +27,5 @@ still wip
 
 the downside of this:
 most of lightning stuff has to be configured with ini files
+
+; acc-extension-config
