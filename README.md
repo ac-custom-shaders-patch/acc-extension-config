@@ -3,20 +3,17 @@ Configuration files for Assetto Corsa Custom Shaders Patch
 
 features, in pre-something status
 
--dynamic lights, including track lightning, car headlights,
- brake- & turnsignals, dashboard lights
+-dynamic lights, including track lightning, car headlights, brake- & turnsignals, dashboard lights
 
 -lightning fx
 
--Prebaked Ambient Occlusion for more realistic shadows
+-Prebaked Ambient Occlusion for realistic shadows
 
 -visible tyre deformation
 
 -realtime car dashboard instruments, digital and analog
 
--brakedisc fx
-
--wipers for cars
+-brakedisc glowing and reflections
 
 -better shadows for onboard cam
 
@@ -34,7 +31,9 @@ features, in pre-something status
 
 -nice splashscreen on startup + race info
 
--3 python apps for some features
+-wipers for cars
+
+-3 python apps: AccExtHelper, AccExtMirrors, AccExtRain
 
 
 still wip
