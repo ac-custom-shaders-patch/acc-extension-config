@@ -1,5 +1,3 @@
-# acc-extension-config
-
 Configuration files for Assetto Corsa Custom Shaders Patch
 
 features, in pre-something status
@@ -23,9 +21,11 @@ features, in pre-something status
 -3 python apps for some features
 
 still wip
--rain simulation
--dynamic weather system
 -24h cycle
+-dynamic weather system
+-rain simulation
 
 the downside of this:
 most of lightning stuff has to be configured with ini files
+
+; acc-extension-config
