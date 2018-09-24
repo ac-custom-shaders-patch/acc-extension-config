@@ -1,6 +1,9 @@
 # acc-extension-config
 ### Configuration files for Assetto Corsa Custom Shaders Patch
 
+## source: 
+  - https://discordapp.com/channels/453595061788344330/
+
 ## features, in pre-something status
 
   - dynamic lights, including track lightning, car headlights, brake- & turnsignals, dashboard lights
