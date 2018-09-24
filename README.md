@@ -26,4 +26,4 @@
   - dynamic weather system
   - rain simulation
 
-the downside of this: *most of lightning stuff has to be configured with ini files*
+the good side of this: *most of the stuff is adjustable with ini files*
