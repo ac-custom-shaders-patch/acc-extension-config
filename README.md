@@ -8,7 +8,7 @@
 
   - dynamic lights, including track lightning, car headlights, brake- & turnsignals, dashboard lights
   - lightning fx
-  - Prebaked Ambient Occlusion for realistic shadows
+  - Prebaked Vertex Ambient Occlusion (VAO) shadows
   - visible tyre deformation
   - realtime car dashboard instruments, digital and analog
   - brakedisc glowing and reflections
