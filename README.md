@@ -1,11 +1,14 @@
 # acc-extension-config
 ### Configuration files for Assetto Corsa Custom Shaders Patch
 
+## source: 
+  - https://discordapp.com/channels/453595061788344330/
+
 ## features, in pre-something status
 
   - dynamic lights, including track lightning, car headlights, brake- & turnsignals, dashboard lights
   - lightning fx
-  - Prebaked Ambient Occlusion for realistic shadows
+  - Prebaked Vertex Ambient Occlusion (VAO) shadows
   - visible tyre deformation
   - realtime car dashboard instruments, digital and analog
   - brakedisc glowing and reflections
@@ -26,4 +29,4 @@
   - dynamic weather system
   - rain simulation
 
-the downside of this: *most of lightning stuff has to be configured with ini files*
+the good side of this: *most of the stuff is adjustable with ini files*
