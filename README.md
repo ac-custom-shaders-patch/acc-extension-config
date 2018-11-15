@@ -18,12 +18,13 @@
  - track light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/cars
  - vao-patches (prebaked shadows): https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches
  - destination folders: 
-   c:\Steam\steamapps\common\assettocorsa\extension\ or
-   c:\Progam Files\Steam\steamapps\common\assettocorsa\extension\ or 
-   %userprofile%\Documents\Assetto Corsa\cfg\extension\
-
-\---assettocorsa
-      \---extension
+```
+c:\Steam\steamapps\common\assettocorsa\extension\ or
+c:\Progam Files\Steam\steamapps\common\assettocorsa\extension\ or 
+%userprofile%\Documents\Assetto Corsa\cfg\extension\
+```
+```
+    \---extension
             +---config
             |   +---cars
             |   |   +---common
@@ -36,7 +37,8 @@
             |   \---tracks
             |       \---common
             \---vao-patches
-            
+```
+
 ## features 
   - dynamic lights, including track lightning, car headlights, brake- & turnsignals, dashboard lights
   - lightning fx
