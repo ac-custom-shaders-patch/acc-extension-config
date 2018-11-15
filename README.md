@@ -17,26 +17,25 @@
  - car light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/tracks
  - track light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/cars
  - vao-patches (prebaked shadows): https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches
- - destination folders: 
+ 
+## destination folders: 
 ```
 c:\Steam\steamapps\common\assettocorsa\extension\ or
 c:\Progam Files\Steam\steamapps\common\assettocorsa\extension\ or 
 %userprofile%\Documents\Assetto Corsa\cfg\extension\
-```
-```
-    \---extension
-            +---config
-            |   +---cars
-            |   |   +---common
-            |   |   +---kunos
-            |   |   \---mods
-            |   |       +---acclub
-            |   |       +---acfl
-            |   |       +---fo
-            |   |       \---rss
-            |   \---tracks
-            |       \---common
-            \---vao-patches
+\---extension
+    +---config
+    |   +---cars
+    |   |   +---common
+    |   |   +---kunos
+    |   |   \---mods
+    |   |       +---acclub
+    |   |       +---acfl
+    |   |       +---fo
+    |   |       \---rss
+    |   \---tracks
+    |       \---common
+    \---vao-patches
 ```
 
 ## features 
