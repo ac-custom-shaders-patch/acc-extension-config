@@ -12,10 +12,10 @@ live, saving a car/track-config take effect immediately during gameplay
 
  - Custom Shaders Patch 
    Stable builds:
-     https://trello.com/c/6em3uuLJ/22-stable-builds
+     - https://trello.com/c/6em3uuLJ/22-stable-builds
    or on this discord channel:
-     https://discordapp.com/channels/453595061788344330/
-     https://discord.gg/2NCVWvk
+     - https://discordapp.com/channels/453595061788344330/
+     - https://discord.gg/2NCVWvk
 
 ## content of this repo:
  - car light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/cars
