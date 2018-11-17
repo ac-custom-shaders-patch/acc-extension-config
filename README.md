@@ -18,8 +18,8 @@ live, saving a car/track-config take effect immediately during gameplay
      https://discord.gg/2NCVWvk
 
 ## content of this repo:
- - car light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/tracks
- - track light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/cars
+ - car light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/cars
+ - track light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/tracks
  - vao-patches (prebaked shadows): https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches
  
 ## destination folders: 
