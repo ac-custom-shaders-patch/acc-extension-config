@@ -1,5 +1,9 @@
-_*
+_private*
+_packed*
+_*.ini
 *.psd
+*.zsh
 shaders/*
 weather*/*
+textures/_*
 sfx/*
