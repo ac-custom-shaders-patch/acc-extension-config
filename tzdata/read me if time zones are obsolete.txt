@@ -1,0 +1,12 @@
+Main bunch of files definiting actual time zones is taken from here (data only package):
+https://www.iana.org/time-zones
+
+Windows zones can be found here:
+http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml
+
+More details can be found here:
+https://howardhinnant.github.io/date/tz.html
+https://github.com/HowardHinnant/date
+
+Current version is 2018g (released 2018-10-26). I cut out comments and stuff to keep it small 
+using “sed -i -E '/^(#.*|\s*<!--.+-->)?$/d' *(^/)”, but that’s not necessary, of course.

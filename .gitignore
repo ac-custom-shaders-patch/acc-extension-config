@@ -1,3 +1,5 @@
 _*
-shaders/*
 *.psd
+shaders/*
+weather*/*
+sfx/*
