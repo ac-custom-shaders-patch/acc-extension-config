@@ -5,6 +5,8 @@
 *most of the stuff is adjustable with ini files*
 live, saving a car/track-config take effect immediately during gameplay
 
+wiki: https://github.com/ac-custom-shaders-patch/acc-extension-config/wiki 
+
 ## downloads:
  
  - Assetto Corsa Content Manager - required to run Assetto Corsa with the shaders patch
@@ -21,7 +23,7 @@ live, saving a car/track-config take effect immediately during gameplay
  - car light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/cars
  - track light configs: https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/tracks
  - vao-patches (prebaked shadows): https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches
- 
+
 ## destination folders: 
 ```
 c:\Steam\steamapps\common\assettocorsa\extension\ or
