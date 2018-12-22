@@ -7,3 +7,4 @@ shaders/*
 weather*/*
 textures/_*
 sfx/*
+lua/_src/*
