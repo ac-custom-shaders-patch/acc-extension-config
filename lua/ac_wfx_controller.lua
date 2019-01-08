@@ -19,6 +19,7 @@ typedef struct {
   weather_conditions_track trackState;
   weather_conditions_wind wind;
   float transition;
+  float humidity, pressure;
   float variableA, variableB, variableC;
 } weather_conditions;
 ]]
@@ -38,7 +39,8 @@ end
 require "extension/lua/ac_common"
 __ac_weatherconditions()
 ffi.cdef [[
-float lj_getCurrentTime();
+double lj_getCurrentTime();
+float lj_getDaySeconds();
 int lj_getDayOfTheYear();
 float lj_getTimeMultiplier();
 vec3 lj_getSunDirection();
@@ -61,6 +63,8 @@ weather_conditions_temperatures lj_getInputTemperatures__controller();
 weather_conditions_wind lj_getInputWind__controller();
 weather_conditions_track lj_getInputTrackState__controller();
 void lj_setConditionsSet__controller(const weather_conditions& c);
+void lj_setPpTonemapViewportScale_impl(const vec2& v);
+void lj_setPpTonemapViewportOffset_impl(const vec2& v);
 ]]
 local function __sane(x)
 	if type(x) == 'number' then
@@ -87,6 +91,7 @@ local function __sane(x)
 	return x
 end
 ac.getCurrentTime = ffi.C.lj_getCurrentTime
+ac.getDaySeconds = ffi.C.lj_getDaySeconds
 ac.getDayOfTheYear = ffi.C.lj_getDayOfTheYear
 ac.getTimeMultiplier = ffi.C.lj_getTimeMultiplier
 ac.getSunDirection = ffi.C.lj_getSunDirection

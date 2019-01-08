@@ -1572,6 +1572,15 @@ local function __ac_enums()
 		Windy = 31,
 		Hail = 32
 	}
+	ac.TonemapFunction = {
+		Linear = 0,
+		LinearClamped = 1,
+		Sensitometric = 2,
+		Reinhard = 3,
+		ReinhardLum = 4,
+		Log = 5,
+		LogLum = 6
+	}
 end
 local function __math()
 	local function __clamp(x, min, max)

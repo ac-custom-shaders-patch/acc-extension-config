@@ -19,6 +19,7 @@ typedef struct {
   weather_conditions_track trackState;
   weather_conditions_wind wind;
   float transition;
+  float humidity, pressure;
   float variableA, variableB, variableC;
 } weather_conditions;
 ]]
@@ -395,7 +396,8 @@ __ac_colorcorrections()
 __ac_particlematerials()
 __ac_lightpollution()
 ffi.cdef [[
-float lj_getCurrentTime();
+double lj_getCurrentTime();
+float lj_getDaySeconds();
 int lj_getDayOfTheYear();
 float lj_getTimeMultiplier();
 vec3 lj_getSunDirection();
@@ -484,6 +486,14 @@ void lj_setPpSepia__impl(float v);
 void lj_setPpSaturation__impl(float v);
 void lj_setPpBrightness__impl(float v);
 void lj_setPpContrast__impl(float v);
+void lj_setPpTonemapFunction__impl(int v);
+void lj_setPpTonemapUseHdrSpace__impl(bool v);
+void lj_setPpTonemapExposure__impl(bool v);
+void lj_setPpTonemapGamma__impl(bool v);
+void lj_setPpTonemapMappingFactor__impl(bool v);
+void lj_setPpTonemapFilmicContrast__impl(bool v);
+void lj_setPpTonemapViewportScale_impl(const vec2& v);
+void lj_setPpTonemapViewportOffset_impl(const vec2& v);
 void lj_setHeatParticles__impl(bool v);
 bool lj_isVertexAoPatchApplied__impl();
 bool lj_isTrackAmbientLowerMultiplierDefined__impl();
@@ -591,6 +601,7 @@ local function __sane(x)
 	return x
 end
 ac.getCurrentTime = ffi.C.lj_getCurrentTime
+ac.getDaySeconds = ffi.C.lj_getDaySeconds
 ac.getDayOfTheYear = ffi.C.lj_getDayOfTheYear
 ac.getTimeMultiplier = ffi.C.lj_getTimeMultiplier
 ac.getSunDirection = ffi.C.lj_getSunDirection
@@ -815,6 +826,24 @@ ac.setPpBrightness = function(v)
 end
 ac.setPpContrast = function(v)
 	ffi.C.lj_setPpContrast__impl(__sane(v))
+end
+ac.setPpTonemapFunction = function(v)
+	ffi.C.lj_setPpTonemapFunction__impl(__sane(v))
+end
+ac.setPpTonemapUseHdrSpace = function(v)
+	ffi.C.lj_setPpTonemapUseHdrSpace__impl(__sane(v))
+end
+ac.setPpTonemapExposure = function(v)
+	ffi.C.lj_setPpTonemapExposure__impl(__sane(v))
+end
+ac.setPpTonemapGamma = function(v)
+	ffi.C.lj_setPpTonemapGamma__impl(__sane(v))
+end
+ac.setPpTonemapMappingFactor = function(v)
+	ffi.C.lj_setPpTonemapMappingFactor__impl(__sane(v))
+end
+ac.setPpTonemapFilmicContrast = function(v)
+	ffi.C.lj_setPpTonemapFilmicContrast__impl(__sane(v))
 end
 ac.setHeatParticles = function(v)
 	ffi.C.lj_setHeatParticles__impl(__sane(v))
