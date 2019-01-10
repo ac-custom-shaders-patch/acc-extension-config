@@ -63,8 +63,6 @@ weather_conditions_temperatures lj_getInputTemperatures__controller();
 weather_conditions_wind lj_getInputWind__controller();
 weather_conditions_track lj_getInputTrackState__controller();
 void lj_setConditionsSet__controller(const weather_conditions& c);
-void lj_setPpTonemapViewportScale_impl(const vec2& v);
-void lj_setPpTonemapViewportOffset_impl(const vec2& v);
 ]]
 local function __sane(x)
 	if type(x) == 'number' then

@@ -487,13 +487,35 @@ void lj_setPpSaturation__impl(float v);
 void lj_setPpBrightness__impl(float v);
 void lj_setPpContrast__impl(float v);
 void lj_setPpTonemapFunction__impl(int v);
+void lj_setPpTonemapExposure__impl(float v);
+void lj_setPpTonemapGamma__impl(float v);
 void lj_setPpTonemapUseHdrSpace__impl(bool v);
-void lj_setPpTonemapExposure__impl(bool v);
-void lj_setPpTonemapGamma__impl(bool v);
-void lj_setPpTonemapMappingFactor__impl(bool v);
-void lj_setPpTonemapFilmicContrast__impl(bool v);
-void lj_setPpTonemapViewportScale_impl(const vec2& v);
-void lj_setPpTonemapViewportOffset_impl(const vec2& v);
+void lj_setPpTonemapMappingFactor__impl(float v);
+void lj_setPpTonemapFilmicContrast__impl(float v);
+float lj_getGodraysLength__impl();
+float lj_getGodraysGlareRatio__impl();
+float lj_getGodraysAngleAttenuation__impl();
+float lj_getGodraysNoiseFrequency__impl();
+float lj_getGodraysNoiseMask__impl();
+float lj_getGodraysDepthMapThreshold__impl();
+float lj_getGlareThreshold__impl();
+float lj_getGlareBloomFilterThreshold__impl();
+float lj_getGlareStarFilterThreshold__impl();
+float lj_getPpColorTemperatureK__impl();
+float lj_getPpWhiteBalanceK__impl();
+float lj_getPpHue__impl();
+float lj_getPpSepia__impl();
+float lj_getPpSaturation__impl();
+float lj_getPpBrightness__impl();
+float lj_getPpContrast__impl();
+float lj_getPpTonemapFunction__impl();
+float lj_getPpTonemapExposure__impl();
+float lj_getPpTonemapGamma__impl();
+float lj_getPpTonemapMappingFactor__impl();
+float lj_getPpTonemapFilmicContrast__impl();
+float lj_getPpTonemapUseHdrSpace__impl();
+void lj_setPpTonemapViewportScale__impl(const vec2& v);
+void lj_setPpTonemapViewportOffset__impl(const vec2& v);
 void lj_setHeatParticles__impl(bool v);
 bool lj_isVertexAoPatchApplied__impl();
 bool lj_isTrackAmbientLowerMultiplierDefined__impl();
@@ -830,20 +852,48 @@ end
 ac.setPpTonemapFunction = function(v)
 	ffi.C.lj_setPpTonemapFunction__impl(__sane(v))
 end
-ac.setPpTonemapUseHdrSpace = function(v)
-	ffi.C.lj_setPpTonemapUseHdrSpace__impl(__sane(v))
-end
 ac.setPpTonemapExposure = function(v)
 	ffi.C.lj_setPpTonemapExposure__impl(__sane(v))
 end
 ac.setPpTonemapGamma = function(v)
 	ffi.C.lj_setPpTonemapGamma__impl(__sane(v))
 end
+ac.setPpTonemapUseHdrSpace = function(v)
+	ffi.C.lj_setPpTonemapUseHdrSpace__impl(__sane(v))
+end
 ac.setPpTonemapMappingFactor = function(v)
 	ffi.C.lj_setPpTonemapMappingFactor__impl(__sane(v))
 end
 ac.setPpTonemapFilmicContrast = function(v)
 	ffi.C.lj_setPpTonemapFilmicContrast__impl(__sane(v))
+end
+ac.getGodraysLength = ffi.C.lj_getGodraysLength__impl
+ac.getGodraysGlareRatio = ffi.C.lj_getGodraysGlareRatio__impl
+ac.getGodraysAngleAttenuation = ffi.C.lj_getGodraysAngleAttenuation__impl
+ac.getGodraysNoiseFrequency = ffi.C.lj_getGodraysNoiseFrequency__impl
+ac.getGodraysNoiseMask = ffi.C.lj_getGodraysNoiseMask__impl
+ac.getGodraysDepthMapThreshold = ffi.C.lj_getGodraysDepthMapThreshold__impl
+ac.getGlareThreshold = ffi.C.lj_getGlareThreshold__impl
+ac.getGlareBloomFilterThreshold = ffi.C.lj_getGlareBloomFilterThreshold__impl
+ac.getGlareStarFilterThreshold = ffi.C.lj_getGlareStarFilterThreshold__impl
+ac.getPpColorTemperatureK = ffi.C.lj_getPpColorTemperatureK__impl
+ac.getPpWhiteBalanceK = ffi.C.lj_getPpWhiteBalanceK__impl
+ac.getPpHue = ffi.C.lj_getPpHue__impl
+ac.getPpSepia = ffi.C.lj_getPpSepia__impl
+ac.getPpSaturation = ffi.C.lj_getPpSaturation__impl
+ac.getPpBrightness = ffi.C.lj_getPpBrightness__impl
+ac.getPpContrast = ffi.C.lj_getPpContrast__impl
+ac.getPpTonemapFunction = ffi.C.lj_getPpTonemapFunction__impl
+ac.getPpTonemapExposure = ffi.C.lj_getPpTonemapExposure__impl
+ac.getPpTonemapGamma = ffi.C.lj_getPpTonemapGamma__impl
+ac.getPpTonemapMappingFactor = ffi.C.lj_getPpTonemapMappingFactor__impl
+ac.getPpTonemapFilmicContrast = ffi.C.lj_getPpTonemapFilmicContrast__impl
+ac.getPpTonemapUseHdrSpace = ffi.C.lj_getPpTonemapUseHdrSpace__impl
+ac.setPpTonemapViewportScale = function(v)
+	ffi.C.lj_setPpTonemapViewportScale__impl(__sane(v))
+end
+ac.setPpTonemapViewportOffset = function(v)
+	ffi.C.lj_setPpTonemapViewportOffset__impl(__sane(v))
 end
 ac.setHeatParticles = function(v)
 	ffi.C.lj_setHeatParticles__impl(__sane(v))

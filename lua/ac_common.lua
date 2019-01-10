@@ -1581,6 +1581,19 @@ local function __ac_enums()
 		Log = 5,
 		LogLum = 6
 	}
+	ac.FolderId = {
+		Root = 5,
+		Cfg = 6,
+		Setups = 7,
+		Logs = 8,
+		Screenshots = 9,
+		Replays = 10,
+		Replays_temp = 11,
+		PPFilters = 12,
+		Ext = 13,
+		ExtCfgSys = 14,
+		ExtCfgUser = 15
+	}
 end
 local function __math()
 	local function __clamp(x, min, max)
@@ -1691,6 +1704,8 @@ float lj_getSunAngle();
 float lj_getSunPitchAngle();
 float lj_getSunHeadingAngle();
 bool lj_isInteriorView();
+bool lj_isInReplayMode();
+const char* lj_readDataFile(const char* value);
 void lj_poissonsampler_circle(void* value, int size);
 void lj_poissonsampler_square(void* value, int size);
 ]]
@@ -1733,3 +1748,7 @@ ac.getSunAngle = ffi.C.lj_getSunAngle
 ac.getSunPitchAngle = ffi.C.lj_getSunPitchAngle
 ac.getSunHeadingAngle = ffi.C.lj_getSunHeadingAngle
 ac.isInteriorView = ffi.C.lj_isInteriorView
+ac.isInReplayMode = ffi.C.lj_isInReplayMode
+ac.readDataFile = function(value)
+	return ffi.string(ffi.C.lj_readDataFile(__sane(tostring(value))))
+end
