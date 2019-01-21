@@ -405,7 +405,7 @@ vec3 lj_getMoonDirection();
 float lj_getAltitude();
 float lj_getSunAltitude();
 vec2 lj_getTrackCoordinates();
-long lj_getInputDate();
+uint64_t lj_getInputDate();
 float lj_getRealTrackHeadingAngle();
 float lj_getTimeZoneOffset();
 float lj_getTimeZoneDstOffset();
@@ -514,6 +514,21 @@ float lj_getPpTonemapGamma__impl();
 float lj_getPpTonemapMappingFactor__impl();
 float lj_getPpTonemapFilmicContrast__impl();
 float lj_getPpTonemapUseHdrSpace__impl();
+bool lj_getPpGodraysEnabled__impl();
+bool lj_getPpDofEnabled__impl();
+bool lj_getPpDofActive__impl();
+bool lj_getPpChromaticAbberationActive__impl();
+bool lj_getPpGlareGhostActive__impl();
+bool lj_getPpHeatParticleActive__impl();
+bool lj_getPpAirydiskEnabled__impl();
+bool lj_getPpAntialiasingEnabled__impl();
+bool lj_getPpAutoExposureEnabled__impl();
+bool lj_getPpChromaticAbberationEnabled__impl();
+bool lj_getPpFeedbackEnabled__impl();
+bool lj_getPpLensDistortionEnabled__impl();
+bool lj_getPpHeatParticleEnabled__impl();
+bool lj_getPpGlareEnabled__impl();
+bool lj_getPpGlareAnamorphicEnabled__impl();
 void lj_setPpTonemapViewportScale__impl(const vec2& v);
 void lj_setPpTonemapViewportOffset__impl(const vec2& v);
 void lj_setHeatParticles__impl(bool v);
@@ -889,6 +904,21 @@ ac.getPpTonemapGamma = ffi.C.lj_getPpTonemapGamma__impl
 ac.getPpTonemapMappingFactor = ffi.C.lj_getPpTonemapMappingFactor__impl
 ac.getPpTonemapFilmicContrast = ffi.C.lj_getPpTonemapFilmicContrast__impl
 ac.getPpTonemapUseHdrSpace = ffi.C.lj_getPpTonemapUseHdrSpace__impl
+ac.getPpGodraysEnabled = ffi.C.lj_getPpGodraysEnabled__impl
+ac.getPpDofEnabled = ffi.C.lj_getPpDofEnabled__impl
+ac.getPpDofActive = ffi.C.lj_getPpDofActive__impl
+ac.getPpChromaticAbberationActive = ffi.C.lj_getPpChromaticAbberationActive__impl
+ac.getPpGlareGhostActive = ffi.C.lj_getPpGlareGhostActive__impl
+ac.getPpHeatParticleActive = ffi.C.lj_getPpHeatParticleActive__impl
+ac.getPpAirydiskEnabled = ffi.C.lj_getPpAirydiskEnabled__impl
+ac.getPpAntialiasingEnabled = ffi.C.lj_getPpAntialiasingEnabled__impl
+ac.getPpAutoExposureEnabled = ffi.C.lj_getPpAutoExposureEnabled__impl
+ac.getPpChromaticAbberationEnabled = ffi.C.lj_getPpChromaticAbberationEnabled__impl
+ac.getPpFeedbackEnabled = ffi.C.lj_getPpFeedbackEnabled__impl
+ac.getPpLensDistortionEnabled = ffi.C.lj_getPpLensDistortionEnabled__impl
+ac.getPpHeatParticleEnabled = ffi.C.lj_getPpHeatParticleEnabled__impl
+ac.getPpGlareEnabled = ffi.C.lj_getPpGlareEnabled__impl
+ac.getPpGlareAnamorphicEnabled = ffi.C.lj_getPpGlareAnamorphicEnabled__impl
 ac.setPpTonemapViewportScale = function(v)
 	ffi.C.lj_setPpTonemapViewportScale__impl(__sane(v))
 end

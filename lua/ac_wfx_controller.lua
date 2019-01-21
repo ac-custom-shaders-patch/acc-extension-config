@@ -48,7 +48,7 @@ vec3 lj_getMoonDirection();
 float lj_getAltitude();
 float lj_getSunAltitude();
 vec2 lj_getTrackCoordinates();
-long lj_getInputDate();
+uint64_t lj_getInputDate();
 float lj_getRealTrackHeadingAngle();
 float lj_getTimeZoneOffset();
 float lj_getTimeZoneDstOffset();
