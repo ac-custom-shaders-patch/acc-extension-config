@@ -347,7 +347,7 @@ local function __ac_primitive_vec3()
 			end,
 			rotate = function(v, q, out)
 				out = out or v
-				local u, c, o = vtmp1, vtmp2, out
+				local u, c, o = vec3(), vec3(), out
 				u.x, u.y, u.z = q.x, q.y, q.z
 				o.x, o.y, o.z = v.x, v.y, v.z
 				u:cross(v, c)
@@ -1273,6 +1273,32 @@ local function __ac_primitive_quat()
 		}
 	}
 end
+local function __ac_smoothing()
+	return setmetatable({}, {
+		__call = function(_, v, s)
+			return setmetatable({
+				val = v or 0,
+				lastValue = v or 0,
+				smooth = s or 100
+			}, {
+				__tostring = function(v)
+					return string.format('(%s, s=%f)', v.val, v.smooth)
+				end,
+				__index = {
+					update = function(v, x)
+						v.val = v.val + (x - v.val) / v.smooth
+					end,
+					updateIfNew = function(v, x)
+						if x ~= v.lastValue then
+							v.val = v.val + (x - v.val) / v.smooth
+							v.lastValue = x
+						end
+					end
+				}
+			})
+		end
+	})
+end
 local function __ac_primitive()
 	local forward
 	local vtmp1
@@ -1294,6 +1320,7 @@ local function __ac_primitive()
 	hsv = ffi.metatype('hsv', __ac_primitive_hsv())
 	rgbm = ffi.metatype('rgbm', __ac_primitive_rgbm())
 	quat = ffi.metatype('quat', __ac_primitive_quat())
+	smoothing = __ac_smoothing()
 	local forward = vec3(0, 0, -1)
 	local vtmp1 = vec3()
 	local vtmp2 = vec3()
@@ -1588,7 +1615,7 @@ local function __ac_enums()
 		Logs = 8,
 		Screenshots = 9,
 		Replays = 10,
-		Replays_temp = 11,
+		ReplaysTemp = 11,
 		PPFilters = 12,
 		Ext = 13,
 		ExtCfgSys = 14,
@@ -1633,6 +1660,15 @@ local function __math()
 		end
 		return __clamp(x, min, max)
 	end
+	math.sign = function(x)
+		if x > 0 then
+			return 1
+		elseif x < 0 then
+			return -1
+		else
+			return 0
+		end
+	end
 	math.lerp = function(x, y, s)
 		return x * (1 - s) + y * s
 	end
@@ -1652,7 +1688,7 @@ local function __math()
 		return x:clone():normalize()
 	end
 	math.cross = function(x, y)
-		return x:cross(y)
+		return x:clone():cross(y)
 	end
 	math.dot = function(x, y)
 		return x:dot(y)
@@ -1664,7 +1700,13 @@ local function __math()
 		return x:distance(y)
 	end
 	math.project = function(x, y)
-		return x:project(y)
+		return x:clone():project(y)
+	end
+	math.radians = function(x)
+		return x * math.pi / 180
+	end
+	math.degress = function(x)
+		return x * 180 / math.pi
 	end
 	local poissonData = __bound_array(ffi.typeof('vec2'), nil)
 	math.poissonSamplerCircle = function(size)
