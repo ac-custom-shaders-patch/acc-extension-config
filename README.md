@@ -15,8 +15,7 @@ wiki: https://github.com/ac-custom-shaders-patch/acc-extension-config/wiki
  - Custom Shaders Patch 
    Stable builds:
      - https://trello.com/c/6em3uuLJ/22-stable-builds
-   or on this discord channel:
-     - https://discordapp.com/channels/453595061788344330/
+   or on this discord channel under #updates-download:
      - https://discord.gg/2NCVWvk
 
 ## content of this repo:
