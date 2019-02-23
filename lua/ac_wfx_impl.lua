@@ -141,6 +141,7 @@ typedef struct {
   vec3 direction;
   float sizeFull, sizeStart;
   bool isAdditive;
+  bool isIncludedInCalculate;
 
   struct {
     rgb color;
@@ -492,6 +493,7 @@ void lj_setPpTonemapGamma__impl(float v);
 void lj_setPpTonemapUseHdrSpace__impl(bool v);
 void lj_setPpTonemapMappingFactor__impl(float v);
 void lj_setPpTonemapFilmicContrast__impl(float v);
+bool lj_isPpActive__impl();
 float lj_getGodraysLength__impl();
 float lj_getGodraysGlareRatio__impl();
 float lj_getGodraysAngleAttenuation__impl();
@@ -882,6 +884,7 @@ end
 ac.setPpTonemapFilmicContrast = function(v)
 	ffi.C.lj_setPpTonemapFilmicContrast__impl(__sane(v))
 end
+ac.isPpActive = ffi.C.lj_isPpActive__impl
 ac.getGodraysLength = ffi.C.lj_getGodraysLength__impl
 ac.getGodraysGlareRatio = ffi.C.lj_getGodraysGlareRatio__impl
 ac.getGodraysAngleAttenuation = ffi.C.lj_getGodraysAngleAttenuation__impl
