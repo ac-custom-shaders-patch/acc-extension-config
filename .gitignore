@@ -8,3 +8,7 @@ weather*/*
 textures/_*
 sfx/*
 lua/_src/*
+
+# something for debugging and uploading
+config/0/*
+*/Manifest.json
