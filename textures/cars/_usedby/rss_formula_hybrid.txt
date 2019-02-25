@@ -1,1 +1,5 @@
 rss_formula_hybrid_2017
+rss_formula_hybrid_2017_s1
+rss_formula_hybrid_2018
+rss_formula_hybrid_2018_s1
+rss_formula_rss_2_v6
