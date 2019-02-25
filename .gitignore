@@ -10,5 +10,11 @@ sfx/*
 lua/_src/*
 
 # something for debugging and uploading
+storage.data
 config/0/*
 */Manifest.json
+config/*/loaded/*
+*.pack_bak
+textures/cars/*.zip
+textures/cars/_temporary/*
+installed.log
