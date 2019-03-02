@@ -1,0 +1,3 @@
+[submodule "vao-patches"]
+	path = vao-patches
+	url = https://github.com/ac-custom-shaders-patch/acc-extension-extra-vao
