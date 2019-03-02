@@ -54,6 +54,7 @@ float lj_getTimeZoneOffset();
 float lj_getTimeZoneDstOffset();
 float lj_getTimeZoneBaseOffset();
 weather_conditions lj_getConditionsSet();
+const char* lj_getPpFilter();
 void lj_debug__controller(const char* key, const char* value);
 void lj_log__controller(const char* value);
 void lj_warn__controller(const char* value);
@@ -103,6 +104,9 @@ ac.getTimeZoneOffset = ffi.C.lj_getTimeZoneOffset
 ac.getTimeZoneDstOffset = ffi.C.lj_getTimeZoneDstOffset
 ac.getTimeZoneBaseOffset = ffi.C.lj_getTimeZoneBaseOffset
 ac.getConditionsSet = ffi.C.lj_getConditionsSet
+ac.getPpFilter = function()
+	return ffi.string(ffi.C.lj_getPpFilter())
+end
 ac.debug = function(key, value)
 	ffi.C.lj_debug__controller(__sane(tostring(key)), __sane(tostring(value)))
 end

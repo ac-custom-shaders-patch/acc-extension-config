@@ -1737,6 +1737,8 @@ void* lj_malloc(size_t size);
 void* lj_calloc(size_t count, size_t size);
 void* lj_realloc(void* ptr, size_t size);
 void lj_free(void* ptr);
+const char* lj_getPatchVersion();
+int lj_getPatchVersionCode();
 const char* lj_getFolder(int f);
 const char* lj_getTrackId();
 const char* lj_getTrackLayout();
@@ -1775,6 +1777,10 @@ local function __sane(x)
 	end
 	return x
 end
+ac.getPatchVersion = function()
+	return ffi.string(ffi.C.lj_getPatchVersion())
+end
+ac.getPatchVersionCode = ffi.C.lj_getPatchVersionCode
 ac.getFolder = function(f)
 	return ffi.string(ffi.C.lj_getFolder(__sane(f)))
 end

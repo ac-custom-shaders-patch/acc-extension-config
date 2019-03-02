@@ -53,6 +53,7 @@ local function __ac_clouds()
     float fogMultiplier;
 
     rgb baseColor;
+    float lightSaturation;
   } cloud_material;
 
   typedef struct { 
@@ -65,14 +66,20 @@ local function __ac_clouds()
       float cutoff;
       float horizontalHeading;
       bool horizontal;
+      bool flipHorizontal;
+      bool flipVertical;
     };
     
     vec2 noiseOffset;
     bool useNoise;
     bool occludeGodrays;
+    bool useCustomLightColor;
+    bool useCustomLightDirection;
 
     cloud_material* __material;
     rgb extraDownlit;
+    rgb customLightColor;
+    vec3 customLightDirection;
   } cloud;
 
   cloud* lj_cloud_new();
@@ -111,7 +118,7 @@ local function __ac_clouds()
 				end
 				return __cloudExtraData[self.__id]
 			end
-			error('cloud has no member called\'' .. key .. '\'')
+			error('cloud has no member called \'' .. key .. '\'')
 		end,
 		__newindex = function(self, key, value)
 			if key == 'material' then
@@ -122,7 +129,7 @@ local function __ac_clouds()
 				__cloudMaterialKeepAlive[self.__id] = value
 				return
 			end
-			error('cloud has no member called\'' .. key .. '\'')
+			error('cloud has no member called \'' .. key .. '\'')
 		end
 	})
 	ac.SkyCloud = function()
@@ -412,6 +419,7 @@ float lj_getTimeZoneOffset();
 float lj_getTimeZoneDstOffset();
 float lj_getTimeZoneBaseOffset();
 weather_conditions lj_getConditionsSet();
+const char* lj_getPpFilter();
 void lj_debug__impl(const char* key, const char* value);
 void lj_log__impl(const char* value);
 void lj_warn__impl(const char* value);
@@ -467,6 +475,8 @@ void lj_setSkyPlanetsSizeVariance__impl(float v);
 void lj_setSkyPlanetsSizeMultiplier__impl(float v);
 void lj_resetSpecularColor__impl();
 void lj_setSpecularColor__impl(const rgb& c);
+void lj_resetEmissiveMultiplier__impl();
+void lj_setEmissiveMultiplier__impl(float v);
 void lj_resetGodraysCustomColor__impl();
 void lj_setGodraysCustomColor__impl(const rgb& c);
 void lj_resetGodraysCustomDirection__impl();
@@ -654,6 +664,9 @@ ac.getTimeZoneOffset = ffi.C.lj_getTimeZoneOffset
 ac.getTimeZoneDstOffset = ffi.C.lj_getTimeZoneDstOffset
 ac.getTimeZoneBaseOffset = ffi.C.lj_getTimeZoneBaseOffset
 ac.getConditionsSet = ffi.C.lj_getConditionsSet
+ac.getPpFilter = function()
+	return ffi.string(ffi.C.lj_getPpFilter())
+end
 ac.debug = function(key, value)
 	ffi.C.lj_debug__impl(__sane(tostring(key)), __sane(tostring(value)))
 end
@@ -809,6 +822,10 @@ end
 ac.resetSpecularColor = ffi.C.lj_resetSpecularColor__impl
 ac.setSpecularColor = function(c)
 	ffi.C.lj_setSpecularColor__impl(__sane(rgb.new(c)))
+end
+ac.resetEmissiveMultiplier = ffi.C.lj_resetEmissiveMultiplier__impl
+ac.setEmissiveMultiplier = function(v)
+	ffi.C.lj_setEmissiveMultiplier__impl(__sane(v))
 end
 ac.resetGodraysCustomColor = ffi.C.lj_resetGodraysCustomColor__impl
 ac.setGodraysCustomColor = function(c)
