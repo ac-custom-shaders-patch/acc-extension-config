@@ -7,7 +7,7 @@ shaders/*
 weather*/*
 textures/_*
 sfx/*
-lua/_src/*
+lua/.src/*
 
 # something for debugging and uploading
 backgrounds/*.jpg
