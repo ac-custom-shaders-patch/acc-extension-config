@@ -1,0 +1,6 @@
+# Please add your name here if you’re sharing VAO patches and want your name to be shown in CM.
+# Also, please, don’t use overlays. I’ll add a proper support for them a bit later.
+
+acu_bathurst/1: x4fab
+ks_brands_hatch__indy/1: x4fab
+ks_brands_hatch__indy/2: x4fab

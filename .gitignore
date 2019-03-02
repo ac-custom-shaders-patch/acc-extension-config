@@ -10,6 +10,9 @@ sfx/*
 lua/_src/*
 
 # something for debugging and uploading
+backgrounds/*.jpg
+backgrounds/*.jpeg
+backgrounds/*.png
 storage.data
 config/0/*
 */Manifest.json
