@@ -3,7 +3,6 @@ _packed*
 _*.ini
 *.psd
 *.zsh
-shaders/*
 weather*/*
 textures/_*
 sfx/*
