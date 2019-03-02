@@ -1,3 +1,0 @@
-# Please add your name here if you’re sharing VAO patches and want your name to be shown in CM.
-
-topgear: x4fab
