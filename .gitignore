@@ -8,6 +8,7 @@ weather*/*
 textures/_*
 sfx/*
 lua/.src/*
+tzdata/.src/*
 
 # something for debugging and uploading
 backgrounds/*.jpg
