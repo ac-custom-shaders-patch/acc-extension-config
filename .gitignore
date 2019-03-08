@@ -8,6 +8,7 @@ textures/_*
 sfx/*
 lua/.src/*
 tzdata/.src/*
+shaders
 
 # something for debugging and uploading
 backgrounds/*.jpg
