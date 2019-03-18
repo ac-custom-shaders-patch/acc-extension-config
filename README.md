@@ -42,3 +42,12 @@ c:\Progam Files\Steam\steamapps\common\assettocorsa\extension\ or
     |       \---common
     \---vao-patches
 ```
+Be aware, that sometimes the cfg-maker did not name files properly, i.e. for 
+
+  "assettocorsa\extension\config\tracks\ks_nurburgring.ini" 
+
+all these files are required too:
+  nurbAllGlass.kn5
+  nurbSpots.kn5
+  nurbSpotsPad.kn5
+  nurbpitglass2.kn5
