@@ -22,3 +22,5 @@ config/*/loaded/*
 textures/cars/*.zip
 textures/cars/_temporary/*
 installed.log
+config/.build/build.js
+config/.vscode/tasks.json
