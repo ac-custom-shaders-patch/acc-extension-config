@@ -443,6 +443,9 @@ void lj_setFogDensity__impl(float value);
 void lj_setLightDirection__impl(const vec3& dir);
 void lj_setLightColor__impl(const rgb& c);
 void lj_setAmbientColor__impl(const rgb& c);
+bool lj_isRainFxActive__impl();
+float lj_getRainAmount__impl();
+void lj_setRainAmount__impl(float v);
 void lj_setSunColor__impl(const rgb& c);
 void lj_setSkyStarsMap__impl(const char* v);
 void lj_setSkyMoonTexture__impl(const char* v);
@@ -728,6 +731,11 @@ ac.setLightColor = function(c)
 end
 ac.setAmbientColor = function(c)
 	ffi.C.lj_setAmbientColor__impl(__sane(rgb.new(c)))
+end
+ac.isRainFxActive = ffi.C.lj_isRainFxActive__impl
+ac.getRainAmount = ffi.C.lj_getRainAmount__impl
+ac.setRainAmount = function(v)
+	ffi.C.lj_setRainAmount__impl(__sane(v))
 end
 ac.setSunColor = function(c)
 	ffi.C.lj_setSunColor__impl(__sane(rgb.new(c)))
