@@ -31,7 +31,7 @@ If you’re not using Content Manager, you can always get any version of Shaders
  - [Track light configs](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/tracks);
  - [Vao-patches (prebaked shadows)](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches);
 
-## Destination folders:
+## Destination folders
 ```
 c:\Steam\steamapps\common\assettocorsa\extension\ or
 c:\Progam Files\Steam\steamapps\common\assettocorsa\extension\ or 
