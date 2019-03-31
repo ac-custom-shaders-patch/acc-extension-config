@@ -3,7 +3,7 @@
 [![Backgrounds status](https://acstuff.ru/patch/backgrounds/warnings/icon)](https://acstuff.ru/patch/backgrounds/warnings/list)
 [![Cars configs status](https://acstuff.ru/patch/cars-configs/warnings/icon)](https://acstuff.ru/patch/cars-configs/warnings/list)
 [![Cars textures status](https://acstuff.ru/patch/cars-textures/warnings/icon)](https://acstuff.ru/patch/cars-textures/warnings/list)
-[![Track configs status](https://acstuff.ru/patch/tracks-configs/warnings/icon)](https://acstuff.ru/patch/track-configs/warnings/list)
+[![Track configs status](https://acstuff.ru/patch/tracks-configs/warnings/icon)](https://acstuff.ru/patch/tracks-configs/warnings/list)
 [![Track VAO status](https://acstuff.ru/patch/tracks-vao/warnings/icon)](https://acstuff.ru/patch/tracks-vao/warnings/list)
 [![More information: https://trello.com/b/xq54vHsX/ac-patch](https://img.shields.io/badge/trello-more%20info-brightgreen.svg)](https://trello.com/b/xq54vHsX/ac-patch) 
 [![Join the chat in Discord: https://discord.gg/buxkYNT](https://img.shields.io/badge/discord-join%20chat-brightgreen.svg)](https://discord.gg/W2KQCMH)
