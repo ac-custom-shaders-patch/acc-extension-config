@@ -11,7 +11,7 @@ Configuration files and resources for Custom Shaders Patch for Assetto Corsa. De
 
 ## The good side of this
 
-Most of the stuff is adjustable with ini files: live, saving a car/track-config take effect immediately during gameplay
+Most of the stuff is adjustable with ini files: live, saving a car/track-config take effect immediately during gameplay.
 
 ## Links
 
