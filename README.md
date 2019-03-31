@@ -1,6 +1,5 @@
 # Custom Shaders Patch configs
 
-[![Backgrounds status](https://acstuff.ru/patch/backgrounds/warnings/icon)](https://acstuff.ru/patch/backgrounds/warnings/list)
 [![Cars configs status](https://acstuff.ru/patch/cars-configs/warnings/icon)](https://acstuff.ru/patch/cars-configs/warnings/list)
 [![Cars textures status](https://acstuff.ru/patch/cars-textures/warnings/icon)](https://acstuff.ru/patch/cars-textures/warnings/list)
 [![Track configs status](https://acstuff.ru/patch/tracks-configs/warnings/icon)](https://acstuff.ru/patch/tracks-configs/warnings/list)
