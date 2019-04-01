@@ -29,7 +29,7 @@ If you’re not using Content Manager, you can always get any version of Shaders
 ## Content of this repo
  - [Car light configs](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/cars);
  - [Track light configs](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/tracks);
- - [Vertex AO patches (prebaked shadows)](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches);
+ - [Vertex AO patches (prebaked shadows)](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches).
 
 ## Destination folders
 ```
