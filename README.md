@@ -1,11 +1,11 @@
 # Custom Shaders Patch configs
 
+[![More information: https://trello.com/b/xq54vHsX/ac-patch](https://img.shields.io/badge/trello-more%20info-brightgreen.svg)](https://trello.com/b/xq54vHsX/ac-patch) 
+[![Join the chat in Discord: https://discord.gg/buxkYNT](https://img.shields.io/badge/discord-join%20chat-brightgreen.svg)](https://discord.gg/W2KQCMH)
 [![Cars configs status](https://acstuff.ru/patch/cars-configs/warnings/icon?t=0)](https://acstuff.ru/patch/cars-configs/warnings/list)
 [![Cars textures status](https://acstuff.ru/patch/cars-textures/warnings/icon?t=0)](https://acstuff.ru/patch/cars-textures/warnings/list)
 [![Track configs status](https://acstuff.ru/patch/tracks-configs/warnings/icon?t=0)](https://acstuff.ru/patch/tracks-configs/warnings/list)
 [![Track VAO status](https://acstuff.ru/patch/tracks-vao/warnings/icon?t=0)](https://acstuff.ru/patch/tracks-vao/warnings/list)
-[![More information: https://trello.com/b/xq54vHsX/ac-patch](https://img.shields.io/badge/trello-more%20info-brightgreen.svg)](https://trello.com/b/xq54vHsX/ac-patch) 
-[![Join the chat in Discord: https://discord.gg/buxkYNT](https://img.shields.io/badge/discord-join%20chat-brightgreen.svg)](https://discord.gg/W2KQCMH)
 
 Configuration files and resources for Custom Shaders Patch for Assetto Corsa. Define things like track lights, specific car settings, additional tyres textures and so on. There is a server somewhere pulling it from time to time (with 5 minutes interval) and converting it into a format that can be downloaded automatically with AC Content Manager (or any other launcher, API for that is really simple).
 
@@ -29,7 +29,7 @@ If you’re not using Content Manager, you can always get any version of Shaders
 ## Content of this repo
  - [Car light configs](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/cars);
  - [Track light configs](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/config/tracks);
- - [Vao-patches (prebaked shadows)](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches);
+ - [Vertex AO patches (prebaked shadows)](https://github.com/ac-custom-shaders-patch/acc-extension-config/tree/master/vao-patches);
 
 ## Destination folders
 ```
