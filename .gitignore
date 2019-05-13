@@ -24,3 +24,4 @@ textures/cars/_temporary/*
 installed.log
 config/.build/*
 config/.vscode/*
+shaders_dev/*
