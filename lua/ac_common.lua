@@ -1798,5 +1798,5 @@ ac.getSunHeadingAngle = ffi.C.lj_getSunHeadingAngle
 ac.isInteriorView = ffi.C.lj_isInteriorView
 ac.isInReplayMode = ffi.C.lj_isInReplayMode
 ac.readDataFile = function(value)
-	return ffi.string(ffi.C.lj_readDataFile(__sane(tostring(value))))
+	return ffi.string(ffi.C.lj_readDataFile(value ~= nil and tostring(value) or nil))
 end

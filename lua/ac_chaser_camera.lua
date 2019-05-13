@@ -82,10 +82,10 @@ local function __sane(x)
 	return x
 end
 ac.debug = function(key, value)
-	ffi.C.lj_debug(__sane(tostring(key)), __sane(tostring(value)))
+	ffi.C.lj_debug(key ~= nil and tostring(key) or nil, value ~= nil and tostring(value) or nil)
 end
 ac.log = function(value)
-	ffi.C.lj_log(__sane(tostring(value)))
+	ffi.C.lj_log(value ~= nil and tostring(value) or nil)
 end
 ac.getCarPosition = ffi.C.lj_getCarPosition
 ac.getCarDirection = ffi.C.lj_getCarDirection

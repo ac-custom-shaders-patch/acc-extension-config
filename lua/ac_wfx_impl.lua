@@ -359,6 +359,70 @@ typedef struct {
 		end
 	})
 end
+local function __ac_audio()
+	ffi.cdef [[ 
+typedef struct {
+  void* nativeEvent_;
+  float volume;
+  float cameraInteriorMultiplier;
+  float cameraExteriorMultiplier;
+  float cameraTrackMultiplier;
+  bool inAutoLoopMode;
+} audioevent;
+]]
+	ac.AudioEvent = function(s, reverbResponse)
+		local created = ffi.C.lj_audioevent_new__impl(tostring(s), reverbResponse and true or false)
+		return ffi.gc(created, ffi.C.lj_audioevent_gc__impl)
+	end
+	__audioEventKeepAlive = {}
+	ffi.metatype('audioevent', {
+		__index = function(self, key)
+			if key == 'setPosition' then
+				return function(s, pos, dir, up, vel)
+					ffi.C.lj_audioevent_set_pos__impl(s, pos, dir or vec3.new(0, 0, 1), up or vec3.new(0, 1, 0), vel or vec3.new(0, 0, 0))
+				end
+			end
+			if key == 'keepAlive' then
+				return function(s)
+					__audioEventKeepAlive[#__audioEventKeepAlive + 1] = s
+				end
+			end
+			if key == 'setParam' then
+				return ffi.C.lj_audioevent_set_param__impl
+			end
+			if key == 'isValid' then
+				return function(s)
+					return s.nativeEvent_ ~= nil
+				end
+			end
+			if key == 'isPlaying' then
+				return ffi.C.lj_audioevent_is_playing__impl
+			end
+			if key == 'isPaused' then
+				return ffi.C.lj_audioevent_is_paused__impl
+			end
+			if key == 'isWithinRange' then
+				return ffi.C.lj_audioevent_is_within_range__impl
+			end
+			if key == 'resume' then
+				return ffi.C.lj_audioevent_resume__impl
+			end
+			if key == 'resumeIf' then
+				return ffi.C.lj_audioevent_resume_if__impl
+			end
+			if key == 'stop' then
+				return ffi.C.lj_audioevent_stop__impl
+			end
+			if key == 'start' then
+				return ffi.C.lj_audioevent_start__impl
+			end
+			error('audioevent has no member called \'' .. key .. '\'')
+		end,
+		__newindex = function(self, key, value)
+			error('audioevent has no member called \'' .. key .. '\'')
+		end
+	})
+end
 local function __ac_obsolete()
 	ac.SHADOWS_ON = 1
 	ac.SHADOWS_OFF = 0
@@ -403,6 +467,7 @@ __ac_gradients()
 __ac_colorcorrections()
 __ac_particlematerials()
 __ac_lightpollution()
+__ac_audio()
 ffi.cdef [[
 double lj_getCurrentTime();
 float lj_getDaySeconds();
@@ -555,6 +620,7 @@ float lj_getWeatherStaticAmbientLowerMultiplier__impl();
 void lj_setWeatherStaticAmbient__impl(const rgb& upper, const rgb& lower);
 void lj_resetWeatherStaticAmbient__impl();
 void lj_setEmissiveCameraGain__impl(float direct, float mirror);
+void lj_setExtraAsphaltReflectionsMultiplier__impl(float value);
 void lj_setParticlesSmokeMaterial__impl(const particles_material& material);
 void lj_setParticlesGrassMaterial__impl(const particles_material& material);
 void lj_setParticlesGrassPiecesMaterial__impl(const particles_material& material);
@@ -589,6 +655,18 @@ cloud_material* lj_cloudmaterial_new__impl();
 void lj_cloudmaterial_gc__impl(cloud_material* r);
 void lj_cloud_set_texture__impl(cloud* self, const char* value);
 void lj_cloud_set_noise_texture__impl(cloud* self, const char* value);
+void lj_loadSoundbank__impl(const char* soundbank, const char* guids);
+audioevent* lj_audioevent_new__impl(const char* path, bool reverb_response);
+void lj_audioevent_gc__impl(audioevent* r);
+void lj_audioevent_set_pos__impl(audioevent* self, const vec3& pos, const vec3& dir, const vec3& up, const vec3& velocity);
+void lj_audioevent_set_param__impl(audioevent* self, const char* name, float value);
+bool lj_audioevent_is_playing__impl(audioevent* self);
+bool lj_audioevent_is_paused__impl(audioevent* self);
+bool lj_audioevent_is_within_range__impl(audioevent* self);
+void lj_audioevent_resume__impl(audioevent* self);
+void lj_audioevent_resume_if__impl(audioevent* self, bool c);
+void lj_audioevent_stop__impl(audioevent* self);
+void lj_audioevent_start__impl(audioevent* self);
 extra_gradient* lj_extragradient_new__impl();
 void lj_extragradient_gc__impl(extra_gradient* r);
 cc_grayscale* lj_cc_grayscale_new__impl();
@@ -671,16 +749,16 @@ ac.getPpFilter = function()
 	return ffi.string(ffi.C.lj_getPpFilter())
 end
 ac.debug = function(key, value)
-	ffi.C.lj_debug__impl(__sane(tostring(key)), __sane(tostring(value)))
+	ffi.C.lj_debug__impl(key ~= nil and tostring(key) or nil, value ~= nil and tostring(value) or nil)
 end
 ac.log = function(value)
-	ffi.C.lj_log__impl(__sane(tostring(value)))
+	ffi.C.lj_log__impl(value ~= nil and tostring(value) or nil)
 end
 ac.warn = function(value)
-	ffi.C.lj_warn__impl(__sane(tostring(value)))
+	ffi.C.lj_warn__impl(value ~= nil and tostring(value) or nil)
 end
 ac.error = function(value)
-	ffi.C.lj_error__impl(__sane(tostring(value)))
+	ffi.C.lj_error__impl(value ~= nil and tostring(value) or nil)
 end
 ac.getSkyAbsorption = function(dir)
 	return ffi.C.lj_getSkyAbsorption__impl(__sane(dir))
@@ -741,10 +819,10 @@ ac.setSunColor = function(c)
 	ffi.C.lj_setSunColor__impl(__sane(rgb.new(c)))
 end
 ac.setSkyStarsMap = function(v)
-	ffi.C.lj_setSkyStarsMap__impl(__sane(tostring(v)))
+	ffi.C.lj_setSkyStarsMap__impl(v ~= nil and tostring(v) or nil)
 end
 ac.setSkyMoonTexture = function(v)
-	ffi.C.lj_setSkyMoonTexture__impl(__sane(tostring(v)))
+	ffi.C.lj_setSkyMoonTexture__impl(v ~= nil and tostring(v) or nil)
 end
 ac.setSkyColor = function(c)
 	ffi.C.lj_setSkyColor__impl(__sane(rgb.new(c)))
@@ -968,6 +1046,9 @@ ac.resetWeatherStaticAmbient = ffi.C.lj_resetWeatherStaticAmbient__impl
 ac.setEmissiveCameraGain = function(direct, mirror)
 	ffi.C.lj_setEmissiveCameraGain__impl(__sane(direct), __sane(mirror))
 end
+ac.setExtraAsphaltReflectionsMultiplier = function(value)
+	ffi.C.lj_setExtraAsphaltReflectionsMultiplier__impl(__sane(value))
+end
 ac.setParticlesSmokeMaterial = function(material)
 	ffi.C.lj_setParticlesSmokeMaterial__impl(__sane(material))
 end
@@ -1036,6 +1117,9 @@ ac.calculateSkyColor = function(v, include_sky_color, include_moon_color)
 end
 ac.setAiHeadlights = function(v)
 	ffi.C.lj_setAiHeadlights__impl(__sane(v))
+end
+ac.loadSoundbank = function(soundbank, guids)
+	ffi.C.lj_loadSoundbank__impl(soundbank ~= nil and tostring(soundbank) or nil, guids ~= nil and tostring(guids) or nil)
 end
 ac.setTrackCondition = function(key, value)
 	ffi.C.lj_set_track_condition__impl(key, value)

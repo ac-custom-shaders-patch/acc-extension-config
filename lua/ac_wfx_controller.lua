@@ -108,16 +108,16 @@ ac.getPpFilter = function()
 	return ffi.string(ffi.C.lj_getPpFilter())
 end
 ac.debug = function(key, value)
-	ffi.C.lj_debug__controller(__sane(tostring(key)), __sane(tostring(value)))
+	ffi.C.lj_debug__controller(key ~= nil and tostring(key) or nil, value ~= nil and tostring(value) or nil)
 end
 ac.log = function(value)
-	ffi.C.lj_log__controller(__sane(tostring(value)))
+	ffi.C.lj_log__controller(value ~= nil and tostring(value) or nil)
 end
 ac.warn = function(value)
-	ffi.C.lj_warn__controller(__sane(tostring(value)))
+	ffi.C.lj_warn__controller(value ~= nil and tostring(value) or nil)
 end
 ac.error = function(value)
-	ffi.C.lj_error__controller(__sane(tostring(value)))
+	ffi.C.lj_error__controller(value ~= nil and tostring(value) or nil)
 end
 ac.getInputWeatherType = ffi.C.lj_getInputWeatherType__controller
 ac.getInputTemperatures = ffi.C.lj_getInputTemperatures__controller
