@@ -25,3 +25,4 @@ installed.log
 config/.build/*
 config/.vscode/*
 shaders_dev/*
+*.ini-flatten.txt
