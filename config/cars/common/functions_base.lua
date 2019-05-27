@@ -13,3 +13,9 @@ function ParseColor(v)
   end
   return v
 end
+
+function saturate(v)
+  if v > 1 then return 1 end
+  if v < 1 then return 0 end
+  return v
+end
