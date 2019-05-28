@@ -6,19 +6,21 @@
 local maximumCameraAngle = { 54, 68 }  -- degress
 
 -- This thing will smooth car velocity to reduce wobbling with replays or in online:
-local carVelocity = smoothing(vec3(), 100)
+local carVelocity = smoothing(vec3(), 40)
 
 -- Alternative for ac.getCarVelocity(), possibly smoother:
 local calculateVelocityHere = true
 local lastCarPos = vec3()
 
 -- Extra thing for looking around:
-local lookDirection = smoothing(0, 20)
+local lookDirection = smoothing(0, 10)
 
 -- Will be called each frame:
 -- Note: `dt` is time passed since last frame, `cameraIndex` is 1 or 2, depending on which camera is
 -- chosen.
 function update(dt, cameraIndex)
+
+  smoothing.setDT(dt)
 
   -- Get AC camera parameters with some corrections to be somewhat compatible:
   local cameraParameters = ac.getCameraParameters(cameraIndex)
@@ -47,6 +49,8 @@ function update(dt, cameraIndex)
     -- time. This way, in replays camera will freeze.
     carVelocity:updateIfNew(ac.getCarVelocity())
   end
+
+  -- ac.debug('carVelocity', carVelocity)
 
   -- Normalize car velocity:
   local carVelocityDir = math.normalize(carVelocity.val)

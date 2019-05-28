@@ -1274,6 +1274,7 @@ local function __ac_primitive_quat()
 	}
 end
 local function __ac_smoothing()
+	local _dt = 0.0167
 	return setmetatable({}, {
 		__call = function(_, v, s)
 			return setmetatable({
@@ -1286,17 +1287,22 @@ local function __ac_smoothing()
 				end,
 				__index = {
 					update = function(v, x)
-						v.val = v.val + (x - v.val) / v.smooth
+						v.val = math.applyLag(v.val, x, 1 - 1 / v.smooth, _dt)
 					end,
 					updateIfNew = function(v, x)
 						if x ~= v.lastValue then
-							v.val = v.val + (x - v.val) / v.smooth
+							v.val = math.applyLag(v.val, x, 1 - 1 / v.smooth, _dt)
 							v.lastValue = x
 						end
 					end
 				}
 			})
-		end
+		end,
+		__index = {
+			setDT = function(dt)
+				_dt = math.applyLag(_dt, dt, 0.9, _dt)
+			end
+		}
 	})
 end
 local function __ac_primitive()
@@ -1707,6 +1713,15 @@ local function __math()
 	end
 	math.degress = function(x)
 		return x * 180 / math.pi
+	end
+	math.lagMult = function(lag, dt)
+		return math.saturate((1.0 - lag) * dt * 60)
+	end
+	math.applyLag = function(v, target, lag, dt)
+		if lag <= 0 then
+			return target
+		end
+		return v + (target - v) * math.lagMult(lag, dt)
 	end
 	local poissonData = __bound_array(ffi.typeof('vec2'), nil)
 	math.poissonSamplerCircle = function(size)
