@@ -4,3 +4,6 @@
 acu_bathurst/1: x4fab
 ks_brands_hatch__indy/1: x4fab
 ks_brands_hatch__indy/2: x4fab
+goodwood_hillclimb/0: Gunnar333
+goodwood_hillclimb/1: Gunnar333
+goodwood_hillclimb/2: Gunnar333
