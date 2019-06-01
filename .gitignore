@@ -25,4 +25,6 @@ installed.log
 config/.build/*
 config/.vscode/*
 shaders_dev/*
+shaders.zip
 *.ini-flatten.txt
+config/tracks/unpacked*
