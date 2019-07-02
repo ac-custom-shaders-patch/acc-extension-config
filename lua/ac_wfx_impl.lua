@@ -71,6 +71,7 @@ local function __ac_clouds()
     };
     
     vec2 noiseOffset;
+    float shadowOpacity;
     bool useNoise;
     bool occludeGodrays;
     bool useCustomLightColor;
@@ -507,6 +508,8 @@ void lj_setFogHeight__impl(float value);
 void lj_setFogDensity__impl(float value);
 void lj_setLightDirection__impl(const vec3& dir);
 void lj_setLightColor__impl(const rgb& c);
+void lj_setLightShadowOpacity__impl(float value);
+float lj_getCloudsShadow__impl();
 void lj_setAmbientColor__impl(const rgb& c);
 bool lj_isRainFxActive__impl();
 float lj_getRainAmount__impl();
@@ -807,6 +810,10 @@ end
 ac.setLightColor = function(c)
 	ffi.C.lj_setLightColor__impl(__sane(rgb.new(c)))
 end
+ac.setLightShadowOpacity = function(value)
+	ffi.C.lj_setLightShadowOpacity__impl(__sane(value))
+end
+ac.getCloudsShadow = ffi.C.lj_getCloudsShadow__impl
 ac.setAmbientColor = function(c)
 	ffi.C.lj_setAmbientColor__impl(__sane(rgb.new(c)))
 end
