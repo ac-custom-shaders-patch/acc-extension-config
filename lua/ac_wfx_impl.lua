@@ -548,6 +548,8 @@ void lj_resetSpecularColor__impl();
 void lj_setSpecularColor__impl(const rgb& c);
 void lj_resetEmissiveMultiplier__impl();
 void lj_setEmissiveMultiplier__impl(float v);
+void lj_resetGlowBrightness__impl();
+void lj_setGlowBrightness__impl(float v);
 void lj_resetGodraysCustomColor__impl();
 void lj_setGodraysCustomColor__impl(const rgb& c);
 void lj_resetGodraysCustomDirection__impl();
@@ -647,6 +649,9 @@ void lj_setAutoExposureTarget__impl(float v);
 void lj_setAutoExposureMeasuringArea__impl(vec2 center, vec2 size);
 void lj_setAutoExposureLimits__impl(float min, float max);
 void lj_setSkyFogMultiplier__impl(float v);
+void lj_setHorizonFogMultiplier__impl(float horizon, float exp, float range_mult);
+void lj_resetHorizonFogMultiplier__impl();
+float lj_calculateSkyFog__impl(const vec3& v);
 rgb lj_calculateSkyColor__impl(const vec3& v, bool include_sky_color, bool include_moon_color);
 void lj_setAiHeadlights__impl(bool v);
 void lj_set_clouds__impl(const void* arr);
@@ -920,6 +925,10 @@ ac.resetEmissiveMultiplier = ffi.C.lj_resetEmissiveMultiplier__impl
 ac.setEmissiveMultiplier = function(v)
 	ffi.C.lj_setEmissiveMultiplier__impl(__sane(v))
 end
+ac.resetGlowBrightness = ffi.C.lj_resetGlowBrightness__impl
+ac.setGlowBrightness = function(v)
+	ffi.C.lj_setGlowBrightness__impl(__sane(v))
+end
 ac.resetGodraysCustomColor = ffi.C.lj_resetGodraysCustomColor__impl
 ac.setGodraysCustomColor = function(c)
 	ffi.C.lj_setGodraysCustomColor__impl(__sane(rgb.new(c)))
@@ -1118,6 +1127,13 @@ ac.setAutoExposureLimits = function(min, max)
 end
 ac.setSkyFogMultiplier = function(v)
 	ffi.C.lj_setSkyFogMultiplier__impl(__sane(v))
+end
+ac.setHorizonFogMultiplier = function(horizon, exp, range_mult)
+	ffi.C.lj_setHorizonFogMultiplier__impl(__sane(horizon), __sane(exp), __sane(range_mult))
+end
+ac.resetHorizonFogMultiplier = ffi.C.lj_resetHorizonFogMultiplier__impl
+ac.calculateSkyFog = function(v)
+	return ffi.C.lj_calculateSkyFog__impl(__sane(v))
 end
 ac.calculateSkyColor = function(v, include_sky_color, include_moon_color)
 	return ffi.C.lj_calculateSkyColor__impl(__sane(v), __sane(include_sky_color), __sane(include_moon_color))
