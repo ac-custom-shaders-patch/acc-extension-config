@@ -23,8 +23,10 @@ textures/cars/*.zip
 textures/cars/_temporary/*
 installed.log
 config/.build/*
-config/.vscode/*
+config/cars/stereo/mk14_abar*.kn5
+config/cars/stereo/mk14_loxh*.kn5
 shaders_dev/*
 shaders.zip
 *.ini-flatten.txt
 config/tracks/unpacked*
+*/.vscode/*
