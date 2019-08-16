@@ -1767,6 +1767,15 @@ bool lj_isInReplayMode();
 const char* lj_readDataFile(const char* value);
 void lj_poissonsampler_circle(void* value, int size);
 void lj_poissonsampler_square(void* value, int size);
+bool lj_cfg_track_bool(const char* key, const char* value, bool def);
+int lj_cfg_track_integer(const char* key, const char* value, int def);
+rgb lj_cfg_track_rgb(const char* key, const char* value, const rgb& def);
+rgbm lj_cfg_track_rgbm(const char* key, const char* value, const rgbm& def);
+vec2 lj_cfg_track_vec2(const char* key, const char* value, const vec2& def);
+vec3 lj_cfg_track_vec3(const char* key, const char* value, const vec3& def);
+vec4 lj_cfg_track_vec4(const char* key, const char* value, const vec4& def);
+float lj_cfg_track_decimal(const char* key, const char* value, float def);
+const char* lj_cfg_track_string(const char* key, const char* value, const char* def);
 ]]
 local function __sane(x)
 	if type(x) == 'number' then

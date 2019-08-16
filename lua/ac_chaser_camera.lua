@@ -1,11 +1,11 @@
 	require "extension/lua/ac_common"
 ffi.cdef [[
 vec3 lj_getCamera_position();
-void lj_setCamera_position(vec3 v);
+void lj_setCamera_position(const vec3& v);
 vec3 lj_getCamera_direction();
-void lj_setCamera_direction(vec3 v);
+void lj_setCamera_direction(const vec3& v);
 vec3 lj_getCamera_up();
-void lj_setCamera_up(vec3 v);
+void lj_setCamera_up(const vec3& v);
 float lj_getCamera_fov();
 void lj_setCamera_fov(float v);
 float lj_getCamera_dofFactor();
