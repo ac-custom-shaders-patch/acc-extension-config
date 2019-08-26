@@ -1758,6 +1758,8 @@ const char* lj_getFolder(int f);
 const char* lj_getTrackId();
 const char* lj_getTrackLayout();
 vec3 lj_getCameraPosition();
+vec3 lj_getCameraUp();
+vec3 lj_getCameraSide();
 vec3 lj_getCameraDirection();
 float lj_getSunAngle();
 float lj_getSunPitchAngle();
@@ -1815,6 +1817,8 @@ ac.getTrackLayout = function()
 	return ffi.string(ffi.C.lj_getTrackLayout())
 end
 ac.getCameraPosition = ffi.C.lj_getCameraPosition
+ac.getCameraUp = ffi.C.lj_getCameraUp
+ac.getCameraSide = ffi.C.lj_getCameraSide
 ac.getCameraDirection = ffi.C.lj_getCameraDirection
 ac.getSunAngle = ffi.C.lj_getSunAngle
 ac.getSunPitchAngle = ffi.C.lj_getSunPitchAngle

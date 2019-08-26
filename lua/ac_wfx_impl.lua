@@ -672,6 +672,7 @@ void lj_setWeatherBouncedLightShMultiplier__impl(float v);
 void lj_setWeatherBouncedLightShSaturation__impl(float v);
 float lj_getWeatherLightsMultiplier__impl();
 void lj_setWeatherLightsMultiplier__impl(float value);
+void lj_setWeatherTrackLightsMultiplierThreshold__impl(float value);
 void lj_resetWeatherLightsMultiplier__impl();
 float lj_getAutoExposure__impl();
 void lj_setAutoExposureActive__impl(bool v);
@@ -684,6 +685,7 @@ void lj_setHorizonFogMultiplier__impl(float horizon, float exp, float range_mult
 void lj_resetHorizonFogMultiplier__impl();
 float lj_calculateSkyFog__impl(const vec3& v);
 rgb lj_calculateSkyColor__impl(const vec3& v, bool include_sky_color, bool include_moon_color);
+rgb lj_sampleSH__impl(const vec3& v);
 void lj_setAiHeadlights__impl(bool v);
 void lj_set_clouds__impl(const void* arr);
 void lj_set_gradients__impl(const void* arr);
@@ -1139,6 +1141,9 @@ ac.getWeatherLightsMultiplier = ffi.C.lj_getWeatherLightsMultiplier__impl
 ac.setWeatherLightsMultiplier = function(value)
 	ffi.C.lj_setWeatherLightsMultiplier__impl(__sane(value))
 end
+ac.setWeatherTrackLightsMultiplierThreshold = function(value)
+	ffi.C.lj_setWeatherTrackLightsMultiplierThreshold__impl(__sane(value))
+end
 ac.resetWeatherLightsMultiplier = ffi.C.lj_resetWeatherLightsMultiplier__impl
 ac.getAutoExposure = ffi.C.lj_getAutoExposure__impl
 ac.setAutoExposureActive = function(v)
@@ -1168,6 +1173,9 @@ ac.calculateSkyFog = function(v)
 end
 ac.calculateSkyColor = function(v, include_sky_color, include_moon_color)
 	return ffi.C.lj_calculateSkyColor__impl(__sane(v), __sane(include_sky_color), __sane(include_moon_color))
+end
+ac.sampleSH = function(v)
+	return ffi.C.lj_sampleSH__impl(__sane(v))
 end
 ac.setAiHeadlights = function(v)
 	ffi.C.lj_setAiHeadlights__impl(__sane(v))
