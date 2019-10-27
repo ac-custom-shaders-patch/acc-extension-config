@@ -1767,6 +1767,9 @@ float lj_getSunHeadingAngle();
 bool lj_isInteriorView();
 bool lj_isInReplayMode();
 const char* lj_readDataFile(const char* value);
+bool lj_isJoystickButtonPressed(uint32_t joystick, uint32_t button);
+float lj_isJoystickAxisValue(uint32_t joystick, uint32_t axis);
+int lj_isJoystickDpadValue(uint32_t joystick, uint32_t dpad);
 void lj_poissonsampler_circle(void* value, int size);
 void lj_poissonsampler_square(void* value, int size);
 bool lj_cfg_track_bool(const char* key, const char* value, bool def);
@@ -1827,4 +1830,13 @@ ac.isInteriorView = ffi.C.lj_isInteriorView
 ac.isInReplayMode = ffi.C.lj_isInReplayMode
 ac.readDataFile = function(value)
 	return ffi.string(ffi.C.lj_readDataFile(value ~= nil and tostring(value) or nil))
+end
+ac.isJoystickButtonPressed = function(joystick, button)
+	return ffi.C.lj_isJoystickButtonPressed(__sane(joystick), __sane(button))
+end
+ac.isJoystickAxisValue = function(joystick, axis)
+	return ffi.C.lj_isJoystickAxisValue(__sane(joystick), __sane(axis))
+end
+ac.isJoystickDpadValue = function(joystick, dpad)
+	return ffi.C.lj_isJoystickDpadValue(__sane(joystick), __sane(dpad))
 end
