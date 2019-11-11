@@ -3,6 +3,8 @@
 
 acu_bathurst/1: x4fab
 anglesey__anglesey_dry/1: MadMat
+aspertsham__hargassen/1: MadMat
+aspertsham__wiesling/1: MadMat
 ks_black_cat_county__layout_int/1: MadMat
 ks_brands_hatch__indy/1: x4fab
 ks_brands_hatch__indy/2: x4fab
