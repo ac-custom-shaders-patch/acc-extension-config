@@ -24,3 +24,7 @@ goodwood_hillclimb/1: Gunnar333
 goodwood_hillclimb/2: Gunnar333
 magione/1: MadMat
 magione/2: MadMat
+mid_ohio__chicane/1: MadMat
+mid_ohio__chicane/2: MadMat
+mid_ohio__no_chicane/1: MadMat
+mid_ohio__no_chicane/2: MadMat
