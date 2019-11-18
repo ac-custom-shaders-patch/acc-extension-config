@@ -1768,7 +1768,9 @@ bool lj_isInteriorView();
 bool lj_isInReplayMode();
 const char* lj_readDataFile(const char* value);
 bool lj_isJoystickButtonPressed(uint32_t joystick, uint32_t button);
-float lj_isJoystickAxisValue(uint32_t joystick, uint32_t axis);
+float lj_getJoystickAxisValue(uint32_t joystick, uint32_t axis);
+int lj_isJoystickAxisValue(uint32_t joystick, uint32_t axis);
+int lj_getJoystickDpadValue(uint32_t joystick, uint32_t dpad);
 int lj_isJoystickDpadValue(uint32_t joystick, uint32_t dpad);
 void lj_poissonsampler_circle(void* value, int size);
 void lj_poissonsampler_square(void* value, int size);
@@ -1834,8 +1836,14 @@ end
 ac.isJoystickButtonPressed = function(joystick, button)
 	return ffi.C.lj_isJoystickButtonPressed(__sane(joystick), __sane(button))
 end
+ac.getJoystickAxisValue = function(joystick, axis)
+	return ffi.C.lj_getJoystickAxisValue(__sane(joystick), __sane(axis))
+end
 ac.isJoystickAxisValue = function(joystick, axis)
 	return ffi.C.lj_isJoystickAxisValue(__sane(joystick), __sane(axis))
+end
+ac.getJoystickDpadValue = function(joystick, dpad)
+	return ffi.C.lj_getJoystickDpadValue(__sane(joystick), __sane(dpad))
 end
 ac.isJoystickDpadValue = function(joystick, dpad)
 	return ffi.C.lj_isJoystickDpadValue(__sane(joystick), __sane(dpad))
