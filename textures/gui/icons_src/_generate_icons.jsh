@@ -126,6 +126,8 @@ fs.writeFileSync(`C:/Development/acc-rendering-adv/source/imgui/icons.cpp`, `#in
 #include "icons.h"
 
 #include <hooks/ac_hooks.h>
+#include <settings/custom_textures.h>
+#include <ac_classes/KGLTexture.h>
 
 namespace ImGui 
 {
