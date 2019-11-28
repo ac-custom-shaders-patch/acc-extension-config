@@ -1,12 +1,10 @@
-# Please add your name here if you’re sharing VAO patches and want your name to be shown in CM.
+﻿# Please add your name here if you’re sharing VAO patches and want your name to be shown in CM.
 # Also, please, don’t use overlays. I’ll add a proper support for them a bit later.
 
 acu_bathurst/1: x4fab
 anglesey__anglesey_dry/1: MadMat
 aspertsham__hargassen/1: MadMat
 aspertsham__wiesling/1: MadMat
-drift/1: MadMat
-drift/2: MadMat
 ks_black_cat_county__layout_int/1: MadMat
 ks_black_cat_county__layout_long/1: MadMat
 ks_black_cat_county__layout_short/1: MadMat
@@ -19,12 +17,5 @@ ks_drag__drag400/1: MadMat
 ks_drag__drag500/1: MadMat
 ks_drag__drag1000/1: MadMat
 ks_drag__drag2000/1: MadMat
-goodwood_hillclimb/0: Gunnar333
-goodwood_hillclimb/1: Gunnar333
-goodwood_hillclimb/2: Gunnar333
 magione/1: MadMat
 magione/2: MadMat
-mid_ohio__chicane/1: MadMat
-mid_ohio__chicane/2: MadMat
-mid_ohio__no_chicane/1: MadMat
-mid_ohio__no_chicane/2: MadMat

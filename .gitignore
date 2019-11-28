@@ -30,3 +30,12 @@ shaders.zip
 *.ini-flatten.txt
 config/tracks/unpacked*
 */.vscode/*
+backgrounds/mid_ohio__no_chicane/1.jpg
+backgrounds/mid_ohio__no_chicane/2.jpg
+config/tracks/acu_interlagos_2018.ini
+config/tracks/bathurst_fm7.ini
+config/tracks/charade_spc2018.ini
+config/tracks/trento-bondone.ini
+config/tracks/vrc_alabama.ini
+config/tracks/zolder.ini
+config/tracks/zolder_pascalwb.ini
