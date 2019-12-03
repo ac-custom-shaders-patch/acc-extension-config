@@ -29,6 +29,7 @@ ks_highlands/2: AssettoDrive.net
 ks_highlands/3: AssettoDrive.net
 ks_highlands/4: maymate
 ks_highlands/5: AssettoDrive.net
+ks_highlands/6: hamzah
 ks_red_bull_ring/1: demonized
 ks_nordschleife/1: demonized
 ks_nordschleife/2: demonized
