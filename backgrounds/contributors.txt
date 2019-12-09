@@ -1,12 +1,17 @@
-# Please add your name here if you’re sharing VAO patches and want your name to be shown in CM.
+﻿# Please add your name here if you’re sharing VAO patches and want your name to be shown in CM.
 # Also, please, don’t use overlays. I’ll add a proper support for them a bit later.
 
 acu_bathurst/1: x4fab
+acu_bathurst/2: exydeus
 anglesey__anglesey_dry/1: MadMat
 aspertsham__hargassen/1: MadMat
 aspertsham__wiesling/1: MadMat
-drift/1: MadMat
-drift/2: MadMat
+chang/1: nptc
+doningtonpark/1: ItsDraik
+ks_highlands/1: JavireTwo
+ks_highlands/2: AssettoDrive.net
+ks_highlands/3: AssettoDrive.net
+ks_black_cat_county/2: T-Top
 ks_black_cat_county__layout_int/1: MadMat
 ks_black_cat_county__layout_long/1: MadMat
 ks_black_cat_county__layout_short/1: MadMat
@@ -19,12 +24,24 @@ ks_drag__drag400/1: MadMat
 ks_drag__drag500/1: MadMat
 ks_drag__drag1000/1: MadMat
 ks_drag__drag2000/1: MadMat
-goodwood_hillclimb/0: Gunnar333
-goodwood_hillclimb/1: Gunnar333
-goodwood_hillclimb/2: Gunnar333
+ks_highlands/1: JavireTwo
+ks_highlands/2: AssettoDrive.net
+ks_highlands/3: AssettoDrive.net
+ks_highlands/4: maymate
+ks_highlands/5: AssettoDrive.net
+ks_highlands/6: hamzah
+ks_red_bull_ring/1: demonized
+ks_nordschleife/1: demonized
+ks_nordschleife/2: demonized
+lilski_watkins_glen/1: demonized
 magione/1: MadMat
 magione/2: MadMat
-mid_ohio__chicane/1: MadMat
-mid_ohio__chicane/2: MadMat
-mid_ohio__no_chicane/1: MadMat
-mid_ohio__no_chicane/2: MadMat
+mugello/1: demonized
+mugello/2: demonized
+nardo/1:ACZeldaFan17
+norisring/2:kelnor34
+spa/1: demonized
+shutoko_revival_project/1: demonized
+thomson/1: demonized
+usce/1: AssettoDrive.net
+
