@@ -1,70 +1,43 @@
+function tileSize(resolution){
+  if (resolution < 40) return 16;
+  if (resolution < 120) return 8;
+  if (resolution < 500) return 4;
+  return 2;
+}
+
+function getTile(count){
+  let side = Math.ceil(Math.sqrt(count));
+  let ret = { x: side, y: side };
+  ret.y -= Math.floor((side * side - count) / side);
+  return ret;
+}
+
 async function run(size){
   let icons = $.glob(`icons_${size}/*.png`);
-  let args = ['-background', 'none', '-geometry', `${size - 2}x${size - 2}>+1+1`];
-  [].push.apply(args, icons);
-  args.push(`icons_${size}.png`);
-  await $['D:/Applications/Cygwin/bin/magick.exe']['montage'].apply(null, args);
-  await $['D:/Applications/Cygwin/bin/magick.exe'](`icons_${size}.png`, 
-    '-fill', '#ffffff', '-colorize', '100%', `../icons_${size}.png`);
-  await $['D:/Applications/Cygwin/bin/optipng.exe']('-o7', '-clobber', '-strip', 'all', `../icons_${size}.png`);
-  return { size: size, icons: icons };
+  let ret = [];
+  let atlas_size = Math.pow(tileSize(+size), 2);
+  for (let i = 0; i < icons.length; i += atlas_size) {
+    let tile = getTile(icons.slice(i, i + atlas_size).length);
+    let args = ['-background', 'none', '-tile', `${tile.x}x${tile.y}`, '-geometry', `${size - 2}x${size - 2}>+1+1`];
+    [].push.apply(args, icons.slice(i, i + atlas_size));
+    args.push(`icons_${size}_${i / atlas_size}.png`);
+    await $['D:/Applications/Cygwin/bin/magick.exe']['montage'].apply(null, args);
+    await $['D:/Applications/Cygwin/bin/magick.exe'](`icons_${size}_${i / atlas_size}.png`, 
+      '-fill', '#ffffff', '-colorize', '100%', `../icons_${size}_${i / atlas_size}.png`);
+    await $['D:/Applications/Cygwin/bin/optipng.exe']('-o7', '-clobber', '-strip', 'all', `../icons_${size}_${i / atlas_size}.png`);
+    ret.push({ size: size, icons: icons.slice(i, i + atlas_size), file: `icons_${size}_${i / atlas_size}.png` });
+  }
+  return ret;
 }
+
+for (let f of $.glob(`icons_*_*.png`)) $.rm(f);
+for (let f of $.glob(`../icons_*_*.png`)) $.rm(f);
 
 let icons = [];
-for (let size of $.glob(`icons_*`).map(x => /_(\d+)$/.test(x) ? RegExp.$1 : null).filter(x => x)){
-  icons.push(await run(size));
-}
-
-const tile = {
-  '1': { x: 1, y: 1 },
-  '2': { x: 2, y: 1 },
-  '3': { x: 3, y: 1 },
-  '4': { x: 2, y: 2 },
-  '5': { x: 3, y: 2 },
-  '6': { x: 3, y: 2 },
-  '7': { x: 4, y: 2 },
-  '8': { x: 4, y: 2 },
-  '9': { x: 3, y: 3 },
-  '10': { x: 4, y: 3 },
-  '11': { x: 4, y: 3 },
-  '12': { x: 4, y: 3 },
-  '13': { x: 5, y: 3 },
-  '14': { x: 5, y: 3 },
-  '15': { x: 5, y: 3 },
-  '16': { x: 5, y: 4 },
-  '17': { x: 5, y: 4 },
-  '18': { x: 5, y: 4 },
-  '19': { x: 5, y: 4 },
-  '20': { x: 5, y: 4 },
-  '21': { x: 6, y: 4 },
-  '22': { x: 6, y: 4 },
-  '23': { x: 6, y: 4 },
-  '21': { x: 6, y: 4 },
-  '25': { x: 5, y: 5 },
-  '26': { x: 6, y: 5 },
-  '27': { x: 6, y: 5 },
-  '28': { x: 6, y: 5 },
-  '29': { x: 6, y: 5 },
-  '30': { x: 6, y: 5 },
-  '31': { x: 7, y: 5 },
-  '32': { x: 7, y: 5 },
-  '33': { x: 7, y: 5 },
-  '34': { x: 7, y: 5 },
-  '35': { x: 7, y: 5 },
-  '36': { x: 6, y: 6 },
-  '37': { x: 7, y: 6 },
-  '38': { x: 7, y: 6 },
-  '39': { x: 7, y: 6 },
-  '40': { x: 7, y: 6 },
-  '41': { x: 7, y: 6 },
-  '42': { x: 7, y: 6 },
-  '43': { x: 8, y: 6 },
-  '44': { x: 8, y: 6 },
-  '45': { x: 8, y: 6 },
-  '46': { x: 8, y: 6 },
-  '47': { x: 8, y: 6 },
-  '48': { x: 8, y: 6 },
-};
+await $.glob(`icons_*`).map(x => /_(\d+)$/.test(x) ? RegExp.$1 : null).filter(x => x).parallel(async x => {
+  [].push.apply(icons, await run(x));
+}, 8);
+icons.sort((x, y) => +x.size - +y.size);
 
 function getUV(a, b){
   if (a == 0) return '0.f';
@@ -87,12 +60,12 @@ function getIconsLineH(item){
 
 function getIconsLineCpp(item){
   function getIconLineCpp(icon, index){
-    const t = tile[item.icons.length];
+    const t = getTile(item.icons.length);
     const pos_x = index % t.x;
     const pos_y = (index / t.x) | 0;
     const name = path.basename(icon, '.png');
     const res = path.dirname(icon);
-    return `ImIcon ICON_${res.split('_')[1]}_${name.toUpperCase()}{"textures/gui/${res}.png", `
+    return `ImIcon ICON_${res.split('_')[1]}_${name.toUpperCase()}{"textures/gui/${item.file}", `
       + `float2(${getUV(pos_x, t.x)}, ${getUV(pos_y, t.y)}), float2(${getUV(pos_x + 1, t.x)}, ${getUV(pos_y + 1, t.y)})};`;
   }
   return item.icons.map(getIconLineCpp).join('\n    ');
@@ -120,6 +93,8 @@ namespace ImGui
     };
 
     ${icons.map(getIconsLineH).join('\n    ')}
+
+    ${icons.map(x => x.size).unique().map(x => `utils::nullable<ImIcon> GetIcon${x}(const std::string& id);`).join('\n    ')}
 }`);
 
 fs.writeFileSync(`C:/Development/acc-rendering-adv/source/imgui/icons.cpp`, `#include "stdafx.h"
@@ -144,4 +119,12 @@ namespace ImGui
     }
 
     ${icons.map(getIconsLineCpp).join('\n    ')}
+
+    ${icons.map(x => x.size).unique().map(size => `utils::nullable<ImIcon> GetIcon${size}(const std::string& id)
+    {
+        ${icons.filter(x => x.size == size).map(x => x.icons).flat(1).map(y => {
+          return `if (id == ${JSON.stringify(path.basename(y, '.png').toUpperCase())}) return &ICON_${size}_${path.basename(y, '.png').toUpperCase()};`
+        }).join('\n        ')}
+        return nullptr;
+    }`).join('\n\n    ')}
 }`);
