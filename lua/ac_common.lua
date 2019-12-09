@@ -1769,7 +1769,7 @@ bool lj_isInReplayMode();
 const char* lj_readDataFile(const char* value);
 bool lj_isJoystickButtonPressed(uint32_t joystick, uint32_t button);
 float lj_getJoystickAxisValue(uint32_t joystick, uint32_t axis);
-int lj_isJoystickAxisValue(uint32_t joystick, uint32_t axis);
+float lj_isJoystickAxisValue(uint32_t joystick, uint32_t axis);
 int lj_getJoystickDpadValue(uint32_t joystick, uint32_t dpad);
 int lj_isJoystickDpadValue(uint32_t joystick, uint32_t dpad);
 void lj_poissonsampler_circle(void* value, int size);
