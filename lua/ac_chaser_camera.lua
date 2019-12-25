@@ -24,8 +24,6 @@ bool lj_getCamera_useBlur();
 void lj_setCamera_useBlur(bool v);
 bool lj_getCamera_useRadialBlur();
 void lj_setCamera_useRadialBlur(bool v);
-void lj_debug(const char* key, const char* value);
-void lj_log(const char* value);
 vec3 lj_getCarPosition();
 vec3 lj_getCarDirection();
 vec3 lj_getCarUp();
@@ -80,12 +78,6 @@ local function __sane(x)
 		__sane(x.b)
 	end
 	return x
-end
-ac.debug = function(key, value)
-	ffi.C.lj_debug(key ~= nil and tostring(key) or nil, value ~= nil and tostring(value) or nil)
-end
-ac.log = function(value)
-	ffi.C.lj_log(value ~= nil and tostring(value) or nil)
 end
 ac.getCarPosition = ffi.C.lj_getCarPosition
 ac.getCarDirection = ffi.C.lj_getCarDirection

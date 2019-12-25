@@ -1473,6 +1473,14 @@ void lj_free(void *ptr);
 		self:push(x)
 		return #self
 	end
+	function Vector:erase(x)
+		for i = 1, #self do
+			if self:get(i) == x then
+				self:remove(i)
+				return
+			end
+		end
+	end
 	function Vector:remove(i)
 		if type(i) == 'nil' then
 			return self:pop()
@@ -1734,6 +1742,71 @@ local function __math()
 		return result
 	end
 end
+local function __ac_audio()
+	ffi.cdef [[ 
+typedef struct {
+  void* host_;
+  void* nativeEvent_;
+  float volume;
+  float cameraInteriorMultiplier;
+  float cameraExteriorMultiplier;
+  float cameraTrackMultiplier;
+  bool inAutoLoopMode;
+} audioevent;
+]]
+	ac.AudioEvent = function(s, reverbResponse)
+		local created = ffi.C.lj_audioevent_new(tostring(s), reverbResponse and true or false)
+		return ffi.gc(created, ffi.C.lj_audioevent_gc)
+	end
+	__audioEventKeepAlive = {}
+	ffi.metatype('audioevent', {
+		__index = function(self, key)
+			if key == 'setPosition' then
+				return function(s, pos, dir, up, vel)
+					ffi.C.lj_audioevent_set_pos(s, pos, dir or vec3.new(0, 0, 1), up or vec3.new(0, 1, 0), vel or vec3.new(0, 0, 0))
+				end
+			end
+			if key == 'keepAlive' then
+				return function(s)
+					__audioEventKeepAlive[#__audioEventKeepAlive + 1] = s
+				end
+			end
+			if key == 'setParam' then
+				return ffi.C.lj_audioevent_set_param
+			end
+			if key == 'isValid' then
+				return function(s)
+					return s.host_ ~= nil and s.nativeEvent_ ~= nil
+				end
+			end
+			if key == 'isPlaying' then
+				return ffi.C.lj_audioevent_is_playing
+			end
+			if key == 'isPaused' then
+				return ffi.C.lj_audioevent_is_paused
+			end
+			if key == 'isWithinRange' then
+				return ffi.C.lj_audioevent_is_within_range
+			end
+			if key == 'resume' then
+				return ffi.C.lj_audioevent_resume
+			end
+			if key == 'resumeIf' then
+				return ffi.C.lj_audioevent_resume_if
+			end
+			if key == 'stop' then
+				return ffi.C.lj_audioevent_stop
+			end
+			if key == 'start' then
+				return ffi.C.lj_audioevent_start
+			end
+			error('audioevent has no member called \'' .. key .. '\'')
+		end,
+		__newindex = function(self, key, value)
+			error('audioevent has no member called \'' .. key .. '\'')
+		end
+	})
+end
 ac = {}
 function __num_fallback(v, f)
 	if type(v) ~= 'number' then
@@ -1746,12 +1819,18 @@ __ac_primitive()
 __vector()
 __ac_enums()
 __math()
+__ac_audio()
 ffi.cdef [[
 void* lj_memmove(void* dst, const void* src, size_t len);
 void* lj_malloc(size_t size);
 void* lj_calloc(size_t count, size_t size);
 void* lj_realloc(void* ptr, size_t size);
 void lj_free(void* ptr);
+void lj_debug(const char* key, const char* value);
+void lj_log(const char* value);
+void lj_warn(const char* value);
+void lj_error(const char* value);
+const char* lj_dirname();
 const char* lj_getPatchVersion();
 int lj_getPatchVersionCode();
 const char* lj_getFolder(int f);
@@ -1767,6 +1846,18 @@ float lj_getSunHeadingAngle();
 bool lj_isInteriorView();
 bool lj_isInReplayMode();
 const char* lj_readDataFile(const char* value);
+bool lj_loadSoundbank(const char* soundbank, const char* guids);
+audioevent* lj_audioevent_new(const char* path, bool reverb_response);
+void lj_audioevent_gc(audioevent* r);
+void lj_audioevent_set_pos(audioevent* self, const vec3& pos, const vec3& dir, const vec3& up, const vec3& velocity);
+void lj_audioevent_set_param(audioevent* self, const char* name, float value);
+bool lj_audioevent_is_playing(audioevent* self);
+bool lj_audioevent_is_paused(audioevent* self);
+bool lj_audioevent_is_within_range(audioevent* self);
+void lj_audioevent_resume(audioevent* self);
+void lj_audioevent_resume_if(audioevent* self, bool c);
+void lj_audioevent_stop(audioevent* self);
+void lj_audioevent_start(audioevent* self);
 bool lj_isJoystickButtonPressed(uint32_t joystick, uint32_t button);
 float lj_getJoystickAxisValue(uint32_t joystick, uint32_t axis);
 float lj_isJoystickAxisValue(uint32_t joystick, uint32_t axis);
@@ -1808,6 +1899,21 @@ local function __sane(x)
 	end
 	return x
 end
+ac.debug = function(key, value)
+	ffi.C.lj_debug(key ~= nil and tostring(key) or nil, value ~= nil and tostring(value) or nil)
+end
+ac.log = function(value)
+	ffi.C.lj_log(value ~= nil and tostring(value) or nil)
+end
+ac.warn = function(value)
+	ffi.C.lj_warn(value ~= nil and tostring(value) or nil)
+end
+ac.error = function(value)
+	ffi.C.lj_error(value ~= nil and tostring(value) or nil)
+end
+ac.dirname = function()
+	return ffi.string(ffi.C.lj_dirname())
+end
 ac.getPatchVersion = function()
 	return ffi.string(ffi.C.lj_getPatchVersion())
 end
@@ -1832,6 +1938,9 @@ ac.isInteriorView = ffi.C.lj_isInteriorView
 ac.isInReplayMode = ffi.C.lj_isInReplayMode
 ac.readDataFile = function(value)
 	return ffi.string(ffi.C.lj_readDataFile(value ~= nil and tostring(value) or nil))
+end
+ac.loadSoundbank = function(soundbank, guids)
+	return ffi.C.lj_loadSoundbank(soundbank ~= nil and tostring(soundbank) or nil, guids ~= nil and tostring(guids) or nil)
 end
 ac.isJoystickButtonPressed = function(joystick, button)
 	return ffi.C.lj_isJoystickButtonPressed(__sane(joystick), __sane(button))

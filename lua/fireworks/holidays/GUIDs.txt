@@ -1,0 +1,4 @@
+{4c650448-3b39-4d6f-8eaa-98a7d0ace29b} event:/extra_fireworks/hiss
+{88645547-2990-41ea-bac2-3bdfc70f75c5} event:/extra_fireworks/firework
+{08f6ba78-f576-4f9f-a232-47657d5fec19} bus:/
+{1e21189a-f43d-45c9-9051-8e99f05abe93} bank:/extra_fireworks

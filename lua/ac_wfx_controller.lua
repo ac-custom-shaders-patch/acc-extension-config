@@ -86,10 +86,6 @@ float lj_getTimeZoneDstOffset();
 float lj_getTimeZoneBaseOffset();
 weather_conditions lj_getConditionsSet();
 const char* lj_getPpFilter();
-void lj_debug__controller(const char* key, const char* value);
-void lj_log__controller(const char* value);
-void lj_warn__controller(const char* value);
-void lj_error__controller(const char* value);
 char lj_getInputWeatherType__controller();
 weather_conditions_temperatures lj_getInputTemperatures__controller();
 weather_conditions_wind lj_getInputWind__controller();
@@ -137,18 +133,6 @@ ac.getTimeZoneBaseOffset = ffi.C.lj_getTimeZoneBaseOffset
 ac.getConditionsSet = ffi.C.lj_getConditionsSet
 ac.getPpFilter = function()
 	return ffi.string(ffi.C.lj_getPpFilter())
-end
-ac.debug = function(key, value)
-	ffi.C.lj_debug__controller(key ~= nil and tostring(key) or nil, value ~= nil and tostring(value) or nil)
-end
-ac.log = function(value)
-	ffi.C.lj_log__controller(value ~= nil and tostring(value) or nil)
-end
-ac.warn = function(value)
-	ffi.C.lj_warn__controller(value ~= nil and tostring(value) or nil)
-end
-ac.error = function(value)
-	ffi.C.lj_error__controller(value ~= nil and tostring(value) or nil)
 end
 ac.getInputWeatherType = ffi.C.lj_getInputWeatherType__controller
 ac.getInputTemperatures = ffi.C.lj_getInputTemperatures__controller
