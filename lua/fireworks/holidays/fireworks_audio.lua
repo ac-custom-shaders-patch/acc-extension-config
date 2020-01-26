@@ -98,16 +98,16 @@ function audioSetExplosion(pos, volumeMult)
   local distanceToCamera = #(ac.getCameraPosition() - pos)
   if distanceToCamera > 800 then return end
   if poolExplosions == nil then
-    poolExplosions = AudioPool(6, '/extra_fireworks/firework', 0.1, true)
+    poolExplosions = AudioPool(16, '/extra_fireworks/firework', 0.1, true)
   end
-  poolExplosions.run(pos, distanceToCamera, (volumeMult or 1) * 0.5)
+  poolExplosions.run(pos, distanceToCamera, (volumeMult or 1))
 end
 
 function audioSetHiss(pos, volumeMult)
   local distanceToCamera = #(ac.getCameraPosition() - pos)
   if distanceToCamera > 400 then return end
   if poolHiss == nil then
-    poolHiss = AudioPool(4, '/extra_fireworks/hiss', 4)
+    poolHiss = AudioPool(8, '/extra_fireworks/hiss', 4)
   end
-  poolHiss.run(pos, distanceToCamera, (volumeMult or 1) * 0.3)
+  poolHiss.run(pos, distanceToCamera, (volumeMult or 1) * 0.7)
 end

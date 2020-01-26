@@ -68,36 +68,12 @@ firework* lj_firework_new();
 void lj_firework_gc(firework* r);
 void lj_set_fireworks(const void* arr);
 ]]
-local function __sane(x)
-	if type(x) == 'number' then
-		if not(x > -math.huge and x < math.huge) then
-			error('finite value is required, got: ' .. x)
-		end
-	elseif vec2.isvec2(x) then
-		__sane(x.x)
-		__sane(x.y)
-	elseif vec3.isvec3(x) then
-		__sane(x.x)
-		__sane(x.y)
-		__sane(x.z)
-	elseif vec4.isvec4(x) then
-		__sane(x.x)
-		__sane(x.y)
-		__sane(x.z)
-		__sane(x.w)
-	elseif rgb.isrgb(x) then
-		__sane(x.r)
-		__sane(x.g)
-		__sane(x.b)
-	end
-	return x
-end
 ac.getRandomFireworksSpot = ffi.C.lj_getRandomFireworksSpot
 ac.getFireworksSpot = function(index)
-	return ffi.C.lj_getFireworksSpot(__sane(index))
+	return ffi.C.lj_getFireworksSpot(ac.__sane(index))
 end
 ac.getFireworksSpotCount = ffi.C.lj_getFireworksSpotCount
 ac.addFireworkFlash = function(group, pos, color, duration)
-	ffi.C.lj_addFireworkFlash(__sane(group), __sane(pos), __sane(rgb.new(color)), __sane(duration))
+	ffi.C.lj_addFireworkFlash(ac.__sane(group), ac.__sane(pos), ac.__sane_rgb(color), ac.__sane(duration))
 end
 __ac_lists()

@@ -55,30 +55,6 @@ bool lj_looksBehind();
 vec3 lj_get_joystick_look();
 vec3 lj_get_camera_params_as_vec3(int index);
 ]]
-local function __sane(x)
-	if type(x) == 'number' then
-		if not(x > -math.huge and x < math.huge) then
-			error('finite value is required, got: ' .. x)
-		end
-	elseif vec2.isvec2(x) then
-		__sane(x.x)
-		__sane(x.y)
-	elseif vec3.isvec3(x) then
-		__sane(x.x)
-		__sane(x.y)
-		__sane(x.z)
-	elseif vec4.isvec4(x) then
-		__sane(x.x)
-		__sane(x.y)
-		__sane(x.z)
-		__sane(x.w)
-	elseif rgb.isrgb(x) then
-		__sane(x.r)
-		__sane(x.g)
-		__sane(x.b)
-	end
-	return x
-end
 ac.getCarPosition = ffi.C.lj_getCarPosition
 ac.getCarDirection = ffi.C.lj_getCarDirection
 ac.getCarUp = ffi.C.lj_getCarUp
@@ -92,28 +68,28 @@ ac.getTurboBoost = ffi.C.lj_getTurboBoost
 ac.getEngineLifeLeft = ffi.C.lj_getEngineLifeLeft
 ac.getCGHeight = ffi.C.lj_getCGHeight
 ac.getTyreSlip = function(tyre)
-	return ffi.C.lj_getTyreSlip(__sane(tyre))
+	return ffi.C.lj_getTyreSlip(ac.__sane(tyre))
 end
 ac.getTyreSlipRatio = function(tyre)
-	return ffi.C.lj_getTyreSlipRatio(__sane(tyre))
+	return ffi.C.lj_getTyreSlipRatio(ac.__sane(tyre))
 end
 ac.getTyreSlipAngle = function(tyre)
-	return ffi.C.lj_getTyreSlipAngle(__sane(tyre))
+	return ffi.C.lj_getTyreSlipAngle(ac.__sane(tyre))
 end
 ac.getTyreAngularSpeed = function(tyre)
-	return ffi.C.lj_getTyreAngularSpeed(__sane(tyre))
+	return ffi.C.lj_getTyreAngularSpeed(ac.__sane(tyre))
 end
 ac.getTyreContactPoint = function(tyre)
-	return ffi.C.lj_getTyreContactPoint(__sane(tyre))
+	return ffi.C.lj_getTyreContactPoint(ac.__sane(tyre))
 end
 ac.getTyrePosition = function(tyre)
-	return ffi.C.lj_getTyrePosition(__sane(tyre))
+	return ffi.C.lj_getTyrePosition(ac.__sane(tyre))
 end
 ac.getTyreDirection = function(tyre)
-	return ffi.C.lj_getTyreDirection(__sane(tyre))
+	return ffi.C.lj_getTyreDirection(ac.__sane(tyre))
 end
 ac.getDamageLevel = function(side)
-	return ffi.C.lj_getDamageLevel(__sane(side))
+	return ffi.C.lj_getDamageLevel(ac.__sane(side))
 end
 ac.getSteer = ffi.C.lj_getSteer
 ac.getGas = ffi.C.lj_getGas

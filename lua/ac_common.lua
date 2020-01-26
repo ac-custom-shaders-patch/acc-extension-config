@@ -45,6 +45,18 @@
 				error('vec2s can only be divided by vec2s and numbers')
 			end
 		end,
+		__pow = function(v, u)
+			if type(v) == 'number' then
+				return vec2(v, v) ^ u
+			end
+			if vec2.isvec2(u) then
+				return v:pow(u, vec2())
+			elseif type(u) == 'number' then
+				return vec2(v.x ^ u, v.y ^ u)
+			else
+				error('vec2s can only be raised to power of vec2s and numbers')
+			end
+		end,
 		__unm = function(v)
 			return vec2(-v.x, -v.y)
 		end,
@@ -67,6 +79,9 @@
 			isvec2 = function(x)
 				return ffi.istype('vec2', x)
 			end,
+			type = function(x)
+				return vec2
+			end,
 			clone = function(v)
 				return vec2(v.x, v.y)
 			end,
@@ -79,6 +94,11 @@
 				end
 				v.x = x
 				v.y = y
+				return v
+			end,
+			setLerp = function(v, a, b, k)
+				v.x = math.lerp(a.x, b.x, k)
+				v.y = math.lerp(a.y, b.y, k)
 				return v
 			end,
 			add = function(v, u, out)
@@ -115,10 +135,33 @@
 				out.y = v.y / u.y
 				return out
 			end,
+			pow = function(v, u, out)
+				out = out or v
+				if type(u) == 'number' then
+					out.x = v.x ^ u
+					out.y = v.y ^ u
+				else
+					out.x = v.x ^ u.x
+					out.y = v.y ^ u.y
+				end
+				return out
+			end,
 			scale = function(v, s, out)
 				out = out or v
 				out.x = v.x * s
 				out.y = v.y * s
+				return out
+			end,
+			saturate = function(v, out)
+				out = out or v
+				out.x = math.saturateN(v.x)
+				out.y = math.saturateN(v.y)
+				return out
+			end,
+			clamp = function(v, min, max, out)
+				out = out or v
+				out.x = math.clampN(v.x, min.x, max.x)
+				out.y = math.clampN(v.y, min.y, max.y)
 				return out
 			end,
 			length = function(v)
@@ -216,6 +259,18 @@ local function __ac_primitive_vec3()
 				error('vec3s can only be divided by vec3s and numbers')
 			end
 		end,
+		__pow = function(v, u)
+			if type(v) == 'number' then
+				return vec3(v, v, v) ^ u
+			end
+			if vec3.isvec3(u) then
+				return v:pow(u, vec3())
+			elseif type(u) == 'number' then
+				return vec3(v.x ^ u, v.y ^ u, v.z ^ u)
+			else
+				error('vec3s can only be raised to power of vec3s and numbers')
+			end
+		end,
 		__unm = function(v)
 			return vec3(-v.x, -v.y, -v.z)
 		end,
@@ -241,6 +296,9 @@ local function __ac_primitive_vec3()
 			isvec3 = function(x)
 				return ffi.istype('vec3', x)
 			end,
+			type = function(x)
+				return vec3
+			end,
 			clone = function(v)
 				return vec3(v.x, v.y, v.z)
 			end,
@@ -254,6 +312,12 @@ local function __ac_primitive_vec3()
 				v.x = x
 				v.y = y
 				v.z = z
+				return v
+			end,
+			setLerp = function(v, a, b, k)
+				v.x = math.lerp(a.x, b.x, k)
+				v.y = math.lerp(a.y, b.y, k)
+				v.z = math.lerp(a.z, b.z, k)
 				return v
 			end,
 			add = function(v, u, out)
@@ -296,11 +360,38 @@ local function __ac_primitive_vec3()
 				out.z = v.z / u.z
 				return out
 			end,
+			pow = function(v, u, out)
+				out = out or v
+				if type(u) == 'number' then
+					out.x = v.x ^ u
+					out.y = v.y ^ u
+					out.z = v.z ^ u
+				else
+					out.x = v.x ^ u.x
+					out.y = v.y ^ u.y
+					out.z = v.z ^ u.z
+				end
+				return out
+			end,
 			scale = function(v, s, out)
 				out = out or v
 				out.x = v.x * s
 				out.y = v.y * s
 				out.z = v.z * s
+				return out
+			end,
+			saturate = function(v, out)
+				out = out or v
+				out.x = math.saturateN(v.x)
+				out.y = math.saturateN(v.y)
+				out.z = math.saturateN(v.z)
+				return out
+			end,
+			clamp = function(v, min, max, out)
+				out = out or v
+				out.x = math.clampN(v.x, min.x, max.x)
+				out.y = math.clampN(v.y, min.y, max.y)
+				out.z = math.clampN(v.z, min.z, max.z)
 				return out
 			end,
 			length = function(v)
@@ -410,6 +501,18 @@ local function __ac_primitive_vec4()
 				error('vec4s can only be divided by vec4s and numbers')
 			end
 		end,
+		__pow = function(v, u)
+			if type(v) == 'number' then
+				return vec4(v, v, v, v) ^ u
+			end
+			if vec4.isvec4(u) then
+				return v:pow(u, vec4())
+			elseif type(u) == 'number' then
+				return vec4(v.x ^ u, v.y ^ u, v.z ^ u, v.w ^ u)
+			else
+				error('vec4s can only be raised to power of vec4s and numbers')
+			end
+		end,
 		__unm = function(v)
 			return vec4(-v.x, -v.y, -v.z, -v.w)
 		end,
@@ -444,6 +547,9 @@ local function __ac_primitive_vec4()
 			isvec4 = function(x)
 				return ffi.istype('vec4', x)
 			end,
+			type = function(x)
+				return vec4
+			end,
 			clone = function(v)
 				return vec4(v.x, v.y, v.z, v.w)
 			end,
@@ -458,6 +564,13 @@ local function __ac_primitive_vec4()
 				v.y = y
 				v.z = z
 				v.w = w
+				return v
+			end,
+			setLerp = function(v, a, b, k)
+				v.x = math.lerp(a.x, b.x, k)
+				v.y = math.lerp(a.y, b.y, k)
+				v.z = math.lerp(a.z, b.z, k)
+				v.w = math.lerp(a.w, b.w, k)
 				return v
 			end,
 			add = function(v, u, out)
@@ -506,12 +619,43 @@ local function __ac_primitive_vec4()
 				out.w = v.w / u.w
 				return out
 			end,
+			pow = function(v, u, out)
+				out = out or v
+				if type(u) == 'number' then
+					out.x = v.x ^ u
+					out.y = v.y ^ u
+					out.z = v.z ^ u
+					out.w = v.w ^ u
+				else
+					out.x = v.x ^ u.x
+					out.y = v.y ^ u.y
+					out.z = v.z ^ u.z
+					out.w = v.w ^ u.w
+				end
+				return out
+			end,
 			scale = function(v, s, out)
 				out = out or v
 				out.x = v.x * s
 				out.y = v.y * s
 				out.z = v.z * s
 				out.w = v.w * s
+				return out
+			end,
+			saturate = function(v, out)
+				out = out or v
+				out.x = math.saturateN(v.x)
+				out.y = math.saturateN(v.y)
+				out.z = math.saturateN(v.z)
+				out.w = math.saturateN(v.w)
+				return out
+			end,
+			clamp = function(v, min, max, out)
+				out = out or v
+				out.x = math.clampN(v.x, min.x, max.x)
+				out.y = math.clampN(v.y, min.y, max.y)
+				out.z = math.clampN(v.z, min.z, max.z)
+				out.w = math.clampN(v.w, min.w, max.w)
 				return out
 			end,
 			length = function(v)
@@ -646,6 +790,18 @@ local function __ac_primitive_rgb()
 				error('rgbs can only be divided by rgbs and numbers')
 			end
 		end,
+		__pow = function(v, u)
+			if type(v) == 'number' then
+				return rgb(v, v, v) ^ u
+			end
+			if rgb.isrgb(u) then
+				return v:pow(u, rgb())
+			elseif type(u) == 'number' then
+				return rgb(v.r ^ u, v.g ^ u, v.b ^ u)
+			else
+				error('rgbs can only be raised to power of rgbs and numbers')
+			end
+		end,
 		__unm = function(v)
 			return rgb(-v.r, -v.g, -v.b)
 		end,
@@ -704,6 +860,9 @@ local function __ac_primitive_rgb()
 			isrgb = function(r)
 				return ffi.istype('rgb', r)
 			end,
+			type = function(x)
+				return rgb
+			end,
 			clone = function(v)
 				return rgb(v.r, v.g, v.b)
 			end,
@@ -724,6 +883,12 @@ local function __ac_primitive_rgb()
 				v.r = r
 				v.g = g
 				v.b = b
+				return v
+			end,
+			setLerp = function(v, a, b, k)
+				v.r = math.lerp(a.r, b.r, k)
+				v.g = math.lerp(a.g, b.g, k)
+				v.b = math.lerp(a.b, b.b, k)
 				return v
 			end,
 			add = function(v, u, out)
@@ -766,11 +931,38 @@ local function __ac_primitive_rgb()
 				out.b = v.b / u.b
 				return out
 			end,
+			pow = function(v, u, out)
+				out = out or v
+				if type(u) == 'number' then
+					out.r = v.r ^ u
+					out.g = v.g ^ u
+					out.b = v.b ^ u
+				else
+					out.r = v.r ^ u.r
+					out.g = v.g ^ u.g
+					out.b = v.b ^ u.b
+				end
+				return out
+			end,
 			scale = function(v, s, out)
 				out = out or v
 				out.r = v.r * s
 				out.g = v.g * s
 				out.b = v.b * s
+				return out
+			end,
+			saturate = function(v, out)
+				out = out or v
+				out.r = math.saturateN(v.r)
+				out.g = math.saturateN(v.g)
+				out.b = math.saturateN(v.b)
+				return out
+			end,
+			clamp = function(v, min, max, out)
+				out = out or v
+				out.r = math.clampN(v.r, min.r, max.r)
+				out.g = math.clampN(v.g, min.g, max.g)
+				out.b = math.clampN(v.b, min.b, max.b)
 				return out
 			end,
 			normalize = function(v)
@@ -779,6 +971,14 @@ local function __ac_primitive_rgb()
 					return v / m
 				end
 				return v
+			end,
+			adjustSaturation = function(v, sat, out)
+				out = out or v
+				local avg = (v.r + v.g + v.b) / 3
+				out.r = math.max(math.lerp(avg, out.r, sat), 0)
+				out.g = math.max(math.lerp(avg, out.g, sat), 0)
+				out.b = math.max(math.lerp(avg, out.b, sat), 0)
+				return out
 			end,
 			value = rgbValue,
 			getValue = rgbValue,
@@ -873,6 +1073,9 @@ local function __ac_primitive_hsv()
 			ishsv = function(h)
 				return ffi.istype('hsv', h)
 			end,
+			type = function(x)
+				return hsv
+			end,
 			clone = function(v)
 				return hsv(v.h, v.s, v.v)
 			end,
@@ -942,6 +1145,18 @@ local function __ac_primitive_rgbm()
 				error('rgbms can only be divided by rgbms and numbers')
 			end
 		end,
+		__pow = function(v, u)
+			if type(v) == 'number' then
+				return rgbm(v, v, v) ^ u
+			end
+			if rgbm.isrgbm(u) then
+				return v:pow(u, rgbm())
+			elseif type(u) == 'number' then
+				return rgbm(v.r ^ u, v.g ^ u, v.b ^ u, v.mult ^ u)
+			else
+				error('rgbms can only be raised to power of rgbms and numbers')
+			end
+		end,
 		__unm = function(v)
 			return v * -1
 		end,
@@ -997,6 +1212,9 @@ local function __ac_primitive_rgbm()
 			isrgbm = function(r)
 				return ffi.istype('rgbm', r)
 			end,
+			type = function(x)
+				return rgbm
+			end,
 			clone = function(v)
 				return rgbm(v.r, v.g, v.b, v.mult)
 			end,
@@ -1009,6 +1227,13 @@ local function __ac_primitive_rgbm()
 				end
 				v.rgb = rgb
 				v.mult = mult
+				return v
+			end,
+			setLerp = function(v, a, b, k)
+				v.r = math.lerp(a.r, b.r, k)
+				v.g = math.lerp(a.g, b.g, k)
+				v.b = math.lerp(a.b, b.b, k)
+				v.mult = math.lerp(a.mult, b.mult, k)
 				return v
 			end,
 			add = function(v, u, out)
@@ -1045,10 +1270,41 @@ local function __ac_primitive_rgbm()
 				out.mult = v.mult / u.mult
 				return out
 			end,
+			pow = function(v, u, out)
+				out = out or v
+				if type(u) == 'number' then
+					out.r = v.r ^ u
+					out.g = v.g ^ u
+					out.b = v.b ^ u
+					out.mult = v.mult ^ u
+				else
+					out.r = v.r ^ u.r
+					out.g = v.g ^ u.g
+					out.b = v.b ^ u.b
+					out.mult = v.mult ^ u.mult
+				end
+				return out
+			end,
 			scale = function(v, s, out)
 				out = out or v
 				out.rgb = v.rgb * s
 				out.mult = v.mult * s
+				return out
+			end,
+			saturate = function(v, out)
+				out = out or v
+				out.r = math.saturateN(v.r)
+				out.g = math.saturateN(v.g)
+				out.b = math.saturateN(v.b)
+				out.mult = math.saturateN(v.mult)
+				return out
+			end,
+			clamp = function(v, min, max, out)
+				out = out or v
+				out.r = math.clampN(v.r, min.r, max.r)
+				out.g = math.clampN(v.g, min.g, max.g)
+				out.b = math.clampN(v.b, min.b, max.b)
+				out.mult = math.clampN(v.mult, min.mult, max.mult)
 				return out
 			end,
 			normalize = function(v)
@@ -1132,6 +1388,9 @@ local function __ac_primitive_quat()
 			return q:length()
 		end,
 		__index = {
+			type = function(x)
+				return quat
+			end,
 			isquat = function(x)
 				return ffi and ffi.istype('quat', x) or getmetatable(x) == quat
 			end,
@@ -1623,53 +1882,83 @@ local function __ac_enums()
 		LogLum = 6
 	}
 	ac.FolderId = {
-		Root = 5,
-		Cfg = 6,
-		Setups = 7,
-		Logs = 8,
-		Screenshots = 9,
-		Replays = 10,
-		ReplaysTemp = 11,
+		AppData = 0,
+		Documents = 1,
+		Root = 4,
+		Cfg = 5,
+		Setups = 6,
+		Logs = 7,
+		Screenshots = 8,
+		Replays = 9,
+		ReplaysTemp = 10,
+		UserSetups = 11,
 		PPFilters = 12,
-		Ext = 13,
-		ExtCfgSys = 14,
-		ExtCfgUser = 15
+		ContentCars = 13,
+		ContentDrivers = 14,
+		ContentTracks = 15,
+		ExtRoot = 16,
+		ExtCfgSys = 17,
+		ExtCfgUser = 18,
+		ExtTextures = 21,
+		ACApps = 23,
+		ACAppsPython = 24,
+		ExtCfgState = 25,
+		ContentFonts = 26,
+		RaceResults = 27
 	}
 end
 local function __math()
 	local function __clamp(x, min, max)
-		if x < min then
-			return min
-		end
-		if x > max then
-			return max
-		end
-		return x
+		return math.min(math.max(x, min), max)
+	end
+	math.clampN = __clamp
+	math.saturateN = function(x)
+		return math.min(math.max(x, 0), 1)
+	end
+	math.clampV = function(x, min, max)
+		return x:clone():clamp(min, max)
+	end
+	math.saturateV = function(x, min, max)
+		return x:clone():saturate()
 	end
 	math.clamp = function(x, min, max)
-		if vec2.isvec2(x) then
-			local b = vec2.new(min)
-			local t = vec2.new(max)
-			return vec2(__clamp(x.x, b.x, t.x), __clamp(x.y, b.y, t.y))
+		if type(x) == 'number' then
+			return __clamp(x, min, max)
 		end
+		local bn = type(min) == 'number'
+		local bt = type(max) == 'number'
+		if bn and bt then
+			if vec3.isvec3(x) then
+				return vec3(__clamp(x.x, min, max), __clamp(x.y, min, max), __clamp(x.z, min, max))
+			end
+			if vec2.isvec2(x) then
+				return vec2(__clamp(x.x, min, max), __clamp(x.y, min, max))
+			end
+			if vec4.isvec4(x) then
+				return vec4(__clamp(x.x, min, max), __clamp(x.y, min, max), __clamp(x.z, min, max), __clamp(x.w, min, max))
+			end
+			if rgb.isrgb(x) then
+				return rgb(__clamp(x.r, min, max), __clamp(x.g, min, max), __clamp(x.b, min, max))
+			end
+			if rgbm.isrgbm(x) then
+				return rgbm(__clamp(x.r, min, max), __clamp(x.g, min, max), __clamp(x.b, min, max), __clamp(x.mult, min, max))
+			end
+		end
+		local b = bn and min or x:type().new(min)
+		local t = bt and max or x:type().new(max)
 		if vec3.isvec3(x) then
-			local b = vec3.new(min)
-			local t = vec3.new(max)
 			return vec3(__clamp(x.x, b.x, t.x), __clamp(x.y, b.y, t.y), __clamp(x.z, b.z, t.z))
 		end
+		if vec2.isvec2(x) then
+			return vec2(__clamp(x.x, b.x, t.x), __clamp(x.y, b.y, t.y))
+		end
 		if vec4.isvec4(x) then
-			local b = vec4.new(min)
-			local t = vec4.new(max)
 			return vec4(__clamp(x.x, b.x, t.x), __clamp(x.y, b.y, t.y), __clamp(x.z, b.z, t.z), __clamp(x.w, b.w, t.w))
 		end
 		if rgb.isrgb(x) then
-			local b = rgb.new(min)
-			local t = rgb.new(max)
 			return rgb(__clamp(x.r, b.r, t.r), __clamp(x.g, b.g, t.g), __clamp(x.b, b.b, t.b))
 		end
 		if rgbm.isrgbm(x) then
-			local b = rgbm.new(min)
-			local t = rgbm.new(max)
 			return rgbm(__clamp(x.r, b.r, t.r), __clamp(x.g, b.g, t.g), __clamp(x.b, b.b, t.b), __clamp(x.mult, b.mult, t.mult))
 		end
 		return __clamp(x, min, max)
@@ -1808,6 +2097,58 @@ typedef struct {
 	})
 end
 ac = {}
+function __sane(x)
+	if type(x) == 'number' then
+		if not(x > -math.huge and x < math.huge) then
+			error('finite value is required, got: ' .. x)
+		end
+	elseif vec2.isvec2(x) then
+		__sane(x.x)
+		__sane(x.y)
+	elseif vec3.isvec3(x) then
+		__sane(x.x)
+		__sane(x.y)
+		__sane(x.z)
+	elseif vec4.isvec4(x) then
+		__sane(x.x)
+		__sane(x.y)
+		__sane(x.z)
+		__sane(x.w)
+	elseif rgb.isrgb(x) then
+		__sane(x.r)
+		__sane(x.g)
+		__sane(x.b)
+	end
+	return x
+end
+ac.__sane = __sane
+ac.__sane_rgb = function(x)
+	if type(x) == 'number' then
+		__sane(x)
+		return rgb(x, x, x)
+	elseif rgb.isrgb(x) then
+		__sane(x.r)
+		__sane(x.g)
+		__sane(x.b)
+		return x
+	else
+		return rgb.new(x)
+	end
+end
+ac.skipSaneChecks = function()
+	ac.__sane = function(x)
+		return x
+	end
+	ac.__sane_rgb = function(x)
+		if type(x) == 'number' then
+			return rgb(x, x, x)
+		elseif rgb.isrgb(x) then
+			return x
+		else
+			return rgb.new(x)
+		end
+	end
+end
 function __num_fallback(v, f)
 	if type(v) ~= 'number' then
 		return f
@@ -1839,12 +2180,21 @@ const char* lj_getTrackLayout();
 vec3 lj_getCameraPosition();
 vec3 lj_getCameraUp();
 vec3 lj_getCameraSide();
+vec3 lj_getCameraForward();
 vec3 lj_getCameraDirection();
+void lj_getCameraPositionTo(vec3& r);
+void lj_getCameraUpTo(vec3& r);
+void lj_getCameraSideTo(vec3& r);
+void lj_getCameraForwardTo(vec3& r);
+void lj_getCameraDirectionTo(vec3& r);
 float lj_getSunAngle();
 float lj_getSunPitchAngle();
 float lj_getSunHeadingAngle();
 bool lj_isInteriorView();
 bool lj_isInReplayMode();
+float lj_getDeltaT();
+float lj_getGameDeltaT();
+float lj_getConditionsTimeScale();
 const char* lj_readDataFile(const char* value);
 bool lj_loadSoundbank(const char* soundbank, const char* guids);
 audioevent* lj_audioevent_new(const char* path, bool reverb_response);
@@ -1875,30 +2225,6 @@ vec4 lj_cfg_track_vec4(const char* key, const char* value, const vec4& def);
 float lj_cfg_track_decimal(const char* key, const char* value, float def);
 const char* lj_cfg_track_string(const char* key, const char* value, const char* def);
 ]]
-local function __sane(x)
-	if type(x) == 'number' then
-		if not(x > -math.huge and x < math.huge) then
-			error('finite value is required, got: ' .. x)
-		end
-	elseif vec2.isvec2(x) then
-		__sane(x.x)
-		__sane(x.y)
-	elseif vec3.isvec3(x) then
-		__sane(x.x)
-		__sane(x.y)
-		__sane(x.z)
-	elseif vec4.isvec4(x) then
-		__sane(x.x)
-		__sane(x.y)
-		__sane(x.z)
-		__sane(x.w)
-	elseif rgb.isrgb(x) then
-		__sane(x.r)
-		__sane(x.g)
-		__sane(x.b)
-	end
-	return x
-end
 ac.debug = function(key, value)
 	ffi.C.lj_debug(key ~= nil and tostring(key) or nil, value ~= nil and tostring(value) or nil)
 end
@@ -1919,7 +2245,7 @@ ac.getPatchVersion = function()
 end
 ac.getPatchVersionCode = ffi.C.lj_getPatchVersionCode
 ac.getFolder = function(f)
-	return ffi.string(ffi.C.lj_getFolder(__sane(f)))
+	return ffi.string(ffi.C.lj_getFolder(ac.__sane(f)))
 end
 ac.getTrackId = function()
 	return ffi.string(ffi.C.lj_getTrackId())
@@ -1930,12 +2256,31 @@ end
 ac.getCameraPosition = ffi.C.lj_getCameraPosition
 ac.getCameraUp = ffi.C.lj_getCameraUp
 ac.getCameraSide = ffi.C.lj_getCameraSide
+ac.getCameraForward = ffi.C.lj_getCameraForward
 ac.getCameraDirection = ffi.C.lj_getCameraDirection
+ac.getCameraPositionTo = function(r)
+	ffi.C.lj_getCameraPositionTo(ac.__sane(r))
+end
+ac.getCameraUpTo = function(r)
+	ffi.C.lj_getCameraUpTo(ac.__sane(r))
+end
+ac.getCameraSideTo = function(r)
+	ffi.C.lj_getCameraSideTo(ac.__sane(r))
+end
+ac.getCameraForwardTo = function(r)
+	ffi.C.lj_getCameraForwardTo(ac.__sane(r))
+end
+ac.getCameraDirectionTo = function(r)
+	ffi.C.lj_getCameraDirectionTo(ac.__sane(r))
+end
 ac.getSunAngle = ffi.C.lj_getSunAngle
 ac.getSunPitchAngle = ffi.C.lj_getSunPitchAngle
 ac.getSunHeadingAngle = ffi.C.lj_getSunHeadingAngle
 ac.isInteriorView = ffi.C.lj_isInteriorView
 ac.isInReplayMode = ffi.C.lj_isInReplayMode
+ac.getDeltaT = ffi.C.lj_getDeltaT
+ac.getGameDeltaT = ffi.C.lj_getGameDeltaT
+ac.getConditionsTimeScale = ffi.C.lj_getConditionsTimeScale
 ac.readDataFile = function(value)
 	return ffi.string(ffi.C.lj_readDataFile(value ~= nil and tostring(value) or nil))
 end
@@ -1943,17 +2288,17 @@ ac.loadSoundbank = function(soundbank, guids)
 	return ffi.C.lj_loadSoundbank(soundbank ~= nil and tostring(soundbank) or nil, guids ~= nil and tostring(guids) or nil)
 end
 ac.isJoystickButtonPressed = function(joystick, button)
-	return ffi.C.lj_isJoystickButtonPressed(__sane(joystick), __sane(button))
+	return ffi.C.lj_isJoystickButtonPressed(ac.__sane(joystick), ac.__sane(button))
 end
 ac.getJoystickAxisValue = function(joystick, axis)
-	return ffi.C.lj_getJoystickAxisValue(__sane(joystick), __sane(axis))
+	return ffi.C.lj_getJoystickAxisValue(ac.__sane(joystick), ac.__sane(axis))
 end
 ac.isJoystickAxisValue = function(joystick, axis)
-	return ffi.C.lj_isJoystickAxisValue(__sane(joystick), __sane(axis))
+	return ffi.C.lj_isJoystickAxisValue(ac.__sane(joystick), ac.__sane(axis))
 end
 ac.getJoystickDpadValue = function(joystick, dpad)
-	return ffi.C.lj_getJoystickDpadValue(__sane(joystick), __sane(dpad))
+	return ffi.C.lj_getJoystickDpadValue(ac.__sane(joystick), ac.__sane(dpad))
 end
 ac.isJoystickDpadValue = function(joystick, dpad)
-	return ffi.C.lj_isJoystickDpadValue(__sane(joystick), __sane(dpad))
+	return ffi.C.lj_isJoystickDpadValue(ac.__sane(joystick), ac.__sane(dpad))
 end

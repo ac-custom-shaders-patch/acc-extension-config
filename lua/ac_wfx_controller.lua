@@ -75,7 +75,10 @@ float lj_getDaySeconds();
 int lj_getDayOfTheYear();
 float lj_getTimeMultiplier();
 vec3 lj_getSunDirection();
+void lj_getSunDirectionTo(vec3& r);
 vec3 lj_getMoonDirection();
+void lj_getMoonDirectionTo(vec3& r);
+float lj_getMoonFraction();
 float lj_getAltitude();
 float lj_getSunAltitude();
 vec2 lj_getTrackCoordinates();
@@ -85,6 +88,7 @@ float lj_getTimeZoneOffset();
 float lj_getTimeZoneDstOffset();
 float lj_getTimeZoneBaseOffset();
 weather_conditions lj_getConditionsSet();
+void lj_getConditionsSetTo(weather_conditions& r);
 const char* lj_getPpFilter();
 char lj_getInputWeatherType__controller();
 weather_conditions_temperatures lj_getInputTemperatures__controller();
@@ -92,36 +96,19 @@ weather_conditions_wind lj_getInputWind__controller();
 weather_conditions_track lj_getInputTrackState__controller();
 void lj_setConditionsSet__controller(const weather_conditions& c);
 ]]
-local function __sane(x)
-	if type(x) == 'number' then
-		if not(x > -math.huge and x < math.huge) then
-			error('finite value is required, got: ' .. x)
-		end
-	elseif vec2.isvec2(x) then
-		__sane(x.x)
-		__sane(x.y)
-	elseif vec3.isvec3(x) then
-		__sane(x.x)
-		__sane(x.y)
-		__sane(x.z)
-	elseif vec4.isvec4(x) then
-		__sane(x.x)
-		__sane(x.y)
-		__sane(x.z)
-		__sane(x.w)
-	elseif rgb.isrgb(x) then
-		__sane(x.r)
-		__sane(x.g)
-		__sane(x.b)
-	end
-	return x
-end
 ac.getCurrentTime = ffi.C.lj_getCurrentTime
 ac.getDaySeconds = ffi.C.lj_getDaySeconds
 ac.getDayOfTheYear = ffi.C.lj_getDayOfTheYear
 ac.getTimeMultiplier = ffi.C.lj_getTimeMultiplier
 ac.getSunDirection = ffi.C.lj_getSunDirection
+ac.getSunDirectionTo = function(r)
+	ffi.C.lj_getSunDirectionTo(ac.__sane(r))
+end
 ac.getMoonDirection = ffi.C.lj_getMoonDirection
+ac.getMoonDirectionTo = function(r)
+	ffi.C.lj_getMoonDirectionTo(ac.__sane(r))
+end
+ac.getMoonFraction = ffi.C.lj_getMoonFraction
 ac.getAltitude = ffi.C.lj_getAltitude
 ac.getSunAltitude = ffi.C.lj_getSunAltitude
 ac.getTrackCoordinates = ffi.C.lj_getTrackCoordinates
@@ -131,6 +118,9 @@ ac.getTimeZoneOffset = ffi.C.lj_getTimeZoneOffset
 ac.getTimeZoneDstOffset = ffi.C.lj_getTimeZoneDstOffset
 ac.getTimeZoneBaseOffset = ffi.C.lj_getTimeZoneBaseOffset
 ac.getConditionsSet = ffi.C.lj_getConditionsSet
+ac.getConditionsSetTo = function(r)
+	ffi.C.lj_getConditionsSetTo(ac.__sane(r))
+end
 ac.getPpFilter = function()
 	return ffi.string(ffi.C.lj_getPpFilter())
 end
@@ -139,5 +129,5 @@ ac.getInputTemperatures = ffi.C.lj_getInputTemperatures__controller
 ac.getInputWind = ffi.C.lj_getInputWind__controller
 ac.getInputTrackState = ffi.C.lj_getInputTrackState__controller
 ac.setConditionsSet = function(c)
-	ffi.C.lj_setConditionsSet__controller(__sane(c))
+	ffi.C.lj_setConditionsSet__controller(ac.__sane(c))
 end
