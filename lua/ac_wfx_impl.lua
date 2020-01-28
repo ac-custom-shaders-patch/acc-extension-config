@@ -669,6 +669,7 @@ void lj_setParticlesSmokeMaterial__impl(const particles_material& material);
 void lj_setParticlesGrassMaterial__impl(const particles_material& material);
 void lj_setParticlesGrassPiecesMaterial__impl(const particles_material& material);
 void lj_setWeatherFakeShadowOpacity__impl(float v);
+void lj_setWeatherFakeShadowConcentrarion__impl(float v);
 void lj_setWeatherDynamicAmbientMultiplier__impl(float v);
 void lj_setWeatherDynamicAmbientSaturation__impl(float v);
 void lj_setWeatherDynamicAmbientGamma__impl(float v);
@@ -1125,6 +1126,9 @@ ac.setParticlesGrassPiecesMaterial = function(material)
 end
 ac.setWeatherFakeShadowOpacity = function(v)
 	ffi.C.lj_setWeatherFakeShadowOpacity__impl(ac.__sane(v))
+end
+ac.setWeatherFakeShadowConcentrarion = function(v)
+	ffi.C.lj_setWeatherFakeShadowConcentrarion__impl(ac.__sane(v))
 end
 ac.setWeatherDynamicAmbientMultiplier = function(v)
 	ffi.C.lj_setWeatherDynamicAmbientMultiplier__impl(ac.__sane(v))
