@@ -1,0 +1,45 @@
+First of all, of course, we’d first like to thank the Kunos developers for all of the effort they put into making AC such a great simulator and giving us an excellent basis for our work.
+
+Made by:
+- henter, Jackson Papageorge (mclarenf1papa/JPG_18) of IER Simulations, x4fab.
+
+With help from:
+- Blamer: great app for setting up track lights and more;
+- Chr0m3: tyre wear triggering tyres blowing;
+- leBluem: improvements for python apps, documentation;
+- Levels: new chaser camera script;
+- Peter Boese: incredible Weather FX implementation, Sol;
+- Scott Shaw: amazing tyre damages textures;
+- Silent: per-set textures for Tyres FX;
+- Tsuka1427: invaluable help with core functionality of Custom Shaders Patch.
+
+Using:
+- Clouds noise texture based [on demo](https://www.shadertoy.com/view/3dVXDc) by piyushslayer;
+- GPU-accelerated particles based [on this article](https://wickedengine.net/2017/11/07/gpu-based-particle-simulation/) by turanszkij;
+- Grass idea [from GRID](http://blog.codemasters.com/wp-content/uploads/2014/10/Rendering-Fields-of-Grass-using-DirectX11-in-GRID-Autosport.pdf) by Richard Kettlewell (Codemasters);
+- Icons from [www.flaticon.com](https://www.flaticon.com/);
+- Lighting algorithm based on [a great idea](https://worldoffries.wordpress.com/2015/02/19/simple-alternative-to-clustered-shading-for-thousands-of-lights/) by Luke Mamacos;
+- Sky shader forked from [this shader](https://www.shadertoy.com/view/Ml2cWG) made by robobo1221;
+- 8K star map from NASA.
+
+Separate thanks to people preparing configs:
+- atrip3, Benner900, Black Velvet Tzenamo, Blamer, demonized, fanapryde, Fat-Alfie, Fuzo, Gunnar333, Inori, Kavoriken, Kavoriken, leBluem, Ly993, Marocco2, NoThrottleControl aka nptc364, Paul12451, Peter Boese, Ruske06, Rusty#9643, Tovey LD2F, WilliamRiker, RealAKP.
+
+And the ones who shared backgrounds:
+- ACZeldaFan17, AssettoDrive.net, Gunnar333, ItsDraik, JavireTwo, MadMat, T-Top, demonized, exydeus, hamzah, kelnor34, maymate, nptc.
+
+Special effects used:
+- CMAA2;
+- FidelityFX by AMD;
+- FXAA;
+- HBAO+ by NVIDIA;
+- MLAA;
+- SMAA.
+
+Plus, other open-source software:
+- [Dear ImGui](https://github.com/ocornut/imgui);
+- LuaJIT;
+- [meshoptimizer](https://github.com/zeux/meshoptimizer);
+- [minhook fork from ReShade](https://github.com/crosire/reshade).
+
+I’m very sorry if I forgot to mention you, if that’s the case, please contact me.
