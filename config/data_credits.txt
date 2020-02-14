@@ -5,6 +5,7 @@ Made by:
 
 With help from:
 - Blamer: great app for setting up track lights and more;
+- Bombadil: new chaser camera script;
 - Chr0m3: tyre wear triggering tyres blowing;
 - leBluem: improvements for python apps, documentation;
 - Levels: new chaser camera script;
