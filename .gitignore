@@ -30,3 +30,7 @@ shaders.zip
 *.ini-flatten.txt
 config/tracks/unpacked*
 */.vscode/*
+config/*.ini.off
+
+textures/rain_fx/*
+textures/common/dev/*
