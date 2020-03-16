@@ -1,9 +1,11 @@
+[size=20]Custom Shaders Patch[/size]
+
 First of all, of course, we’d first like to thank the Kunos developers for all of the effort they put into making AC such a great simulator and giving us an excellent basis for our work.
 
-Made by:
+[b]Made by:[/b]
 - henter, Jackson Papageorge (mclarenf1papa/JPG_18) of IER Simulations, x4fab.
 
-With help from:
+[b]With help from:[/b]
 - Blamer: great app for setting up track lights and more;
 - Bombadil: new chaser camera script;
 - Chr0m3: tyre wear triggering tyres blowing;
@@ -14,7 +16,7 @@ With help from:
 - Silent: per-set textures for Tyres FX;
 - Tsuka1427: invaluable help with core functionality of Custom Shaders Patch.
 
-Using:
+[b]Using:[/b]
 - Clouds noise texture based [on demo](https://www.shadertoy.com/view/3dVXDc) by piyushslayer;
 - GPU-accelerated particles based [on this article](https://wickedengine.net/2017/11/07/gpu-based-particle-simulation/) by turanszkij;
 - Grass idea [from GRID](http://blog.codemasters.com/wp-content/uploads/2014/10/Rendering-Fields-of-Grass-using-DirectX11-in-GRID-Autosport.pdf) by Richard Kettlewell (Codemasters);
@@ -23,13 +25,13 @@ Using:
 - Sky shader forked from [this shader](https://www.shadertoy.com/view/Ml2cWG) made by robobo1221;
 - 8K star map from NASA.
 
-Separate thanks to people preparing configs:
+[b]Separate thanks to people preparing configs:[/b]
 - atrip3, Benner900, Black Velvet Tzenamo, Blamer, demonized, fanapryde, Fat-Alfie, Fuzo, Gunnar333, Inori, Kavoriken, Kavoriken, leBluem, Ly993, Marocco2, NoThrottleControl aka nptc364, Paul12451, Peter Boese, Ruske06, Rusty#9643, Tovey LD2F, WilliamRiker, RealAKP.
 
-And the ones who shared backgrounds:
+[b]And the ones who shared backgrounds:[/b]
 - ACZeldaFan17, AssettoDrive.net, Gunnar333, ItsDraik, JavireTwo, MadMat, T-Top, demonized, exydeus, hamzah, kelnor34, maymate, nptc.
 
-Special effects used:
+[b]Special effects used:[/b]
 - CMAA2;
 - FidelityFX by AMD;
 - FXAA;
@@ -37,7 +39,7 @@ Special effects used:
 - MLAA;
 - SMAA.
 
-Plus, other open-source software:
+[b]Plus, other open-source software:[/b]
 - [Dear ImGui](https://github.com/ocornut/imgui);
 - LuaJIT;
 - [meshoptimizer](https://github.com/zeux/meshoptimizer);
