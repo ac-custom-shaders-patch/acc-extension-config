@@ -546,6 +546,8 @@ float lj_getCloudsShadow__impl();
 void lj_setCloudShadowMaps__impl(bool value);
 void lj_setAmbientColor__impl(const rgb& c);
 void lj_setBaseAmbientColor__impl(const rgb& c);
+void lj_setExtraAmbientColor__impl(const rgb& c);
+void lj_setExtraAmbientDirection__impl(const vec3& c);
 void lj_setCloudsLight__impl(const vec3& dir, const rgb& color, float earth_radius);
 void lj_resetCloudsLight__impl();
 bool lj_isRainFxActive__impl();
@@ -863,6 +865,12 @@ ac.setAmbientColor = function(c)
 end
 ac.setBaseAmbientColor = function(c)
 	ffi.C.lj_setBaseAmbientColor__impl(ac.__sane_rgb(c))
+end
+ac.setExtraAmbientColor = function(c)
+	ffi.C.lj_setExtraAmbientColor__impl(ac.__sane_rgb(c))
+end
+ac.setExtraAmbientDirection = function(c)
+	ffi.C.lj_setExtraAmbientDirection__impl(ac.__sane(c))
 end
 ac.setCloudsLight = function(dir, color, earth_radius)
 	ffi.C.lj_setCloudsLight__impl(ac.__sane(dir), ac.__sane_rgb(color), ac.__sane(earth_radius or 6371e3))
