@@ -3,12 +3,15 @@ _packed*
 _*.ini
 *.psd
 *.zsh
-weather*/*
 textures/_*
+weather*/*
 sfx/*
 lua/.src/*
 tzdata/.src/*
 shaders
+.vs
+
+!weather-controllers/base
 
 # something for debugging and uploading
 backgrounds/*.jpg
