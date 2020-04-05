@@ -105,6 +105,7 @@ local function __ac_clouds()
       bool flipVertical;
       bool customOrientation;
       bool noTilt;
+      bool flipHorizontalShading;
       vec3 up;
       vec3 side;
     };
