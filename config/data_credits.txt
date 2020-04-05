@@ -20,7 +20,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - Clouds noise texture based [on demo](https://www.shadertoy.com/view/3dVXDc) by piyushslayer;
 - GPU-accelerated particles based [on this article](https://wickedengine.net/2017/11/07/gpu-based-particle-simulation/) by turanszkij;
 - Grass idea [from GRID](http://blog.codemasters.com/wp-content/uploads/2014/10/Rendering-Fields-of-Grass-using-DirectX11-in-GRID-Autosport.pdf) by Richard Kettlewell (Codemasters);
-- Icons from [www.flaticon.com](https://www.flaticon.com/);
+- Icons from ;
 - Lighting algorithm based on [a great idea](https://worldoffries.wordpress.com/2015/02/19/simple-alternative-to-clustered-shading-for-thousands-of-lights/) by Luke Mamacos;
 - Sky shader forked from [this shader](https://www.shadertoy.com/view/Ml2cWG) made by robobo1221;
 - 8K star map from NASA.
@@ -44,5 +44,11 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - LuaJIT;
 - [meshoptimizer](https://github.com/zeux/meshoptimizer);
 - [minhook fork from ReShade](https://github.com/crosire/reshade).
+
+[b]And icons:[/b]
+- Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/);
+- Icons made by [fjstudio](https://www.flaticon.com/authors/fjstudio) from [www.flaticon.com](https://www.flaticon.com/);
+- Icons made by [Those Icons](https://www.flaticon.com/authors/those-icons) from [www.flaticon.com](https://www.flaticon.com/);
+- Icons made by [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect) from [www.flaticon.com](https://www.flaticon.com/).
 
 I’m very sorry if I forgot to mention you, if that’s the case, please contact me.
