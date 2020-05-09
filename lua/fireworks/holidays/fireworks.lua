@@ -27,6 +27,10 @@ function update(dt, intensity, holidayType)
     pyros[i]:update(dt, allowToSpawn, intensity, holidayType)
   end
 
+  if holidayType == ac.HolidayType.Halloween then
+    intensity = math.min(intensity, 0.05)
+  end
+
   ac.debug('items', piecesSize)
   ac.debug('holiday', holidayType)
   ac.debug('intensity', intensity)
