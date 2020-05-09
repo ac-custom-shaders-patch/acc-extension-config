@@ -252,7 +252,7 @@ function Piece:updateBase(dt)
 end
 
 function Piece:update(P, dt)
-  P.pos = P.pos + P.velocity * dt
+  P.pos:add(P.velocity * dt)
   if self.timeout ~= nil and self.timeout > 0 then
     self.timeout = self.timeout - dt
     return true

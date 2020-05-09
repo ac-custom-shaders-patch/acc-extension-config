@@ -554,6 +554,7 @@ void lj_resetCloudsLight__impl();
 bool lj_isRainFxActive__impl();
 float lj_getRainAmount__impl();
 void lj_setRainAmount__impl(float v);
+void lj_setRainWetness__impl(float v);
 void lj_setSunColor__impl(const rgb& c);
 void lj_setSkyStarsMap__impl(const char* v);
 void lj_setSkyMoonTexture__impl(const char* v);
@@ -881,6 +882,9 @@ ac.isRainFxActive = ffi.C.lj_isRainFxActive__impl
 ac.getRainAmount = ffi.C.lj_getRainAmount__impl
 ac.setRainAmount = function(v)
 	ffi.C.lj_setRainAmount__impl(ac.__sane(v))
+end
+ac.setRainWetness = function(v)
+	ffi.C.lj_setRainWetness__impl(ac.__sane(v))
 end
 ac.setSunColor = function(c)
 	ffi.C.lj_setSunColor__impl(ac.__sane_rgb(c))
