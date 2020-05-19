@@ -5,6 +5,12 @@ function tileSize(resolution){
   return 2;
 }
 
+let groups = {
+  'icons': 'ICON',
+  'emoticons': 'SMILEY',
+  'flags': 'FLAG',
+};
+
 function getTile(count){
   let side = Math.ceil(Math.sqrt(count));
   let ret = { x: side, y: side };
@@ -12,32 +18,41 @@ function getTile(count){
   return ret;
 }
 
-async function run(size){
-  let icons = $.glob(`icons_${size}/*.png`);
+async function run(params){
+  let size = params.size;
+  let icons = $.glob(`${params.group}_${size}/*.png`);
   let ret = [];
   let atlas_size = Math.pow(tileSize(+size), 2);
   for (let i = 0; i < icons.length; i += atlas_size) {
     let tile = getTile(icons.slice(i, i + atlas_size).length);
     let args = ['-background', 'none', '-tile', `${tile.x}x${tile.y}`, '-geometry', `${size - 2}x${size - 2}>+1+1`];
     [].push.apply(args, icons.slice(i, i + atlas_size));
-    args.push(`icons_${size}_${i / atlas_size}.png`);
+    args.push(`${params.group}_${size}_${i / atlas_size}.png`);
     await $['D:/Applications/Cygwin/bin/magick.exe']['montage'].apply(null, args);
-    await $['D:/Applications/Cygwin/bin/magick.exe'](`icons_${size}_${i / atlas_size}.png`, 
-      '-fill', '#ffffff', '-colorize', '100%', `../icons_${size}_${i / atlas_size}.png`);
-    await $['D:/Applications/Cygwin/bin/optipng.exe']('-o7', '-clobber', '-strip', 'all', `../icons_${size}_${i / atlas_size}.png`);
-    ret.push({ size: size, icons: icons.slice(i, i + atlas_size), file: `icons_${size}_${i / atlas_size}.png` });
+    if (params.group == 'icons'){
+      await $['D:/Applications/Cygwin/bin/magick.exe'](`${params.group}_${size}_${i / atlas_size}.png`, 
+        '-fill', '#ffffff', '-colorize', '100%', `../${params.group}_${size}_${i / atlas_size}.png`);
+    } else {
+      $.cp(`${params.group}_${size}_${i / atlas_size}.png`, `../${params.group}_${size}_${i / atlas_size}.png`);
+    }
+    await $['D:/Applications/Cygwin/bin/optipng.exe']('-o7', '-clobber', '-strip', 'all', `../${params.group}_${size}_${i / atlas_size}.png`);
+    ret.push({ size: size, type: groups[params.group], icons: icons.slice(i, i + atlas_size), file: `${params.group}_${size}_${i / atlas_size}.png` });
   }
   return ret;
 }
 
-for (let f of $.glob(`icons_*_*.png`)) $.rm(f);
-for (let f of $.glob(`../icons_*_*.png`)) $.rm(f);
+for (let f of Object.keys(groups).map(x => [$.glob(`${x}_*_*.png`), $.glob(`../${x}_*_*.png`)]).flat(Infinity)) {
+  $.rm(f);
+}
 
 let icons = [];
-await $.glob(`icons_*`).map(x => /_(\d+)$/.test(x) ? RegExp.$1 : null).filter(x => x).parallel(async x => {
-  [].push.apply(icons, await run(x));
-}, 8);
+await Object.keys(groups).map(x => $.glob(`${x}_*`)).flat()
+  .map(x => /^(\w+)_(\d+)$/.test(x) ? { group: RegExp.$1, size: RegExp.$2 } : null).filter(x => x)
+  .parallel(async x => {
+    [].push.apply(icons, await run(x));
+  }, 8);
 icons.sort((x, y) => +x.size - +y.size);
+// return;
 
 function getUV(a, b){
   if (a == 0) return '0.f';
@@ -49,11 +64,21 @@ function getUV(a, b){
   return `${a}.f/${b}.f`;
 }
 
+function getType(icon){
+  let p = path.dirname(icon).split('_')[0];
+  return groups[p] || $.fail('Unknown group: ' + p);
+}
+
+function getName(icon){
+  return path.basename(icon, '.png').replace(/-/g, '_').toUpperCase();
+}
+
 function getIconsLineH(item){
   function getIconLineH(icon, index){
-    const name = path.basename(icon, '.png');
     const res = path.dirname(icon);
-    return `extern ImIcon ICON_${res.split('_')[1]}_${name.toUpperCase()};`;
+    const type = getType(icon);
+    const name = getName(icon);
+    return `extern ImIcon ${type}_${res.split('_')[1]}_${name};`;
   }
   return item.icons.map(getIconLineH).join('\n    ');
 }
@@ -63,12 +88,29 @@ function getIconsLineCpp(item){
     const t = getTile(item.icons.length);
     const pos_x = index % t.x;
     const pos_y = (index / t.x) | 0;
-    const name = path.basename(icon, '.png');
     const res = path.dirname(icon);
-    return `ImIcon ICON_${res.split('_')[1]}_${name.toUpperCase()}{"textures/gui/${item.file}", `
+    const type = getType(icon);
+    const name = getName(icon);
+    return `ImIcon ${type}_${res.split('_')[1]}_${name}{"textures/gui/${item.file}", `
       + `float2(${getUV(pos_x, t.x)}, ${getUV(pos_y, t.y)}), float2(${getUV(pos_x + 1, t.x)}, ${getUV(pos_y + 1, t.y)})};`;
   }
   return item.icons.map(getIconLineCpp).join('\n    ');
+}
+
+function getIconGetterH(name, type, useWideChar){
+  return icons.filter(x => x.type == type).map(x => x.size).unique()
+    .map(x => `utils::nullable<ImIcon> Get${name}${x}(const ${useWideChar ? 'std::wstring' : 'std::string'}& id);`).join('\n    ');
+}
+
+function getIconGetterCpp(name, type, useWideChar){
+  return icons.filter(x => x.type == type).map(x => x.size).unique()
+  .map(size => `utils::nullable<ImIcon> Get${name}${size}(const ${useWideChar ? 'std::wstring' : 'std::string'}& id)
+    {
+        ${icons.filter(x => x.size == size && x.type == type).map(x => x.icons).flat(1).map(y => {
+          return `if (id == ${useWideChar ? 'L' : ''}${JSON.stringify(getName(y))}) return &${getType(y)}_${size}_${getName(y)};`
+        }).join('\n        ')}
+        return nullptr;
+    }`).join('\n\n    ');
 }
 
 fs.writeFileSync(`C:/Development/acc-rendering-adv/source/imgui/icons.h`, `#pragma once
@@ -93,8 +135,8 @@ namespace ImGui
     };
 
     ${icons.map(getIconsLineH).join('\n    ')}
-
-    ${icons.map(x => x.size).unique().map(x => `utils::nullable<ImIcon> GetIcon${x}(const std::string& id);`).join('\n    ')}
+    ${getIconGetterH('Icon', 'ICON', false)}
+    ${getIconGetterH('Flag', 'FLAG', true)}
 }`);
 
 fs.writeFileSync(`C:/Development/acc-rendering-adv/source/imgui/icons.cpp`, `#include "stdafx.h"
@@ -120,11 +162,7 @@ namespace ImGui
 
     ${icons.map(getIconsLineCpp).join('\n    ')}
 
-    ${icons.map(x => x.size).unique().map(size => `utils::nullable<ImIcon> GetIcon${size}(const std::string& id)
-    {
-        ${icons.filter(x => x.size == size).map(x => x.icons).flat(1).map(y => {
-          return `if (id == ${JSON.stringify(path.basename(y, '.png').toUpperCase())}) return &ICON_${size}_${path.basename(y, '.png').toUpperCase()};`
-        }).join('\n        ')}
-        return nullptr;
-    }`).join('\n\n    ')}
+    ${getIconGetterCpp('Icon', 'ICON', false)}
+
+    ${getIconGetterCpp('Flag', 'FLAG', true)}
 }`);
