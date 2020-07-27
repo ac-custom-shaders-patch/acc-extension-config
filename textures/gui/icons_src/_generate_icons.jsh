@@ -25,7 +25,8 @@ async function run(params){
   let atlas_size = Math.pow(tileSize(+size), 2);
   for (let i = 0; i < icons.length; i += atlas_size) {
     let tile = getTile(icons.slice(i, i + atlas_size).length);
-    let args = ['-background', 'none', '-tile', `${tile.x}x${tile.y}`, '-geometry', `${size - 2}x${size - 2}>+1+1`];
+    let fill = params.group == 'flags' && size == 64;
+    let args = ['-background', 'none', '-tile', `${tile.x}x${tile.y}`, '-geometry', `${size - 2}x${size - 2}${fill ? '^' : '>'}+1+1`];
     [].push.apply(args, icons.slice(i, i + atlas_size));
     args.push(`${params.group}_${size}_${i / atlas_size}.png`);
     await $['D:/Applications/Cygwin/bin/magick.exe']['montage'].apply(null, args);

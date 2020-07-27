@@ -634,7 +634,7 @@ float lj_getPpSepia__impl();
 float lj_getPpSaturation__impl();
 float lj_getPpBrightness__impl();
 float lj_getPpContrast__impl();
-float lj_getPpTonemapFunction__impl();
+int lj_getPpTonemapFunction__impl();
 float lj_getPpTonemapExposure__impl();
 float lj_getPpTonemapGamma__impl();
 float lj_getPpTonemapMappingFactor__impl();
