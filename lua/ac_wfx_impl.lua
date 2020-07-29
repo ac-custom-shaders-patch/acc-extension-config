@@ -133,6 +133,7 @@ local function __ac_clouds()
     vec2 texSize;
     float orderBy;
     float fogMultiplier;
+    float extraFidelity;
   } cloud;
 
   typedef struct {
@@ -521,6 +522,7 @@ void lj_set_track_condition__impl(const char* key, float value);
 rgb lj_getSkyAbsorption__impl(const vec3& dir);
 void lj_setBrightnessMult__impl(float v);
 void lj_setOverallSkyBrightnessMult__impl(float v);
+void lj_setTrackHeatFactor__impl(float v);
 void lj_getSkyAbsorptionTo__impl(rgb& r, const vec3& dir);
 vec3 lj_fixHeading__impl(const vec3& dir);
 void lj_fixHeadingSelf__impl(vec3& dir);
@@ -795,6 +797,9 @@ ac.setBrightnessMult = function(v)
 end
 ac.setOverallSkyBrightnessMult = function(v)
 	ffi.C.lj_setOverallSkyBrightnessMult__impl(ac.__sane(v))
+end
+ac.setTrackHeatFactor = function(v)
+	ffi.C.lj_setTrackHeatFactor__impl(ac.__sane(v))
 end
 ac.getSkyAbsorptionTo = function(r, dir)
 	ffi.C.lj_getSkyAbsorptionTo__impl(ac.__sane_rgb(r), ac.__sane(dir))

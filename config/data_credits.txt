@@ -3,9 +3,10 @@
 First of all, of course, we’d first like to thank the Kunos developers for all of the effort they put into making AC such a great simulator and giving us an excellent basis for our work.
 
 [b]Made by:[/b]
-- henter, Jackson Papageorge (mclarenf1papa/JPG_18) of IER Simulations, x4fab.
+- henter, Jackson Papageorge (mclarenf1papa/JPG_18) of IER Simulations, Stereo, x4fab.
 
 [b]With help from:[/b]
+- Alessandro Micali: nicely done grass tyre texture;
 - Blamer: great app for setting up track lights and more;
 - Bombadil: new chaser camera script;
 - Chr0m3: tyre wear triggering tyres blowing;
