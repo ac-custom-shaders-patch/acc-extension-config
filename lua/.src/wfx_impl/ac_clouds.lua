@@ -64,6 +64,7 @@ ffi.cdef [[
     vec2 texSize;
     float orderBy;
     float fogMultiplier;
+    float extraFidelity;
   } cloud;
 
   typedef struct {
