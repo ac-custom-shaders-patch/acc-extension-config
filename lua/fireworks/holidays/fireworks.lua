@@ -12,7 +12,7 @@ for i = 1, ac.getFireworksSpotCount() do
 end
 local pyrosSize = #pyros
 
-function update(dt, intensity)
+function update(dt, intensity, holidayType)
   audioPoolPrepare(dt)
   
   local piecesSize = #piecesList
@@ -22,12 +22,17 @@ function update(dt, intensity)
     end
   end
 
-  local allowToSpawn = intensity > 0 and piecesSize < 50
+  local allowToSpawn = intensity > 0 and piecesSize < 150
   for i = 1, pyrosSize do
-    pyros[i]:update(dt, allowToSpawn, intensity)
+    pyros[i]:update(dt, allowToSpawn, intensity, holidayType)
+  end
+
+  if holidayType == ac.HolidayType.Halloween then
+    intensity = math.min(intensity, 0.05)
   end
 
   ac.debug('items', piecesSize)
+  ac.debug('holiday', holidayType)
   ac.debug('intensity', intensity)
 
   -- runGC()

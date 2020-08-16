@@ -1906,6 +1906,18 @@ local function __ac_enums()
 		ContentFonts = 26,
 		RaceResults = 27
 	}
+	ac.HolidayType = {
+		None = 0,
+		NewYear = 1,
+		Christmas = 2,
+		VictoryDay = 3,
+		IndependenceDay = 4,
+		Halloween = 5,
+		JapanFestival = 6,
+		ChineseNewYear = 7,
+		EidAlAdha = 8,
+		GuyFawkesNight = 9
+	}
 end
 local function __math()
 	local function __clamp(x, min, max)
@@ -2182,6 +2194,7 @@ vec3 lj_getCameraUp();
 vec3 lj_getCameraSide();
 vec3 lj_getCameraForward();
 vec3 lj_getCameraDirection();
+float lj_getCameraFOV();
 void lj_getCameraPositionTo(vec3& r);
 void lj_getCameraUpTo(vec3& r);
 void lj_getCameraSideTo(vec3& r);
@@ -2258,6 +2271,7 @@ ac.getCameraUp = ffi.C.lj_getCameraUp
 ac.getCameraSide = ffi.C.lj_getCameraSide
 ac.getCameraForward = ffi.C.lj_getCameraForward
 ac.getCameraDirection = ffi.C.lj_getCameraDirection
+ac.getCameraFOV = ffi.C.lj_getCameraFOV
 ac.getCameraPositionTo = function(r)
 	ffi.C.lj_getCameraPositionTo(ac.__sane(r))
 end

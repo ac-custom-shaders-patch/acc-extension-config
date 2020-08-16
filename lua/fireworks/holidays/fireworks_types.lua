@@ -121,6 +121,14 @@ function GlowingRocket:update(P, dt)
   return P.velocity.y > 0 and (P.pos.y < self.flyTo or P.velocity.y > 10)
 end
 
+-- Random spawning rocket
+
+function RandomRocket()
+  local r = math.random()
+  return r > 0.5 and Rocket
+    or GlowingRocket
+end
+
 -- Series of rockets
 
 RocketsGroup = Group:newType()
@@ -277,7 +285,7 @@ function MassiveSpark:audio(P)
 end
 function MassiveSpark:update(P, dt)
   P.velocity.y = P.velocity.y - 10 * dt
-  P.velocity = P.velocity + randomVec3() * dt * math.max(0, 100 - 100 * self.timeout)
+  P.velocity:add(randomVec3():scale(dt * math.max(0, 100 - 100 * self.timeout)))
   self:setSparkingDir(-self.velocity, 0.2, 0.2)
   self:setSparkingSpeed(#P.velocity * 0.5, 0.5)  
   self:addLight(0.1, P.glowColor)
@@ -289,6 +297,7 @@ end
 
 TrailingSpark = Piece:newType()
 function TrailingSpark:init(P)
+  self.speed = self.speed or 20
   self.targetRadius = self.targetRadius or 7
   self.angleSpeed = self.angleSpeed or 10
   self:setSparking(1, 4)
@@ -306,9 +315,10 @@ function TrailingSpark:audio(P)
   audioSetHiss(P.pos)
 end
 function TrailingSpark:update(P, dt)
-  P.velocity = P.velocity + randomVec3() * dt * 150
-  if #P.velocity > 20 then 
-    P.velocity = P.velocity * 20 / #P.velocity
+  P.velocity:add(randomVec3():scale(dt * 150))
+  local speed = #P.velocity
+  if speed > 20 then 
+    P.velocity:scale(self.speed / speed)
   end
   self:setSparkingDir(-self.velocity, 0.0, 0.0)
   self:setSparkingSpeed(#P.velocity * 0.5, 0.1)  
@@ -321,7 +331,7 @@ end
 
 ConeSpark = Piece:newType()
 function ConeSpark:init(P)
-  P.velocity = math.normalize(P.velocity) * 60
+  P.velocity = math.normalize(P.velocity) * (self.speed or 60)
 
   self.targetRadius = self.targetRadius or 7
   self.angleSpeed = self.angleSpeed or 10
@@ -335,11 +345,20 @@ function ConeSpark:audio(P)
 end
 function ConeSpark:update(P, dt)
   P.velocity.y = P.velocity.y - 5 * dt
-  P.velocity = math.applyLag(P.velocity, vec3(), 0.98, dt)
+  P.velocity:set(math.applyLag(P.velocity, vec3(), 0.98, dt))
   self:setSparkingDir(-math.normalize(P.velocity), 1, 1)
   self:setSparkingSpeed(#P.velocity * 0.5, 0.5)  
   self:addLight(0.5, self.color * 0.5)
   return Piece.update(self, P, dt)
+end
+
+-- Random spark
+
+function RandomSpark()
+  local r = math.random()
+  return r > 0.67 and MassiveSpark
+    or r > 0.33 and TrailingSpark
+    or ConeSpark
 end
 
 -- Spiral
@@ -434,4 +453,11 @@ function DoubleTwirl:update(P, dt)
   P[2].sideA = -P[1].sideAPrev
   P[2].sideB = -P[1].sideBPrev
   return Group.update(self, P, dt)
+end
+
+function RandomContinuousEffect()
+  local r = math.random()
+  if r > 0.67 then return DoubleTwirl end
+  if r > 0.33 then return Twirl end
+  return Spiral
 end

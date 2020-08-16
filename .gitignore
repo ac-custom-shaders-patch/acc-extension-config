@@ -6,7 +6,10 @@ _*.ini
 textures/_*
 weather*/*
 sfx/*
-lua/.src/*
+lua/.src/*.js*
+.vscode
+*.bat
+lua/.src/*.sublime-*
 tzdata/.src/*
 shaders
 .vs
@@ -37,3 +40,4 @@ config/*.ini.off
 
 textures/rain_fx/*
 textures/common/dev/*
+vao-patches-cars

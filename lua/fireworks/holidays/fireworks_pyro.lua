@@ -14,9 +14,10 @@ function Pyro:new(p1)
   return o
 end
 
-function Pyro:spawnNext(intensity)
+function Pyro:spawnNext(intensity, holidayType)
   if self.scheme == nil then
-    self.scheme = coroutine.create(PyroSchemesDev or PyroSchemes[1 + math.floor(#PyroSchemes * math.random())])
+    local list = PyroSchemes[holidayType] or PyroSchemes[ac.HolidayType.None]
+    self.scheme = coroutine.create(PyroSchemesDev or list[1 + math.floor(#list * math.random())])
   end
 
   local ran, timeout = coroutine.resume(self.scheme)
@@ -34,7 +35,7 @@ function Pyro:spawnNext(intensity)
   end
 end
 
-function Pyro:update(dt, allowToSpawn, intensity)
+function Pyro:update(dt, allowToSpawn, intensity, holidayType)
   if self.spawnDelay > 0 then 
     self.spawnDelay = self.spawnDelay - dt
     return
@@ -60,5 +61,5 @@ function Pyro:update(dt, allowToSpawn, intensity)
 
   currentSource.pos = self.pos
   currentSource.index = self.sourceIndex
-  self:spawnNext(intensity)
+  self:spawnNext(intensity, holidayType)
 end
