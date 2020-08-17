@@ -15,7 +15,7 @@ Most of the stuff is adjustable with ini files: live, saving a car/track-config 
 
 ## Links:
 
-- [Some documentation](https://github.com/ac-custom-shaders-patch/acc-extension-config/wiki);
+- [The wiki here on GitHub](https://github.com/ac-custom-shaders-patch/acc-extension-config/wiki);
 - [Custom Shaders Patch webpage](https://acstuff.ru/patch/);
 - [Trello board with more details](https://trello.com/b/xq54vHsX/ac-patch);
 - [Shaders used by Shaders Patch](https://gitlab.com/ac-custom-shaders-patch/public/acc-shaders/tree/master).
