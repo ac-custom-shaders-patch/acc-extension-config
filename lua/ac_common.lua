@@ -1918,6 +1918,12 @@ local function __ac_enums()
 		EidAlAdha = 8,
 		GuyFawkesNight = 9
 	}
+	ac.SkyRegion = {
+		None = 0,
+		Sun = 1,
+		Opposite = 2,
+		All = 3
+	}
 end
 local function __math()
 	local function __clamp(x, min, max)
