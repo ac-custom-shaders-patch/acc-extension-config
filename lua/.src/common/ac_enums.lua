@@ -93,3 +93,10 @@ ac.HolidayType = {
   EidAlAdha = 8,
   GuyFawkesNight = 9
 }
+
+ac.SkyRegion = {
+  None = 0,
+  Sun = 1,
+  Opposite = 2,
+  All = 3
+}
