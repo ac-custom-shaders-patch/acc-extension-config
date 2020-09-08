@@ -612,6 +612,7 @@ void lj_setSkyV2Primaries__impl(uint32_t side, const vec3& v);
 void lj_setSkyV2Rainbow__impl(float v);
 void lj_setSkyV2RainbowSecondary__impl(float v);
 void lj_setSkyV2RainbowDarkening__impl(float v);
+void lj_setSkyV2GradientDirection__impl(const vec3& v);
 void lj_resetSpecularColor__impl();
 void lj_setSpecularColor__impl(const rgb& c);
 void lj_resetEmissiveMultiplier__impl();
@@ -1080,6 +1081,9 @@ ac.setSkyV2RainbowSecondary = function(v)
 end
 ac.setSkyV2RainbowDarkening = function(v)
 	ffi.C.lj_setSkyV2RainbowDarkening__impl(ac.__sane(v))
+end
+ac.setSkyV2GradientDirection = function(v)
+	ffi.C.lj_setSkyV2GradientDirection__impl(ac.__sane(v))
 end
 ac.resetSpecularColor = ffi.C.lj_resetSpecularColor__impl
 ac.setSpecularColor = function(c)
