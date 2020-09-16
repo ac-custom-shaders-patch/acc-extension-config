@@ -38,6 +38,5 @@ config/tracks/unpacked*
 */.vscode/*
 config/*.ini.off
 
-textures/rain_fx/*
 textures/common/dev/*
 vao-patches-cars
