@@ -631,6 +631,7 @@ void lj_setGodraysNoiseMask__impl(float v);
 void lj_setGodraysDepthMapThreshold__impl(float v);
 void lj_setGlareThreshold__impl(float v);
 void lj_setGlareBloomFilterThreshold__impl(float v);
+void lj_setGlareBloomLuminanceGamma__impl(float v);
 void lj_setGlareStarFilterThreshold__impl(float v);
 void lj_setPpColorTemperatureK__impl(float v);
 void lj_setPpWhiteBalanceK__impl(float v);
@@ -1128,6 +1129,9 @@ ac.setGlareThreshold = function(v)
 end
 ac.setGlareBloomFilterThreshold = function(v)
 	ffi.C.lj_setGlareBloomFilterThreshold__impl(ac.__sane(v))
+end
+ac.setGlareBloomLuminanceGamma = function(v)
+	ffi.C.lj_setGlareBloomLuminanceGamma__impl(ac.__sane(v))
 end
 ac.setGlareStarFilterThreshold = function(v)
 	ffi.C.lj_setGlareStarFilterThreshold__impl(ac.__sane(v))
