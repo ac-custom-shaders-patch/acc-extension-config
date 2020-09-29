@@ -562,15 +562,8 @@ void lj_setSkyStarsMap__impl(const char* v);
 void lj_setSkyMoonTexture__impl(const char* v);
 void lj_setSkyColor__impl(const rgb& c);
 void lj_setSkyAnisotropicIntensity__impl(float v);
-void lj_setSkyZenithOffset__impl(float v);
-void lj_setSkyZenithDensityExp__impl(float v);
-void lj_setSkyInputYOffset__impl(float v);
 void lj_setSkyMultiScatterPhase__impl(float v);
-void lj_setSkyDensity__impl(float v);
 void lj_setSkyBrightnessMult__impl(float v);
-void lj_setSkySunBaseColor__impl(const rgb& v);
-void lj_setSkySunBrightness__impl(float v);
-void lj_setSkySunMieExp__impl(float v);
 void lj_setSkySunMoonSizeMultiplier__impl(float v);
 void lj_setSkyMoonBaseColor__impl(const rgb& v);
 void lj_setSkyMoonMieExp__impl(float v);
@@ -587,6 +580,39 @@ void lj_setSkyPlanetsOpacity__impl(float v);
 void lj_setSkyPlanetsSizeBase__impl(float v);
 void lj_setSkyPlanetsSizeVariance__impl(float v);
 void lj_setSkyPlanetsSizeMultiplier__impl(float v);
+void lj_setSkyUseV2__impl(bool v);
+void lj_setSkyZenithOffset__impl(float v);
+void lj_setSkyZenithDensityExp__impl(float v);
+void lj_setSkyInputYOffset__impl(float v);
+void lj_setSkyDensity__impl(float v);
+void lj_setSkySunBaseColor__impl(const rgb& v);
+void lj_setSkySunBrightness__impl(float v);
+void lj_setSkySunMieExp__impl(float v);
+void lj_setSkyV2RefractiveIndex__impl(uint32_t side, float v);
+void lj_setSkyV2DepolarizationFactor__impl(uint32_t side, float v);
+void lj_setSkyV2Luminance__impl(uint32_t side, float v);
+void lj_setSkyV2MieCoefficient__impl(uint32_t side, float v);
+void lj_setSkyV2MieDirectionalG__impl(uint32_t side, float v);
+void lj_setSkyV2MieZenithLength__impl(uint32_t side, float v);
+void lj_setSkyV2MieV__impl(uint32_t side, float v);
+void lj_setSkyV2NumMolecules__impl(uint32_t side, float v);
+void lj_setSkyV2Rayleigh__impl(uint32_t side, float v);
+void lj_setSkyV2YOffset__impl(uint32_t side, float v);
+void lj_setSkyV2YScale__impl(uint32_t side, float v);
+void lj_setSkyV2RayleighZenithLength__impl(uint32_t side, float v);
+void lj_setSkyV2SunIntensityFactor__impl(uint32_t side, float v);
+void lj_setSkyV2SunIntensityFalloffSteepness__impl(uint32_t side, float v);
+void lj_setSkyV2Turbidity__impl(uint32_t side, float v);
+void lj_setSkyV2SunShapeMult__impl(uint32_t side, float v);
+void lj_setSkyV2BackgroundLight__impl(uint32_t side, float v);
+void lj_setSkyV2Saturation__impl(uint32_t side, float v);
+void lj_setSkyV2Gamma__impl(uint32_t side, float v);
+void lj_setSkyV2MieKCoefficient__impl(uint32_t side, const vec3& v);
+void lj_setSkyV2Primaries__impl(uint32_t side, const vec3& v);
+void lj_setSkyV2Rainbow__impl(float v);
+void lj_setSkyV2RainbowSecondary__impl(float v);
+void lj_setSkyV2RainbowDarkening__impl(float v);
+void lj_setSkyV2GradientDirection__impl(const vec3& v);
 void lj_resetSpecularColor__impl();
 void lj_setSpecularColor__impl(const rgb& c);
 void lj_resetEmissiveMultiplier__impl();
@@ -605,6 +631,7 @@ void lj_setGodraysNoiseMask__impl(float v);
 void lj_setGodraysDepthMapThreshold__impl(float v);
 void lj_setGlareThreshold__impl(float v);
 void lj_setGlareBloomFilterThreshold__impl(float v);
+void lj_setGlareBloomLuminanceGamma__impl(float v);
 void lj_setGlareStarFilterThreshold__impl(float v);
 void lj_setPpColorTemperatureK__impl(float v);
 void lj_setPpWhiteBalanceK__impl(float v);
@@ -906,32 +933,11 @@ end
 ac.setSkyAnisotropicIntensity = function(v)
 	ffi.C.lj_setSkyAnisotropicIntensity__impl(ac.__sane(v))
 end
-ac.setSkyZenithOffset = function(v)
-	ffi.C.lj_setSkyZenithOffset__impl(ac.__sane(v))
-end
-ac.setSkyZenithDensityExp = function(v)
-	ffi.C.lj_setSkyZenithDensityExp__impl(ac.__sane(v))
-end
-ac.setSkyInputYOffset = function(v)
-	ffi.C.lj_setSkyInputYOffset__impl(ac.__sane(v))
-end
 ac.setSkyMultiScatterPhase = function(v)
 	ffi.C.lj_setSkyMultiScatterPhase__impl(ac.__sane(v))
 end
-ac.setSkyDensity = function(v)
-	ffi.C.lj_setSkyDensity__impl(ac.__sane(v))
-end
 ac.setSkyBrightnessMult = function(v)
 	ffi.C.lj_setSkyBrightnessMult__impl(ac.__sane(v))
-end
-ac.setSkySunBaseColor = function(v)
-	ffi.C.lj_setSkySunBaseColor__impl(ac.__sane_rgb(v))
-end
-ac.setSkySunBrightness = function(v)
-	ffi.C.lj_setSkySunBrightness__impl(ac.__sane(v))
-end
-ac.setSkySunMieExp = function(v)
-	ffi.C.lj_setSkySunMieExp__impl(ac.__sane(v))
 end
 ac.setSkySunMoonSizeMultiplier = function(v)
 	ffi.C.lj_setSkySunMoonSizeMultiplier__impl(ac.__sane(v))
@@ -981,6 +987,105 @@ end
 ac.setSkyPlanetsSizeMultiplier = function(v)
 	ffi.C.lj_setSkyPlanetsSizeMultiplier__impl(ac.__sane(v))
 end
+ac.setSkyUseV2 = function(v)
+	ffi.C.lj_setSkyUseV2__impl(ac.__sane(v))
+end
+ac.setSkyZenithOffset = function(v)
+	ffi.C.lj_setSkyZenithOffset__impl(ac.__sane(v))
+end
+ac.setSkyZenithDensityExp = function(v)
+	ffi.C.lj_setSkyZenithDensityExp__impl(ac.__sane(v))
+end
+ac.setSkyInputYOffset = function(v)
+	ffi.C.lj_setSkyInputYOffset__impl(ac.__sane(v))
+end
+ac.setSkyDensity = function(v)
+	ffi.C.lj_setSkyDensity__impl(ac.__sane(v))
+end
+ac.setSkySunBaseColor = function(v)
+	ffi.C.lj_setSkySunBaseColor__impl(ac.__sane_rgb(v))
+end
+ac.setSkySunBrightness = function(v)
+	ffi.C.lj_setSkySunBrightness__impl(ac.__sane(v))
+end
+ac.setSkySunMieExp = function(v)
+	ffi.C.lj_setSkySunMieExp__impl(ac.__sane(v))
+end
+ac.setSkyV2RefractiveIndex = function(side, v)
+	ffi.C.lj_setSkyV2RefractiveIndex__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2DepolarizationFactor = function(side, v)
+	ffi.C.lj_setSkyV2DepolarizationFactor__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2Luminance = function(side, v)
+	ffi.C.lj_setSkyV2Luminance__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2MieCoefficient = function(side, v)
+	ffi.C.lj_setSkyV2MieCoefficient__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2MieDirectionalG = function(side, v)
+	ffi.C.lj_setSkyV2MieDirectionalG__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2MieZenithLength = function(side, v)
+	ffi.C.lj_setSkyV2MieZenithLength__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2MieV = function(side, v)
+	ffi.C.lj_setSkyV2MieV__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2NumMolecules = function(side, v)
+	ffi.C.lj_setSkyV2NumMolecules__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2Rayleigh = function(side, v)
+	ffi.C.lj_setSkyV2Rayleigh__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2YOffset = function(side, v)
+	ffi.C.lj_setSkyV2YOffset__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2YScale = function(side, v)
+	ffi.C.lj_setSkyV2YScale__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2RayleighZenithLength = function(side, v)
+	ffi.C.lj_setSkyV2RayleighZenithLength__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2SunIntensityFactor = function(side, v)
+	ffi.C.lj_setSkyV2SunIntensityFactor__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2SunIntensityFalloffSteepness = function(side, v)
+	ffi.C.lj_setSkyV2SunIntensityFalloffSteepness__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2Turbidity = function(side, v)
+	ffi.C.lj_setSkyV2Turbidity__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2SunShapeMult = function(side, v)
+	ffi.C.lj_setSkyV2SunShapeMult__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2BackgroundLight = function(side, v)
+	ffi.C.lj_setSkyV2BackgroundLight__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2Saturation = function(side, v)
+	ffi.C.lj_setSkyV2Saturation__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2Gamma = function(side, v)
+	ffi.C.lj_setSkyV2Gamma__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2MieKCoefficient = function(side, v)
+	ffi.C.lj_setSkyV2MieKCoefficient__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2Primaries = function(side, v)
+	ffi.C.lj_setSkyV2Primaries__impl(ac.__sane(side), ac.__sane(v))
+end
+ac.setSkyV2Rainbow = function(v)
+	ffi.C.lj_setSkyV2Rainbow__impl(ac.__sane(v))
+end
+ac.setSkyV2RainbowSecondary = function(v)
+	ffi.C.lj_setSkyV2RainbowSecondary__impl(ac.__sane(v))
+end
+ac.setSkyV2RainbowDarkening = function(v)
+	ffi.C.lj_setSkyV2RainbowDarkening__impl(ac.__sane(v))
+end
+ac.setSkyV2GradientDirection = function(v)
+	ffi.C.lj_setSkyV2GradientDirection__impl(ac.__sane(v))
+end
 ac.resetSpecularColor = ffi.C.lj_resetSpecularColor__impl
 ac.setSpecularColor = function(c)
 	ffi.C.lj_setSpecularColor__impl(ac.__sane_rgb(c))
@@ -1024,6 +1129,9 @@ ac.setGlareThreshold = function(v)
 end
 ac.setGlareBloomFilterThreshold = function(v)
 	ffi.C.lj_setGlareBloomFilterThreshold__impl(ac.__sane(v))
+end
+ac.setGlareBloomLuminanceGamma = function(v)
+	ffi.C.lj_setGlareBloomLuminanceGamma__impl(ac.__sane(v))
 end
 ac.setGlareStarFilterThreshold = function(v)
 	ffi.C.lj_setGlareStarFilterThreshold__impl(ac.__sane(v))
