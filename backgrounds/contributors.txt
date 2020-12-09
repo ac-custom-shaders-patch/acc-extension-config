@@ -44,7 +44,9 @@ spa/1: demonized
 shutoko_revival_project/1: demonized
 thomson/1: demonized
 usce/1: AssettoDrive.net
-goodwood_hillclimb/1: Gunnar333
+goodwood_hillclimb/1: 
 goodwood_hillclimb/2: Gunnar333
 goodwood_hillclimb/3: Gunnar333
+g333_borgloh/1: Gunnar333
+g333_borgloh/2: Gunnar333
 
