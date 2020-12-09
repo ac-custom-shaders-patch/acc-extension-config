@@ -20,6 +20,7 @@ typedef struct {
   float transition;
   float humidity, pressure;
   float variableA, variableB, variableC;
+  float rainIntensity, rainWetness, rainWater;
 } weather_conditions;
 ]]
 

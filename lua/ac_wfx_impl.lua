@@ -51,6 +51,7 @@ typedef struct {
   float transition;
   float humidity, pressure;
   float variableA, variableB, variableC;
+  float rainIntensity, rainWetness, rainWater;
 } weather_conditions;
 ]]
 	ac.TrackConditions = ffi.metatype('weather_conditions_track', {
@@ -557,6 +558,8 @@ bool lj_isRainFxActive__impl();
 float lj_getRainAmount__impl();
 void lj_setRainAmount__impl(float v);
 void lj_setRainWetness__impl(float v);
+void lj_setReflectionsBrightness__impl(float v);
+void lj_setReflectionsSaturation__impl(float v);
 void lj_setSunColor__impl(const rgb& c);
 void lj_setSkyStarsMap__impl(const char* v);
 void lj_setSkyMoonTexture__impl(const char* v);
@@ -646,6 +649,7 @@ void lj_setPpTonemapGamma__impl(float v);
 void lj_setPpTonemapUseHdrSpace__impl(bool v);
 void lj_setPpTonemapMappingFactor__impl(float v);
 void lj_setPpTonemapFilmicContrast__impl(float v);
+void lj_setPpColorGradingIntensity__impl(float v);
 bool lj_isPpActive__impl();
 float lj_getGodraysLength__impl();
 float lj_getGodraysGlareRatio__impl();
@@ -703,6 +707,7 @@ void lj_setParticlesGrassMaterial__impl(const particles_material& material);
 void lj_setParticlesGrassPiecesMaterial__impl(const particles_material& material);
 void lj_setWeatherFakeShadowOpacity__impl(float v);
 void lj_setWeatherFakeShadowConcentrarion__impl(float v);
+void lj_setWeatherFakeShadowConcentration__impl(float v);
 void lj_setWeatherDynamicAmbientMultiplier__impl(float v);
 void lj_setWeatherDynamicAmbientSaturation__impl(float v);
 void lj_setWeatherDynamicAmbientGamma__impl(float v);
@@ -917,6 +922,12 @@ ac.setRainAmount = function(v)
 end
 ac.setRainWetness = function(v)
 	ffi.C.lj_setRainWetness__impl(ac.__sane(v))
+end
+ac.setReflectionsBrightness = function(v)
+	ffi.C.lj_setReflectionsBrightness__impl(ac.__sane(v))
+end
+ac.setReflectionsSaturation = function(v)
+	ffi.C.lj_setReflectionsSaturation__impl(ac.__sane(v))
 end
 ac.setSunColor = function(c)
 	ffi.C.lj_setSunColor__impl(ac.__sane_rgb(c))
@@ -1175,6 +1186,9 @@ end
 ac.setPpTonemapFilmicContrast = function(v)
 	ffi.C.lj_setPpTonemapFilmicContrast__impl(ac.__sane(v))
 end
+ac.setPpColorGradingIntensity = function(v)
+	ffi.C.lj_setPpColorGradingIntensity__impl(ac.__sane(v))
+end
 ac.isPpActive = ffi.C.lj_isPpActive__impl
 ac.getGodraysLength = ffi.C.lj_getGodraysLength__impl
 ac.getGodraysGlareRatio = ffi.C.lj_getGodraysGlareRatio__impl
@@ -1255,6 +1269,9 @@ ac.setWeatherFakeShadowOpacity = function(v)
 end
 ac.setWeatherFakeShadowConcentrarion = function(v)
 	ffi.C.lj_setWeatherFakeShadowConcentrarion__impl(ac.__sane(v))
+end
+ac.setWeatherFakeShadowConcentration = function(v)
+	ffi.C.lj_setWeatherFakeShadowConcentration__impl(ac.__sane(v))
 end
 ac.setWeatherDynamicAmbientMultiplier = function(v)
 	ffi.C.lj_setWeatherDynamicAmbientMultiplier__impl(ac.__sane(v))

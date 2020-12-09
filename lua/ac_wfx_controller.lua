@@ -51,6 +51,7 @@ typedef struct {
   float transition;
   float humidity, pressure;
   float variableA, variableB, variableC;
+  float rainIntensity, rainWetness, rainWater;
 } weather_conditions;
 ]]
 	ac.TrackConditions = ffi.metatype('weather_conditions_track', {

@@ -2179,6 +2179,22 @@ __vector()
 __ac_enums()
 __math()
 __ac_audio()
+ac.store = function(key, value)
+	key = tostring(key or "")
+	if type(value) == 'number' then
+		ffi.C.lj_store_number(key, value)
+	else
+		ffi.C.lj_store_string(key, value ~= nil and tostring(value or "") or value)
+	end
+end
+ac.load = function(key)
+	key = tostring(key or "")
+	if ffi.C.lj_has_number(key) then
+		return ffi.C.lj_load_number(key)
+	else
+		return ffi.string(ffi.C.lj_load_string(key))
+	end
+end
 ffi.cdef [[
 void* lj_memmove(void* dst, const void* src, size_t len);
 void* lj_malloc(size_t size);
@@ -2243,6 +2259,11 @@ vec3 lj_cfg_track_vec3(const char* key, const char* value, const vec3& def);
 vec4 lj_cfg_track_vec4(const char* key, const char* value, const vec4& def);
 float lj_cfg_track_decimal(const char* key, const char* value, float def);
 const char* lj_cfg_track_string(const char* key, const char* value, const char* def);
+void lj_store_number(const char* key, double value);
+double lj_load_number(const char* key);
+bool lj_has_number(const char* key);
+void lj_store_string(const char* key, const char* value);
+const char* lj_load_string(const char* key);
 ]]
 ac.debug = function(key, value)
 	ffi.C.lj_debug(key ~= nil and tostring(key) or nil, value ~= nil and tostring(value) or nil)
