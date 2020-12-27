@@ -20,38 +20,46 @@ local function hsvToRgb(t)
   return rgb(v, p, q)
 end
 
+local vtmp1
+
 return {
-  __call = function(_, h, s, v)
-    return setmetatable({ h = h or 0, s = s or 0, v = v or 0 }, hsv)
+  init = function()
+    vtmp1 = hsv()
   end,
-
-  __tostring = function(v)
-    return string.format('(H=%f, S=%f, V=%f)', v.h, v.s, v.v)
-  end,
-
-  __eq = function(v, o) return o ~= nil and v.h == o.h and v.s == o.s and v.v == o.v end,
-  __index = {
-    new = function(h, s, v) 
-      if type(h) ~= 'number' then h = 0 end
-      if type(s) ~= 'number' then s = h end
-      if type(v) ~= 'number' then v = s end
-      return hsv(h, s, v) 
+  type = {
+    __call = function(_, h, s, v)
+      return setmetatable({ h = h or 0, s = s or 0, v = v or 0 }, hsv)
     end,
 
-    ishsv = function(h) return ffi.istype('hsv', h) end,
-    type = function(x) return hsv end,
-    clone = function(v) return hsv(v.h, v.s, v.v) end,
-    unpack = function(v) return v.h, v.s, v.v end,
-
-    set = function(v, h, s, v)
-      if hsv.ishsv(h) then h, s, v = h.h, h.s, h.v end
-      v.h = h
-      v.s = s
-      v.v = v
-      return v
+    __tostring = function(v)
+      return string.format('(H=%f, S=%f, V=%f)', v.h, v.s, v.v)
     end,
 
-    rgb = hsvToRgb,
-    toRgb = hsvToRgb,
+    __eq = function(v, o) return o ~= nil and v.h == o.h and v.s == o.s and v.v == o.v end,
+    __index = {
+      new = function(h, s, v) 
+        if type(h) ~= 'number' then h = 0 end
+        if type(s) ~= 'number' then s = h end
+        if type(v) ~= 'number' then v = s end
+        return hsv(h, s, v) 
+      end,
+
+      ishsv = function(h) return ffi.istype('hsv', h) end,
+      tmp = function() return vtmp1 end,
+      type = function(x) return hsv end,
+      clone = function(v) return hsv(v.h, v.s, v.v) end,
+      unpack = function(v) return v.h, v.s, v.v end,
+
+      set = function(v, h, s, v)
+        if hsv.ishsv(h) then h, s, v = h.h, h.s, h.v end
+        v.h = h
+        v.s = s
+        v.v = v
+        return v
+      end,
+
+      rgb = hsvToRgb,
+      toRgb = hsvToRgb,
+    }
   }
 }

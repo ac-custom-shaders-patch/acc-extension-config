@@ -1,699 +1,768 @@
 	local function __ac_primitive_vec2()
+	local vtmp1
+	local vtmp2
 	return {
-		__call = function(_, x, y)
-			return setmetatable({
-				x = x or 0,
-				y = y or 0
-			}, vec2)
+		init = function()
+			vtmp1 = vec2()
+			vtmp2 = vec2()
 		end,
-		__tostring = function(v)
-			return string.format('(%f, %f)', v.x, v.y)
-		end,
-		__add = function(v, u)
-			if type(v) == 'number' then
-				return vec2(v, v):add(u, vec2())
-			end
-			return v:add(u, vec2())
-		end,
-		__sub = function(v, u)
-			if type(v) == 'number' then
-				return vec2(v, v):sub(u, vec2())
-			end
-			return v:sub(u, vec2())
-		end,
-		__mul = function(v, u)
-			if type(v) == 'number' then
-				return vec2(v, v) * u
-			end
-			if vec2.isvec2(u) then
-				return v:mul(u, vec2())
-			elseif type(u) == 'number' then
-				return v:scale(u, vec2())
-			else
-				error('vec2s can only be multiplied by vec2s and numbers')
-			end
-		end,
-		__div = function(v, u)
-			if type(v) == 'number' then
-				return vec2(v, v) / u
-			end
-			if vec2.isvec2(u) then
-				return v:div(u, vec2())
-			elseif type(u) == 'number' then
-				return v:scale(1 / u, vec2())
-			else
-				error('vec2s can only be divided by vec2s and numbers')
-			end
-		end,
-		__pow = function(v, u)
-			if type(v) == 'number' then
-				return vec2(v, v) ^ u
-			end
-			if vec2.isvec2(u) then
-				return v:pow(u, vec2())
-			elseif type(u) == 'number' then
-				return vec2(v.x ^ u, v.y ^ u)
-			else
-				error('vec2s can only be raised to power of vec2s and numbers')
-			end
-		end,
-		__unm = function(v)
-			return vec2(-v.x, -v.y)
-		end,
-		__len = function(v)
-			return v:length()
-		end,
-		__eq = function(v, o)
-			return o ~= nil and v.x == o.x and v.y == o.y
-		end,
-		__index = {
-			new = function(x, y)
-				if type(x) ~= 'number' then
-					x = 0
+		type = {
+			__call = function(_, x, y)
+				return setmetatable({
+					x = x or 0,
+					y = y or 0
+				}, vec2)
+			end,
+			__tostring = function(v)
+				return string.format('(%f, %f)', v.x, v.y)
+			end,
+			__add = function(v, u)
+				if type(v) == 'number' then
+					return vec2(v, v):add(u, vec2())
 				end
-				if type(y) ~= 'number' then
-					y = x
+				return v:add(u, vec2())
+			end,
+			__sub = function(v, u)
+				if type(v) == 'number' then
+					return vec2(v, v):sub(u, vec2())
 				end
-				return vec2(x, y)
+				return v:sub(u, vec2())
 			end,
-			isvec2 = function(x)
-				return ffi.istype('vec2', x)
-			end,
-			type = function(x)
-				return vec2
-			end,
-			clone = function(v)
-				return vec2(v.x, v.y)
-			end,
-			unpack = function(v)
-				return v.x,  v.y
-			end,
-			set = function(v, x, y)
-				if vec2.isvec2(x) then
-					x, y = x.x, x.y
+			__mul = function(v, u)
+				if type(v) == 'number' then
+					return vec2(v, v) * u
 				end
-				v.x = x
-				v.y = y
-				return v
-			end,
-			setLerp = function(v, a, b, k)
-				v.x = math.lerp(a.x, b.x, k)
-				v.y = math.lerp(a.y, b.y, k)
-				return v
-			end,
-			add = function(v, u, out)
-				out = out or v
 				if vec2.isvec2(u) then
-					out.x = v.x + u.x
-					out.y = v.y + u.y
+					return v:mul(u, vec2())
+				elseif type(u) == 'number' then
+					return v:scale(u, vec2())
 				else
-					out.x = v.x + u
-					out.y = v.y + u
+					error('vec2s can only be multiplied by vec2s and numbers')
 				end
-				return out
 			end,
-			sub = function(v, u, out)
-				out = out or v
+			__div = function(v, u)
+				if type(v) == 'number' then
+					return vec2(v, v) / u
+				end
 				if vec2.isvec2(u) then
-					out.x = v.x - u.x
-					out.y = v.y - u.y
+					return v:div(u, vec2())
+				elseif type(u) == 'number' then
+					return v:scale(1 / u, vec2())
 				else
-					out.x = v.x - u
-					out.y = v.y - u
+					error('vec2s can only be divided by vec2s and numbers')
 				end
-				return out
 			end,
-			mul = function(v, u, out)
-				out = out or v
-				out.x = v.x * u.x
-				out.y = v.y * u.y
-				return out
-			end,
-			div = function(v, u, out)
-				out = out or v
-				out.x = v.x / u.x
-				out.y = v.y / u.y
-				return out
-			end,
-			pow = function(v, u, out)
-				out = out or v
-				if type(u) == 'number' then
-					out.x = v.x ^ u
-					out.y = v.y ^ u
+			__pow = function(v, u)
+				if type(v) == 'number' then
+					return vec2(v, v) ^ u
+				end
+				if vec2.isvec2(u) then
+					return v:pow(u, vec2())
+				elseif type(u) == 'number' then
+					return vec2(v.x ^ u, v.y ^ u)
 				else
-					out.x = v.x ^ u.x
-					out.y = v.y ^ u.y
+					error('vec2s can only be raised to power of vec2s and numbers')
 				end
-				return out
 			end,
-			scale = function(v, s, out)
-				out = out or v
-				out.x = v.x * s
-				out.y = v.y * s
-				return out
+			__unm = function(v)
+				return vec2(-v.x, -v.y)
 			end,
-			saturate = function(v, out)
-				out = out or v
-				out.x = math.saturateN(v.x)
-				out.y = math.saturateN(v.y)
-				return out
+			__len = function(v)
+				return v:length()
 			end,
-			clamp = function(v, min, max, out)
-				out = out or v
-				out.x = math.clampN(v.x, min.x, max.x)
-				out.y = math.clampN(v.y, min.y, max.y)
-				return out
+			__eq = function(v, o)
+				return o ~= nil and v.x == o.x and v.y == o.y
 			end,
-			length = function(v)
-				return math.sqrt(v.x * v.x + v.y * v.y)
-			end,
-			distance = function(v, u)
-				return vec2.sub(v, u, vtmp1):length()
-			end,
-			angle = function(v, u)
-				return math.acos(v:dot(u) / (v:length() + u:length()))
-			end,
-			dot = function(v, u)
-				return v.x * u.x + v.y * u.y
-			end,
-			normalize = function(v, out)
-				out = out or v
-				local len = v:length()
-				return len == 0 and v or v:scale(1 / len, out)
-			end,
-			lerp = function(v, u, t, out)
-				out = out or v
-				out.x = v.x + (u.x - v.x) * t
-				out.y = v.y + (u.y - v.y) * t
-				return out
-			end,
-			project = function(v, u, out)
-				out = out or v
-				local unorm = vtmp1
-				u:normalize(unorm)
-				local dot = v:dot(unorm)
-				out.x = unorm.x * dot
-				out.y = unorm.y * dot
-				return out
-			end
+			__index = {
+				new = function(x, y)
+					if type(x) ~= 'number' then
+						x = 0
+					end
+					if type(y) ~= 'number' then
+						y = x
+					end
+					return vec2(x, y)
+				end,
+				isvec2 = function(x)
+					return ffi.istype('vec2', x)
+				end,
+				tmp = function()
+					return vtmp2
+				end,
+				type = function(x)
+					return vec2
+				end,
+				clone = function(v)
+					return vec2(v.x, v.y)
+				end,
+				unpack = function(v)
+					return v.x,  v.y
+				end,
+				set = function(v, x, y)
+					if vec2.isvec2(x) then
+						x, y = x.x, x.y
+					elseif y == nil then
+						y = x
+					end
+					v.x = x
+					v.y = y
+					return v
+				end,
+				setLerp = function(v, a, b, k)
+					v.x = math.lerp(a.x, b.x, k)
+					v.y = math.lerp(a.y, b.y, k)
+					return v
+				end,
+				add = function(v, u, out)
+					out = out or v
+					if vec2.isvec2(u) then
+						out.x = v.x + u.x
+						out.y = v.y + u.y
+					else
+						out.x = v.x + u
+						out.y = v.y + u
+					end
+					return out
+				end,
+				sub = function(v, u, out)
+					out = out or v
+					if vec2.isvec2(u) then
+						out.x = v.x - u.x
+						out.y = v.y - u.y
+					else
+						out.x = v.x - u
+						out.y = v.y - u
+					end
+					return out
+				end,
+				mul = function(v, u, out)
+					out = out or v
+					out.x = v.x * u.x
+					out.y = v.y * u.y
+					return out
+				end,
+				div = function(v, u, out)
+					out = out or v
+					out.x = v.x / u.x
+					out.y = v.y / u.y
+					return out
+				end,
+				pow = function(v, u, out)
+					out = out or v
+					if type(u) == 'number' then
+						out.x = v.x ^ u
+						out.y = v.y ^ u
+					else
+						out.x = v.x ^ u.x
+						out.y = v.y ^ u.y
+					end
+					return out
+				end,
+				scale = function(v, s, out)
+					out = out or v
+					out.x = v.x * s
+					out.y = v.y * s
+					return out
+				end,
+				saturate = function(v, out)
+					out = out or v
+					out.x = math.saturateN(v.x)
+					out.y = math.saturateN(v.y)
+					return out
+				end,
+				clamp = function(v, min, max, out)
+					out = out or v
+					out.x = math.clampN(v.x, min.x, max.x)
+					out.y = math.clampN(v.y, min.y, max.y)
+					return out
+				end,
+				length = function(v)
+					return math.sqrt(v:lengthSquared())
+				end,
+				lengthSquared = function(v)
+					return v.x * v.x + v.y * v.y
+				end,
+				distance = function(v, u)
+					return vec2.sub(v, u, vtmp1):length()
+				end,
+				distanceSquared = function(v, u)
+					return vec2.sub(v, u, vtmp1):lengthSquared()
+				end,
+				closerToThan = function(v, u, d)
+					return v:distanceSquared(u) < d * d
+				end,
+				angle = function(v, u)
+					return math.acos(v:dot(u) / (v:length() + u:length()))
+				end,
+				dot = function(v, u)
+					return v.x * u.x + v.y * u.y
+				end,
+				normalize = function(v, out)
+					out = out or v
+					local len = v:length()
+					return len == 0 and v or v:scale(1 / len, out)
+				end,
+				lerp = function(v, u, t, out)
+					out = out or v
+					out.x = v.x + (u.x - v.x) * t
+					out.y = v.y + (u.y - v.y) * t
+					return out
+				end,
+				project = function(v, u, out)
+					out = out or v
+					local unorm = vtmp1
+					u:normalize(unorm)
+					local dot = v:dot(unorm)
+					out.x = unorm.x * dot
+					out.y = unorm.y * dot
+					return out
+				end
+			}
 		}
 	}
 end
 local function __ac_primitive_vec3()
+	local vtmp1
+	local vtmp2
 	return {
-		__call = function(_, x, y, z)
-			return setmetatable({
-				x = x or 0,
-				y = y or 0,
-				z = z or 0
-			}, vec3)
+		init = function()
+			vtmp1 = vec3()
+			vtmp2 = vec3()
 		end,
-		__tostring = function(v)
-			return string.format('(%f, %f, %f)', v.x, v.y, v.z)
-		end,
-		__add = function(v, u)
-			if type(v) == 'number' then
-				return vec3(v, v, v):add(u, vec3())
-			end
-			if v == nil then
-				return u
-			end
-			return v:add(u, vec3())
-		end,
-		__sub = function(v, u)
-			if type(v) == 'number' then
-				return vec3(v, v, v):sub(u, vec3())
-			end
-			if v == nil then
-				return u
-			end
-			return v:sub(u, vec3())
-		end,
-		__mul = function(v, u)
-			if type(v) == 'number' then
-				return vec3(v, v, v) * u
-			end
-			if v == nil or u == nil then
-				return vec3()
-			end
-			if vec3.isvec3(u) then
-				return v:mul(u, vec3())
-			elseif type(u) == 'number' then
-				return v:scale(u, vec3())
-			else
-				error('vec3s can only be multiplied by vec3s and numbers')
-			end
-		end,
-		__div = function(v, u)
-			if type(v) == 'number' then
-				return vec3(v, v, v) / u
-			end
-			if v == nil or u == nil then
-				return vec3()
-			end
-			if vec3.isvec3(u) then
-				return v:div(u, vec3())
-			elseif type(u) == 'number' then
-				return v:scale(1 / u, vec3())
-			else
-				error('vec3s can only be divided by vec3s and numbers')
-			end
-		end,
-		__pow = function(v, u)
-			if type(v) == 'number' then
-				return vec3(v, v, v) ^ u
-			end
-			if vec3.isvec3(u) then
-				return v:pow(u, vec3())
-			elseif type(u) == 'number' then
-				return vec3(v.x ^ u, v.y ^ u, v.z ^ u)
-			else
-				error('vec3s can only be raised to power of vec3s and numbers')
-			end
-		end,
-		__unm = function(v)
-			return vec3(-v.x, -v.y, -v.z)
-		end,
-		__len = function(v)
-			return v:length()
-		end,
-		__eq = function(v, o)
-			return o ~= nil and v.x == o.x and v.y == o.y and v.z == o.z
-		end,
-		__index = {
-			new = function(x, y, z)
-				if type(x) ~= 'number' then
-					x = 0
+		type = {
+			__call = function(_, x, y, z)
+				return setmetatable({
+					x = x or 0,
+					y = y or 0,
+					z = z or 0
+				}, vec3)
+			end,
+			__tostring = function(v)
+				return string.format('(%f, %f, %f)', v.x, v.y, v.z)
+			end,
+			__add = function(v, u)
+				if type(v) == 'number' then
+					return vec3(v, v, v):add(u, vec3())
 				end
-				if type(y) ~= 'number' then
-					y = x
+				if v == nil then
+					return u
 				end
-				if type(z) ~= 'number' then
-					z = y
+				return v:add(u, vec3())
+			end,
+			__sub = function(v, u)
+				if type(v) == 'number' then
+					return vec3(v, v, v):sub(u, vec3())
 				end
-				return vec3(x, y, z)
-			end,
-			isvec3 = function(x)
-				return ffi.istype('vec3', x)
-			end,
-			type = function(x)
-				return vec3
-			end,
-			clone = function(v)
-				return vec3(v.x, v.y, v.z)
-			end,
-			unpack = function(v)
-				return v.x,  v.y,  v.z
-			end,
-			set = function(v, x, y, z)
-				if vec3.isvec3(x) then
-					x, y, z = x.x, x.y, x.z
+				if v == nil then
+					return u
 				end
-				v.x = x
-				v.y = y
-				v.z = z
-				return v
+				return v:sub(u, vec3())
 			end,
-			setLerp = function(v, a, b, k)
-				v.x = math.lerp(a.x, b.x, k)
-				v.y = math.lerp(a.y, b.y, k)
-				v.z = math.lerp(a.z, b.z, k)
-				return v
-			end,
-			add = function(v, u, out)
-				out = out or v
+			__mul = function(v, u)
+				if type(v) == 'number' then
+					return vec3(v, v, v) * u
+				end
+				if v == nil or u == nil then
+					return vec3()
+				end
 				if vec3.isvec3(u) then
-					out.x = v.x + u.x
-					out.y = v.y + u.y
-					out.z = v.z + u.z
-				elseif u ~= nil then
-					out.x = v.x + u
-					out.y = v.y + u
-					out.z = v.z + u
-				end
-				return out
-			end,
-			sub = function(v, u, out)
-				out = out or v
-				if vec3.isvec3(u) then
-					out.x = v.x - u.x
-					out.y = v.y - u.y
-					out.z = v.z - u.z
-				elseif u ~= nil then
-					out.x = v.x - u
-					out.y = v.y - u
-					out.z = v.z - u
-				end
-				return out
-			end,
-			mul = function(v, u, out)
-				out = out or v
-				out.x = v.x * u.x
-				out.y = v.y * u.y
-				out.z = v.z * u.z
-				return out
-			end,
-			div = function(v, u, out)
-				out = out or v
-				out.x = v.x / u.x
-				out.y = v.y / u.y
-				out.z = v.z / u.z
-				return out
-			end,
-			pow = function(v, u, out)
-				out = out or v
-				if type(u) == 'number' then
-					out.x = v.x ^ u
-					out.y = v.y ^ u
-					out.z = v.z ^ u
+					return v:mul(u, vec3())
+				elseif type(u) == 'number' then
+					return v:scale(u, vec3())
 				else
-					out.x = v.x ^ u.x
-					out.y = v.y ^ u.y
-					out.z = v.z ^ u.z
+					error('vec3s can only be multiplied by vec3s and numbers')
 				end
-				return out
 			end,
-			scale = function(v, s, out)
-				out = out or v
-				out.x = v.x * s
-				out.y = v.y * s
-				out.z = v.z * s
-				return out
+			__div = function(v, u)
+				if type(v) == 'number' then
+					return vec3(v, v, v) / u
+				end
+				if v == nil or u == nil then
+					return vec3()
+				end
+				if vec3.isvec3(u) then
+					return v:div(u, vec3())
+				elseif type(u) == 'number' then
+					return v:scale(1 / u, vec3())
+				else
+					error('vec3s can only be divided by vec3s and numbers')
+				end
 			end,
-			saturate = function(v, out)
-				out = out or v
-				out.x = math.saturateN(v.x)
-				out.y = math.saturateN(v.y)
-				out.z = math.saturateN(v.z)
-				return out
+			__pow = function(v, u)
+				if type(v) == 'number' then
+					return vec3(v, v, v) ^ u
+				end
+				if vec3.isvec3(u) then
+					return v:pow(u, vec3())
+				elseif type(u) == 'number' then
+					return vec3(v.x ^ u, v.y ^ u, v.z ^ u)
+				else
+					error('vec3s can only be raised to power of vec3s and numbers')
+				end
 			end,
-			clamp = function(v, min, max, out)
-				out = out or v
-				out.x = math.clampN(v.x, min.x, max.x)
-				out.y = math.clampN(v.y, min.y, max.y)
-				out.z = math.clampN(v.z, min.z, max.z)
-				return out
+			__unm = function(v)
+				return vec3(-v.x, -v.y, -v.z)
 			end,
-			length = function(v)
-				return math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z)
+			__len = function(v)
+				return v:length()
 			end,
-			distance = function(v, u)
-				return vec3.sub(v, u, vtmp1):length()
+			__eq = function(v, o)
+				return o ~= nil and v.x == o.x and v.y == o.y and v.z == o.z
 			end,
-			angle = function(v, u)
-				return math.acos(v:dot(u) / (v:length() + u:length()))
-			end,
-			dot = function(v, u)
-				return v.x * u.x + v.y * u.y + v.z * u.z
-			end,
-			normalize = function(v, out)
-				out = out or v
-				local len = v:length()
-				return len == 0 and v or v:scale(1 / len, out)
-			end,
-			cross = function(v, u, out)
-				out = out or v
-				local a, b, c = v.x, v.y, v.z
-				out.x = b * u.z - c * u.y
-				out.y = c * u.x - a * u.z
-				out.z = a * u.y - b * u.x
-				return out
-			end,
-			lerp = function(v, u, t, out)
-				out = out or v
-				out.x = v.x + (u.x - v.x) * t
-				out.y = v.y + (u.y - v.y) * t
-				out.z = v.z + (u.z - v.z) * t
-				return out
-			end,
-			project = function(v, u, out)
-				out = out or v
-				local unorm = vtmp1
-				u:normalize(unorm)
-				local dot = v:dot(unorm)
-				out.x = unorm.x * dot
-				out.y = unorm.y * dot
-				out.z = unorm.z * dot
-				return out
-			end,
-			rotate = function(v, q, out)
-				out = out or v
-				local u, c, o = vec3(), vec3(), out
-				u.x, u.y, u.z = q.x, q.y, q.z
-				o.x, o.y, o.z = v.x, v.y, v.z
-				u:cross(v, c)
-				local uu = u:dot(u)
-				local uv = u:dot(v)
-				o:scale(q.w * q.w - uu)
-				u:scale(2 * uv)
-				c:scale(2 * q.w)
-				return o:add(u:add(c))
-			end
+			__index = {
+				new = function(x, y, z)
+					if type(x) ~= 'number' then
+						x = 0
+					end
+					if type(y) ~= 'number' then
+						y = x
+					end
+					if type(z) ~= 'number' then
+						z = y
+					end
+					return vec3(x, y, z)
+				end,
+				isvec3 = function(x)
+					return ffi.istype('vec3', x)
+				end,
+				tmp = function()
+					return vtmp2
+				end,
+				type = function(x)
+					return vec3
+				end,
+				clone = function(v)
+					return vec3(v.x, v.y, v.z)
+				end,
+				unpack = function(v)
+					return v.x,  v.y,  v.z
+				end,
+				set = function(v, x, y, z)
+					if vec3.isvec3(x) then
+						x, y, z = x.x, x.y, x.z
+					elseif y == nil then
+						y = x
+						z = x
+					end
+					v.x = x
+					v.y = y
+					v.z = z
+					return v
+				end,
+				setLerp = function(v, a, b, k)
+					v.x = math.lerp(a.x, b.x, k)
+					v.y = math.lerp(a.y, b.y, k)
+					v.z = math.lerp(a.z, b.z, k)
+					return v
+				end,
+				add = function(v, u, out)
+					out = out or v
+					if vec3.isvec3(u) then
+						out.x = v.x + u.x
+						out.y = v.y + u.y
+						out.z = v.z + u.z
+					elseif u ~= nil then
+						out.x = v.x + u
+						out.y = v.y + u
+						out.z = v.z + u
+					end
+					return out
+				end,
+				sub = function(v, u, out)
+					out = out or v
+					if vec3.isvec3(u) then
+						out.x = v.x - u.x
+						out.y = v.y - u.y
+						out.z = v.z - u.z
+					elseif u ~= nil then
+						out.x = v.x - u
+						out.y = v.y - u
+						out.z = v.z - u
+					end
+					return out
+				end,
+				mul = function(v, u, out)
+					out = out or v
+					out.x = v.x * u.x
+					out.y = v.y * u.y
+					out.z = v.z * u.z
+					return out
+				end,
+				div = function(v, u, out)
+					out = out or v
+					out.x = v.x / u.x
+					out.y = v.y / u.y
+					out.z = v.z / u.z
+					return out
+				end,
+				pow = function(v, u, out)
+					out = out or v
+					if type(u) == 'number' then
+						out.x = v.x ^ u
+						out.y = v.y ^ u
+						out.z = v.z ^ u
+					else
+						out.x = v.x ^ u.x
+						out.y = v.y ^ u.y
+						out.z = v.z ^ u.z
+					end
+					return out
+				end,
+				scale = function(v, s, out)
+					out = out or v
+					out.x = v.x * s
+					out.y = v.y * s
+					out.z = v.z * s
+					return out
+				end,
+				saturate = function(v, out)
+					out = out or v
+					out.x = math.saturateN(v.x)
+					out.y = math.saturateN(v.y)
+					out.z = math.saturateN(v.z)
+					return out
+				end,
+				clamp = function(v, min, max, out)
+					out = out or v
+					out.x = math.clampN(v.x, min.x, max.x)
+					out.y = math.clampN(v.y, min.y, max.y)
+					out.z = math.clampN(v.z, min.z, max.z)
+					return out
+				end,
+				length = function(v)
+					return math.sqrt(v:lengthSquared())
+				end,
+				lengthSquared = function(v)
+					return v.x * v.x + v.y * v.y + v.z * v.z
+				end,
+				distance = function(v, u)
+					return vec3.sub(v, u, vtmp1):length()
+				end,
+				distanceSquared = function(v, u)
+					return vec3.sub(v, u, vtmp1):lengthSquared()
+				end,
+				closerToThan = function(v, u, d)
+					return v:distanceSquared(u) < d * d
+				end,
+				angle = function(v, u)
+					return math.acos(v:dot(u) / (v:length() + u:length()))
+				end,
+				dot = function(v, u)
+					return v.x * u.x + v.y * u.y + v.z * u.z
+				end,
+				normalize = function(v, out)
+					out = out or v
+					local len = v:length()
+					return len == 0 and v or v:scale(1 / len, out)
+				end,
+				cross = function(v, u, out)
+					out = out or v
+					local a, b, c = v.x, v.y, v.z
+					out.x = b * u.z - c * u.y
+					out.y = c * u.x - a * u.z
+					out.z = a * u.y - b * u.x
+					return out
+				end,
+				lerp = function(v, u, t, out)
+					out = out or v
+					out.x = v.x + (u.x - v.x) * t
+					out.y = v.y + (u.y - v.y) * t
+					out.z = v.z + (u.z - v.z) * t
+					return out
+				end,
+				project = function(v, u, out)
+					out = out or v
+					local unorm = vtmp1
+					u:normalize(unorm)
+					local dot = v:dot(unorm)
+					out.x = unorm.x * dot
+					out.y = unorm.y * dot
+					out.z = unorm.z * dot
+					return out
+				end,
+				rotate = function(v, q, out)
+					out = out or v
+					local u, c, o = vec3(), vec3(), out
+					u.x, u.y, u.z = q.x, q.y, q.z
+					o.x, o.y, o.z = v.x, v.y, v.z
+					u:cross(v, c)
+					local uu = u:dot(u)
+					local uv = u:dot(v)
+					o:scale(q.w * q.w - uu)
+					u:scale(2 * uv)
+					c:scale(2 * q.w)
+					return o:add(u:add(c))
+				end
+			}
 		}
 	}
 end
 local function __ac_primitive_vec4()
+	local vtmp1
+	local vtmp2
 	return {
-		__call = function(_, x, y, z, w)
-			return setmetatable({
-				x = x or 0,
-				y = y or 0,
-				z = z or 0,
-				w = w or 0
-			}, vec4)
+		init = function()
+			vtmp1 = vec4()
+			vtmp2 = vec4()
 		end,
-		__tostring = function(v)
-			return string.format('(%f, %f, %f, %f)', v.x, v.y, v.z, v.w)
-		end,
-		__add = function(v, u)
-			if type(v) == 'number' then
-				return vec4(v, v, v, v):add(u, vec4())
-			end
-			return v:add(u, vec4())
-		end,
-		__sub = function(v, u)
-			if type(v) == 'number' then
-				return vec4(v, v, v, v):sub(u, vec4())
-			end
-			return v:sub(u, vec4())
-		end,
-		__mul = function(v, u)
-			if type(v) == 'number' then
-				return vec4(v, v, v, v) * u
-			end
-			if vec4.isvec4(u) then
-				return v:mul(u, vec4())
-			elseif type(u) == 'number' then
-				return v:scale(u, vec4())
-			else
-				error('vec4s can only be multiplied by vec4s and numbers')
-			end
-		end,
-		__div = function(v, u)
-			if type(v) == 'number' then
-				return vec4(v, v, v, v) / u
-			end
-			if vec4.isvec4(u) then
-				return v:div(u, vec4())
-			elseif type(u) == 'number' then
-				return v:scale(1 / u, vec4())
-			else
-				error('vec4s can only be divided by vec4s and numbers')
-			end
-		end,
-		__pow = function(v, u)
-			if type(v) == 'number' then
-				return vec4(v, v, v, v) ^ u
-			end
-			if vec4.isvec4(u) then
-				return v:pow(u, vec4())
-			elseif type(u) == 'number' then
-				return vec4(v.x ^ u, v.y ^ u, v.z ^ u, v.w ^ u)
-			else
-				error('vec4s can only be raised to power of vec4s and numbers')
-			end
-		end,
-		__unm = function(v)
-			return vec4(-v.x, -v.y, -v.z, -v.w)
-		end,
-		__len = function(v)
-			return v:length()
-		end,
-		__eq = function(v, o)
-			return o ~= nil and v.x == o.x and v.y == o.y and v.z == o.z and v.w == o.w
-		end,
-		__index = {
-			new = function(x, y, z, w)
-				if vec3.isvec3(x) then
-					return vec4(x.x, x.y, x.z, w or 0)
-				end
-				if vec3.isvec3(y) then
-					return vec4(x or 0, y.x, y.y, y.z)
-				end
-				if type(x) ~= 'number' then
-					x = 0
-				end
-				if type(y) ~= 'number' then
-					y = x
-				end
-				if type(z) ~= 'number' then
-					z = y
-				end
-				if type(w) ~= 'number' then
-					w = z
-				end
-				return vec4(x, y, z, w)
+		type = {
+			__call = function(_, x, y, z, w)
+				return setmetatable({
+					x = x or 0,
+					y = y or 0,
+					z = z or 0,
+					w = w or 0
+				}, vec4)
 			end,
-			isvec4 = function(x)
-				return ffi.istype('vec4', x)
+			__tostring = function(v)
+				return string.format('(%f, %f, %f, %f)', v.x, v.y, v.z, v.w)
 			end,
-			type = function(x)
-				return vec4
-			end,
-			clone = function(v)
-				return vec4(v.x, v.y, v.z, v.w)
-			end,
-			unpack = function(v)
-				return v.x,  v.y,  v.z,  v.w
-			end,
-			set = function(v, x, y, z, w)
-				if vec4.isvec4(x) then
-					x, y, z, w = x.x, x.y, x.z, x.w
+			__add = function(v, u)
+				if type(v) == 'number' then
+					return vec4(v, v, v, v):add(u, vec4())
 				end
-				v.x = x
-				v.y = y
-				v.z = z
-				v.w = w
-				return v
+				return v:add(u, vec4())
 			end,
-			setLerp = function(v, a, b, k)
-				v.x = math.lerp(a.x, b.x, k)
-				v.y = math.lerp(a.y, b.y, k)
-				v.z = math.lerp(a.z, b.z, k)
-				v.w = math.lerp(a.w, b.w, k)
-				return v
+			__sub = function(v, u)
+				if type(v) == 'number' then
+					return vec4(v, v, v, v):sub(u, vec4())
+				end
+				return v:sub(u, vec4())
 			end,
-			add = function(v, u, out)
-				out = out or v
+			__mul = function(v, u)
+				if type(v) == 'number' then
+					return vec4(v, v, v, v) * u
+				end
 				if vec4.isvec4(u) then
-					out.x = v.x + u.x
-					out.y = v.y + u.y
-					out.z = v.z + u.z
-					out.w = v.w + u.w
+					return v:mul(u, vec4())
+				elseif type(u) == 'number' then
+					return v:scale(u, vec4())
 				else
-					out.x = v.x + u
-					out.y = v.y + u
-					out.z = v.z + u
-					out.w = v.w + u
+					error('vec4s can only be multiplied by vec4s and numbers')
 				end
-				return out
 			end,
-			sub = function(v, u, out)
-				out = out or v
+			__div = function(v, u)
+				if type(v) == 'number' then
+					return vec4(v, v, v, v) / u
+				end
 				if vec4.isvec4(u) then
-					out.x = v.x - u.x
-					out.y = v.y - u.y
-					out.z = v.z - u.z
-					out.w = v.w - u.w
+					return v:div(u, vec4())
+				elseif type(u) == 'number' then
+					return v:scale(1 / u, vec4())
 				else
-					out.x = v.x - u
-					out.y = v.y - u
-					out.z = v.z - u
-					out.w = v.w - u
+					error('vec4s can only be divided by vec4s and numbers')
 				end
-				return out
 			end,
-			mul = function(v, u, out)
-				out = out or v
-				out.x = v.x * u.x
-				out.y = v.y * u.y
-				out.z = v.z * u.z
-				out.w = v.w * u.w
-				return out
-			end,
-			div = function(v, u, out)
-				out = out or v
-				out.x = v.x / u.x
-				out.y = v.y / u.y
-				out.z = v.z / u.z
-				out.w = v.w / u.w
-				return out
-			end,
-			pow = function(v, u, out)
-				out = out or v
-				if type(u) == 'number' then
-					out.x = v.x ^ u
-					out.y = v.y ^ u
-					out.z = v.z ^ u
-					out.w = v.w ^ u
+			__pow = function(v, u)
+				if type(v) == 'number' then
+					return vec4(v, v, v, v) ^ u
+				end
+				if vec4.isvec4(u) then
+					return v:pow(u, vec4())
+				elseif type(u) == 'number' then
+					return vec4(v.x ^ u, v.y ^ u, v.z ^ u, v.w ^ u)
 				else
-					out.x = v.x ^ u.x
-					out.y = v.y ^ u.y
-					out.z = v.z ^ u.z
-					out.w = v.w ^ u.w
+					error('vec4s can only be raised to power of vec4s and numbers')
 				end
-				return out
 			end,
-			scale = function(v, s, out)
-				out = out or v
-				out.x = v.x * s
-				out.y = v.y * s
-				out.z = v.z * s
-				out.w = v.w * s
-				return out
+			__unm = function(v)
+				return vec4(-v.x, -v.y, -v.z, -v.w)
 			end,
-			saturate = function(v, out)
-				out = out or v
-				out.x = math.saturateN(v.x)
-				out.y = math.saturateN(v.y)
-				out.z = math.saturateN(v.z)
-				out.w = math.saturateN(v.w)
-				return out
+			__len = function(v)
+				return v:length()
 			end,
-			clamp = function(v, min, max, out)
-				out = out or v
-				out.x = math.clampN(v.x, min.x, max.x)
-				out.y = math.clampN(v.y, min.y, max.y)
-				out.z = math.clampN(v.z, min.z, max.z)
-				out.w = math.clampN(v.w, min.w, max.w)
-				return out
+			__eq = function(v, o)
+				return o ~= nil and v.x == o.x and v.y == o.y and v.z == o.z and v.w == o.w
 			end,
-			length = function(v)
-				return math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w)
-			end,
-			distance = function(v, u)
-				return vec4.sub(v, u, vtmp1):length()
-			end,
-			angle = function(v, u)
-				return math.acos(v:dot(u) / (v:length() + u:length()))
-			end,
-			dot = function(v, u)
-				return v.x * u.x + v.y * u.y + v.z * u.z + v.w * u.w
-			end,
-			normalize = function(v, out)
-				out = out or v
-				local len = v:length()
-				return len == 0 and v or v:scale(1 / len, out)
-			end,
-			lerp = function(v, u, t, out)
-				out = out or v
-				out.x = v.x + (u.x - v.x) * t
-				out.y = v.y + (u.y - v.y) * t
-				out.z = v.z + (u.z - v.z) * t
-				out.w = v.w + (u.w - v.w) * t
-				return out
-			end,
-			project = function(v, u, out)
-				out = out or v
-				local unorm = vtmp1
-				u:normalize(unorm)
-				local dot = v:dot(unorm)
-				out.x = unorm.x * dot
-				out.y = unorm.y * dot
-				out.z = unorm.z * dot
-				out.w = unorm.w * dot
-				return out
-			end
+			__index = {
+				new = function(x, y, z, w)
+					if vec3.isvec3(x) then
+						return vec4(x.x, x.y, x.z, w or 0)
+					end
+					if vec3.isvec3(y) then
+						return vec4(x or 0, y.x, y.y, y.z)
+					end
+					if type(x) ~= 'number' then
+						x = 0
+					end
+					if type(y) ~= 'number' then
+						y = x
+					end
+					if type(z) ~= 'number' then
+						z = y
+					end
+					if type(w) ~= 'number' then
+						w = z
+					end
+					return vec4(x, y, z, w)
+				end,
+				isvec4 = function(x)
+					return ffi.istype('vec4', x)
+				end,
+				tmp = function()
+					return vtmp2
+				end,
+				type = function(x)
+					return vec4
+				end,
+				clone = function(v)
+					return vec4(v.x, v.y, v.z, v.w)
+				end,
+				unpack = function(v)
+					return v.x,  v.y,  v.z,  v.w
+				end,
+				set = function(v, x, y, z, w)
+					if vec4.isvec4(x) then
+						x, y, z, w = x.x, x.y, x.z, x.w
+					elseif y == nil then
+						y = x
+						z = x
+						w = x
+					end
+					v.x = x
+					v.y = y
+					v.z = z
+					v.w = w
+					return v
+				end,
+				setLerp = function(v, a, b, k)
+					v.x = math.lerp(a.x, b.x, k)
+					v.y = math.lerp(a.y, b.y, k)
+					v.z = math.lerp(a.z, b.z, k)
+					v.w = math.lerp(a.w, b.w, k)
+					return v
+				end,
+				add = function(v, u, out)
+					out = out or v
+					if vec4.isvec4(u) then
+						out.x = v.x + u.x
+						out.y = v.y + u.y
+						out.z = v.z + u.z
+						out.w = v.w + u.w
+					else
+						out.x = v.x + u
+						out.y = v.y + u
+						out.z = v.z + u
+						out.w = v.w + u
+					end
+					return out
+				end,
+				sub = function(v, u, out)
+					out = out or v
+					if vec4.isvec4(u) then
+						out.x = v.x - u.x
+						out.y = v.y - u.y
+						out.z = v.z - u.z
+						out.w = v.w - u.w
+					else
+						out.x = v.x - u
+						out.y = v.y - u
+						out.z = v.z - u
+						out.w = v.w - u
+					end
+					return out
+				end,
+				mul = function(v, u, out)
+					out = out or v
+					out.x = v.x * u.x
+					out.y = v.y * u.y
+					out.z = v.z * u.z
+					out.w = v.w * u.w
+					return out
+				end,
+				div = function(v, u, out)
+					out = out or v
+					out.x = v.x / u.x
+					out.y = v.y / u.y
+					out.z = v.z / u.z
+					out.w = v.w / u.w
+					return out
+				end,
+				pow = function(v, u, out)
+					out = out or v
+					if type(u) == 'number' then
+						out.x = v.x ^ u
+						out.y = v.y ^ u
+						out.z = v.z ^ u
+						out.w = v.w ^ u
+					else
+						out.x = v.x ^ u.x
+						out.y = v.y ^ u.y
+						out.z = v.z ^ u.z
+						out.w = v.w ^ u.w
+					end
+					return out
+				end,
+				scale = function(v, s, out)
+					out = out or v
+					out.x = v.x * s
+					out.y = v.y * s
+					out.z = v.z * s
+					out.w = v.w * s
+					return out
+				end,
+				saturate = function(v, out)
+					out = out or v
+					out.x = math.saturateN(v.x)
+					out.y = math.saturateN(v.y)
+					out.z = math.saturateN(v.z)
+					out.w = math.saturateN(v.w)
+					return out
+				end,
+				clamp = function(v, min, max, out)
+					out = out or v
+					out.x = math.clampN(v.x, min.x, max.x)
+					out.y = math.clampN(v.y, min.y, max.y)
+					out.z = math.clampN(v.z, min.z, max.z)
+					out.w = math.clampN(v.w, min.w, max.w)
+					return out
+				end,
+				length = function(v)
+					return math.sqrt(v:lengthSquared())
+				end,
+				lengthSquared = function(v)
+					return v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w
+				end,
+				distance = function(v, u)
+					return vec4.sub(v, u, vtmp1):length()
+				end,
+				distanceSquared = function(v, u)
+					return vec4.sub(v, u, vtmp1):lengthSquared()
+				end,
+				closerToThan = function(v, u, d)
+					return v:distanceSquared(u) < d * d
+				end,
+				angle = function(v, u)
+					return math.acos(v:dot(u) / (v:length() + u:length()))
+				end,
+				dot = function(v, u)
+					return v.x * u.x + v.y * u.y + v.z * u.z + v.w * u.w
+				end,
+				normalize = function(v, out)
+					out = out or v
+					local len = v:length()
+					return len == 0 and v or v:scale(1 / len, out)
+				end,
+				lerp = function(v, u, t, out)
+					out = out or v
+					out.x = v.x + (u.x - v.x) * t
+					out.y = v.y + (u.y - v.y) * t
+					out.z = v.z + (u.z - v.z) * t
+					out.w = v.w + (u.w - v.w) * t
+					return out
+				end,
+				project = function(v, u, out)
+					out = out or v
+					local unorm = vtmp1
+					u:normalize(unorm)
+					local dot = v:dot(unorm)
+					out.x = unorm.x * dot
+					out.y = unorm.y * dot
+					out.z = unorm.z * dot
+					out.w = unorm.w * dot
+					return out
+				end
+			}
 		}
 	}
 end
@@ -743,270 +812,275 @@ local function __ac_primitive_rgb()
 		local i = math.min(v.r, v.g, v.b)
 		return (a - i) / a
 	end
+	local vtmp1
 	return {
-		__call = function(_, r, g, b)
-			return setmetatable({
-				r = r or 0,
-				g = g or 0,
-				b = b or 0
-			}, rgb)
+		init = function()
+			vtmp1 = rgb()
 		end,
-		__tostring = function(v)
-			return string.format('(%f, %f, %f)', v.r, v.g, v.b)
-		end,
-		__add = function(v, u)
-			if type(v) == 'number' then
-				return rgb(v, v, v):add(u, rgb())
-			end
-			return v:add(u, rgb())
-		end,
-		__sub = function(v, u)
-			if type(v) == 'number' then
-				return rgb(v, v, v):sub(u, rgb())
-			end
-			return v:sub(u, rgb())
-		end,
-		__mul = function(v, u)
-			if type(v) == 'number' then
-				return rgb(v, v, v) * u
-			end
-			if rgb.isrgb(u) then
-				return v:mul(u, rgb())
-			elseif type(u) == 'number' then
-				return v:scale(u, rgb())
-			else
-				error('rgbs can only be multiplied by rgbs and numbers')
-			end
-		end,
-		__div = function(v, u)
-			if type(v) == 'number' then
-				return rgb(v, v, v) / u
-			end
-			if rgb.isrgb(u) then
-				return v:div(u, rgb())
-			elseif type(u) == 'number' then
-				return v:scale(1 / u, rgb())
-			else
-				error('rgbs can only be divided by rgbs and numbers')
-			end
-		end,
-		__pow = function(v, u)
-			if type(v) == 'number' then
-				return rgb(v, v, v) ^ u
-			end
-			if rgb.isrgb(u) then
-				return v:pow(u, rgb())
-			elseif type(u) == 'number' then
-				return rgb(v.r ^ u, v.g ^ u, v.b ^ u)
-			else
-				error('rgbs can only be raised to power of rgbs and numbers')
-			end
-		end,
-		__unm = function(v)
-			return rgb(-v.r, -v.g, -v.b)
-		end,
-		__len = function(v)
-			return v:value()
-		end,
-		__eq = function(v, o)
-			return o ~= nil and v.r == o.r and v.g == o.g and v.b == o.b
-		end,
-		__lt = function(v, o)
-			return v:value() < o:value()
-		end,
-		__le = function(v, o)
-			return v:value() <= o:value()
-		end,
-		__index = {
-			new = function(r, g, b)
-				if rgb.isrgb(r) then
-					return r
-				end
-				if rgbm.isrgbm(r) then
-					return r:color()
-				end
-				if hsv.ishsv(r) then
-					return r:rgb()
-				end
-				if vec3.isvec3(r) then
-					return rgb(r.x, r.y, r.z)
-				end
-				if vec4.isvec4(r) then
-					return rgb(r.x * r.w, r.y * r.w, r.z * r.w)
-				end
-				if type(r) ~= 'number' then
-					r = 0
-				end
-				if type(g) ~= 'number' then
-					g = r
-				end
-				if type(b) ~= 'number' then
-					b = g
-				end
-				return rgb(r, g, b)
+		type = {
+			__call = function(_, r, g, b)
+				return setmetatable({
+					r = r or 0,
+					g = g or 0,
+					b = b or 0
+				}, rgb)
 			end,
-			from0255 = function(r, g, b)
-				if type(r) ~= 'number' then
-					r = 0
+			__tostring = function(v)
+				return string.format('(%f, %f, %f)', v.r, v.g, v.b)
+			end,
+			__add = function(v, u)
+				if type(v) == 'number' then
+					return rgb(v, v, v):add(u, rgb())
 				end
-				if type(g) ~= 'number' then
-					g = r
+				return v:add(u, rgb())
+			end,
+			__sub = function(v, u)
+				if type(v) == 'number' then
+					return rgb(v, v, v):sub(u, rgb())
 				end
-				if type(b) ~= 'number' then
-					b = g
+				return v:sub(u, rgb())
+			end,
+			__mul = function(v, u)
+				if type(v) == 'number' then
+					return rgb(v, v, v) * u
 				end
-				return rgb(r / 255, g / 255, b / 255)
-			end,
-			isrgb = function(r)
-				return ffi.istype('rgb', r)
-			end,
-			type = function(x)
-				return rgb
-			end,
-			clone = function(v)
-				return rgb(v.r, v.g, v.b)
-			end,
-			unpack = function(v)
-				return v.r,  v.g,  v.b
-			end,
-			set = function(v, r, g, b)
-				if rgb.isrgb(r) then
-					r, g, b = r.r, r.g, r.b
+				if rgb.isrgb(u) then
+					return v:mul(u, rgb())
+				elseif type(u) == 'number' then
+					return v:scale(u, rgb())
 				else
-					if g == nil then
+					error('rgbs can only be multiplied by rgbs and numbers')
+				end
+			end,
+			__div = function(v, u)
+				if type(v) == 'number' then
+					return rgb(v, v, v) / u
+				end
+				if rgb.isrgb(u) then
+					return v:div(u, rgb())
+				elseif type(u) == 'number' then
+					return v:scale(1 / u, rgb())
+				else
+					error('rgbs can only be divided by rgbs and numbers')
+				end
+			end,
+			__pow = function(v, u)
+				if type(v) == 'number' then
+					return rgb(v, v, v) ^ u
+				end
+				if rgb.isrgb(u) then
+					return v:pow(u, rgb())
+				elseif type(u) == 'number' then
+					return rgb(v.r ^ u, v.g ^ u, v.b ^ u)
+				else
+					error('rgbs can only be raised to power of rgbs and numbers')
+				end
+			end,
+			__unm = function(v)
+				return rgb(-v.r, -v.g, -v.b)
+			end,
+			__len = function(v)
+				return v:value()
+			end,
+			__eq = function(v, o)
+				return o ~= nil and v.r == o.r and v.g == o.g and v.b == o.b
+			end,
+			__lt = function(v, o)
+				return v:value() < o:value()
+			end,
+			__le = function(v, o)
+				return v:value() <= o:value()
+			end,
+			__index = {
+				new = function(r, g, b)
+					if rgb.isrgb(r) then
+						return r
+					end
+					if rgbm.isrgbm(r) then
+						return r:color()
+					end
+					if hsv.ishsv(r) then
+						return r:rgb()
+					end
+					if vec3.isvec3(r) then
+						return rgb(r.x, r.y, r.z)
+					end
+					if vec4.isvec4(r) then
+						return rgb(r.x * r.w, r.y * r.w, r.z * r.w)
+					end
+					if type(r) ~= 'number' then
+						r = 0
+					end
+					if type(g) ~= 'number' then
 						g = r
 					end
-					if b == nil then
+					if type(b) ~= 'number' then
 						b = g
 					end
+					return rgb(r, g, b)
+				end,
+				from0255 = function(r, g, b)
+					if type(r) ~= 'number' then
+						r = 0
+					end
+					if type(g) ~= 'number' then
+						g = r
+					end
+					if type(b) ~= 'number' then
+						b = g
+					end
+					return rgb(r / 255, g / 255, b / 255)
+				end,
+				isrgb = function(r)
+					return ffi.istype('rgb', r)
+				end,
+				tmp = function()
+					return vtmp1
+				end,
+				type = function(x)
+					return rgb
+				end,
+				clone = function(v)
+					return rgb(v.r, v.g, v.b)
+				end,
+				unpack = function(v)
+					return v.r,  v.g,  v.b
+				end,
+				set = function(v, r, g, b)
+					if rgb.isrgb(r) then
+						r, g, b = r.r, r.g, r.b
+					elseif g == nil then
+						g = r
+						b = r
+					end
+					v.r = r
+					v.g = g
+					v.b = b
+					return v
+				end,
+				setLerp = function(v, a, b, k)
+					v.r = math.lerp(a.r, b.r, k)
+					v.g = math.lerp(a.g, b.g, k)
+					v.b = math.lerp(a.b, b.b, k)
+					return v
+				end,
+				add = function(v, u, out)
+					out = out or v
+					if rgb.isrgb(u) then
+						out.r = v.r + u.r
+						out.g = v.g + u.g
+						out.b = v.b + u.b
+					else
+						out.r = v.r + u
+						out.g = v.g + u
+						out.b = v.b + u
+					end
+					return out
+				end,
+				sub = function(v, u, out)
+					out = out or v
+					if rgb.isrgb(u) then
+						out.r = v.r - u.r
+						out.g = v.g - u.g
+						out.b = v.b - u.b
+					else
+						out.r = v.r - u
+						out.g = v.g - u
+						out.b = v.b - u
+					end
+					return out
+				end,
+				mul = function(v, u, out)
+					out = out or v
+					out.r = v.r * u.r
+					out.g = v.g * u.g
+					out.b = v.b * u.b
+					return out
+				end,
+				div = function(v, u, out)
+					out = out or v
+					out.r = v.r / u.r
+					out.g = v.g / u.g
+					out.b = v.b / u.b
+					return out
+				end,
+				pow = function(v, u, out)
+					out = out or v
+					if type(u) == 'number' then
+						out.r = v.r ^ u
+						out.g = v.g ^ u
+						out.b = v.b ^ u
+					else
+						out.r = v.r ^ u.r
+						out.g = v.g ^ u.g
+						out.b = v.b ^ u.b
+					end
+					return out
+				end,
+				scale = function(v, s, out)
+					out = out or v
+					out.r = v.r * s
+					out.g = v.g * s
+					out.b = v.b * s
+					return out
+				end,
+				saturate = function(v, out)
+					out = out or v
+					out.r = math.saturateN(v.r)
+					out.g = math.saturateN(v.g)
+					out.b = math.saturateN(v.b)
+					return out
+				end,
+				clamp = function(v, min, max, out)
+					out = out or v
+					out.r = math.clampN(v.r, min.r, max.r)
+					out.g = math.clampN(v.g, min.g, max.g)
+					out.b = math.clampN(v.b, min.b, max.b)
+					return out
+				end,
+				normalize = function(v)
+					local m = v:value()
+					if m > 1 then
+						return v / m
+					end
+					return v
+				end,
+				adjustSaturation = function(v, sat, out)
+					out = out or v
+					local avg = (v.r + v.g + v.b) / 3
+					out.r = math.max(math.lerp(avg, out.r, sat), 0)
+					out.g = math.max(math.lerp(avg, out.g, sat), 0)
+					out.b = math.max(math.lerp(avg, out.b, sat), 0)
+					return out
+				end,
+				value = rgbValue,
+				getValue = rgbValue,
+				hue = rgbHue,
+				getHue = rgbHue,
+				hue = rgbHue,
+				getSaturation = rgbSaturation,
+				saturation = rgbSaturation,
+				luminance = rgbLuminance,
+				getLuminance = rgbLuminance,
+				hsv = function(v)
+					return hsv(v:hue(), v:saturation(), v:value())
+				end,
+				toHsv = function(v)
+					return hsv(v:hue(), v:saturation(), v:value())
+				end,
+				rgbm = function(v, m)
+					return rgbm(v.r, v.g, v.b, __num_fallback(m, 1))
+				end,
+				toRgbm = function(v, m)
+					return rgbm(v.r, v.g, v.b, __num_fallback(m, 1))
+				end,
+				vec3 = function(v)
+					return vec3(v.r, v.g, v.b)
+				end,
+				toVec3 = function(v)
+					return vec3(v.r, v.g, v.b)
 				end
-				v.r = r
-				v.g = g
-				v.b = b
-				return v
-			end,
-			setLerp = function(v, a, b, k)
-				v.r = math.lerp(a.r, b.r, k)
-				v.g = math.lerp(a.g, b.g, k)
-				v.b = math.lerp(a.b, b.b, k)
-				return v
-			end,
-			add = function(v, u, out)
-				out = out or v
-				if rgb.isrgb(u) then
-					out.r = v.r + u.r
-					out.g = v.g + u.g
-					out.b = v.b + u.b
-				else
-					out.r = v.r + u
-					out.g = v.g + u
-					out.b = v.b + u
-				end
-				return out
-			end,
-			sub = function(v, u, out)
-				out = out or v
-				if rgb.isrgb(u) then
-					out.r = v.r - u.r
-					out.g = v.g - u.g
-					out.b = v.b - u.b
-				else
-					out.r = v.r - u
-					out.g = v.g - u
-					out.b = v.b - u
-				end
-				return out
-			end,
-			mul = function(v, u, out)
-				out = out or v
-				out.r = v.r * u.r
-				out.g = v.g * u.g
-				out.b = v.b * u.b
-				return out
-			end,
-			div = function(v, u, out)
-				out = out or v
-				out.r = v.r / u.r
-				out.g = v.g / u.g
-				out.b = v.b / u.b
-				return out
-			end,
-			pow = function(v, u, out)
-				out = out or v
-				if type(u) == 'number' then
-					out.r = v.r ^ u
-					out.g = v.g ^ u
-					out.b = v.b ^ u
-				else
-					out.r = v.r ^ u.r
-					out.g = v.g ^ u.g
-					out.b = v.b ^ u.b
-				end
-				return out
-			end,
-			scale = function(v, s, out)
-				out = out or v
-				out.r = v.r * s
-				out.g = v.g * s
-				out.b = v.b * s
-				return out
-			end,
-			saturate = function(v, out)
-				out = out or v
-				out.r = math.saturateN(v.r)
-				out.g = math.saturateN(v.g)
-				out.b = math.saturateN(v.b)
-				return out
-			end,
-			clamp = function(v, min, max, out)
-				out = out or v
-				out.r = math.clampN(v.r, min.r, max.r)
-				out.g = math.clampN(v.g, min.g, max.g)
-				out.b = math.clampN(v.b, min.b, max.b)
-				return out
-			end,
-			normalize = function(v)
-				local m = v:value()
-				if m > 1 then
-					return v / m
-				end
-				return v
-			end,
-			adjustSaturation = function(v, sat, out)
-				out = out or v
-				local avg = (v.r + v.g + v.b) / 3
-				out.r = math.max(math.lerp(avg, out.r, sat), 0)
-				out.g = math.max(math.lerp(avg, out.g, sat), 0)
-				out.b = math.max(math.lerp(avg, out.b, sat), 0)
-				return out
-			end,
-			value = rgbValue,
-			getValue = rgbValue,
-			hue = rgbHue,
-			getHue = rgbHue,
-			hue = rgbHue,
-			getSaturation = rgbSaturation,
-			saturation = rgbSaturation,
-			luminance = rgbLuminance,
-			getLuminance = rgbLuminance,
-			hsv = function(v)
-				return hsv(v:hue(), v:saturation(), v:value())
-			end,
-			toHsv = function(v)
-				return hsv(v:hue(), v:saturation(), v:value())
-			end,
-			rgbm = function(v, m)
-				return rgbm(v.r, v.g, v.b, __num_fallback(m, 1))
-			end,
-			toRgbm = function(v, m)
-				return rgbm(v.r, v.g, v.b, __num_fallback(m, 1))
-			end,
-			vec3 = function(v)
-				return vec3(v.r, v.g, v.b)
-			end,
-			toVec3 = function(v)
-				return vec3(v.r, v.g, v.b)
-			end
+			}
 		}
 	}
 end
@@ -1043,492 +1117,527 @@ local function __ac_primitive_hsv()
 		end
 		return rgb(v, p, q)
 	end
+	local vtmp1
 	return {
-		__call = function(_, h, s, v)
-			return setmetatable({
-				h = h or 0,
-				s = s or 0,
-				v = v or 0
-			}, hsv)
+		init = function()
+			vtmp1 = hsv()
 		end,
-		__tostring = function(v)
-			return string.format('(H=%f, S=%f, V=%f)', v.h, v.s, v.v)
-		end,
-		__eq = function(v, o)
-			return o ~= nil and v.h == o.h and v.s == o.s and v.v == o.v
-		end,
-		__index = {
-			new = function(h, s, v)
-				if type(h) ~= 'number' then
-					h = 0
-				end
-				if type(s) ~= 'number' then
-					s = h
-				end
-				if type(v) ~= 'number' then
-					v = s
-				end
-				return hsv(h, s, v)
+		type = {
+			__call = function(_, h, s, v)
+				return setmetatable({
+					h = h or 0,
+					s = s or 0,
+					v = v or 0
+				}, hsv)
 			end,
-			ishsv = function(h)
-				return ffi.istype('hsv', h)
+			__tostring = function(v)
+				return string.format('(H=%f, S=%f, V=%f)', v.h, v.s, v.v)
 			end,
-			type = function(x)
-				return hsv
+			__eq = function(v, o)
+				return o ~= nil and v.h == o.h and v.s == o.s and v.v == o.v
 			end,
-			clone = function(v)
-				return hsv(v.h, v.s, v.v)
-			end,
-			unpack = function(v)
-				return v.h,  v.s,  v.v
-			end,
-			set = function(v, h, s, v)
-				if hsv.ishsv(h) then
-					h, s, v = h.h, h.s, h.v
-				end
-				v.h = h
-				v.s = s
-				v.v = v
-				return v
-			end,
-			rgb = hsvToRgb,
-			toRgb = hsvToRgb
+			__index = {
+				new = function(h, s, v)
+					if type(h) ~= 'number' then
+						h = 0
+					end
+					if type(s) ~= 'number' then
+						s = h
+					end
+					if type(v) ~= 'number' then
+						v = s
+					end
+					return hsv(h, s, v)
+				end,
+				ishsv = function(h)
+					return ffi.istype('hsv', h)
+				end,
+				tmp = function()
+					return vtmp1
+				end,
+				type = function(x)
+					return hsv
+				end,
+				clone = function(v)
+					return hsv(v.h, v.s, v.v)
+				end,
+				unpack = function(v)
+					return v.h,  v.s,  v.v
+				end,
+				set = function(v, h, s, v)
+					if hsv.ishsv(h) then
+						h, s, v = h.h, h.s, h.v
+					end
+					v.h = h
+					v.s = s
+					v.v = v
+					return v
+				end,
+				rgb = hsvToRgb,
+				toRgb = hsvToRgb
+			}
 		}
 	}
 end
 local function __ac_primitive_rgbm()
+	local vtmp1
 	return {
-		__call = function(_, r, g, b, mult)
-			return setmetatable({
-				r = r or 0,
-				g = g or 0,
-				b = b or 0,
-				mult = mult or 0
-			}, rgbm)
+		init = function()
+			vtmp1 = rgbm()
 		end,
-		__tostring = function(v)
-			return string.format('(rgb=(%f, %f, %f), mult=%f)', v.rgb.r, v.rgb.g, v.rgb.b, v.mult)
-		end,
-		__add = function(v, u)
-			if type(v) == 'number' then
-				return rgbm(v, v, v, v):add(u, rgbm())
-			end
-			return v:add(u, rgbm())
-		end,
-		__sub = function(v, u)
-			if type(v) == 'number' then
-				return rgbm(v, v, v, v):sub(u, rgbm())
-			end
-			return v:sub(u, rgbm())
-		end,
-		__mul = function(v, u)
-			if type(v) == 'number' then
-				return rgbm(v, v, v, v) * u
-			end
-			if rgbm.isrgbm(u) then
-				return v:mul(u, rgbm())
-			elseif type(u) == 'number' then
-				return v:scale(u, rgbm())
-			else
-				error('rgbms can only be multiplied by rgbms and numbers')
-			end
-		end,
-		__div = function(v, u)
-			if type(v) == 'number' then
-				return rgbm(v, v, v, v) / u
-			end
-			if rgbm.isrgbm(u) then
-				return v:div(u, rgbm())
-			elseif type(u) == 'number' then
-				return v:scale(1 / u, rgbm())
-			else
-				error('rgbms can only be divided by rgbms and numbers')
-			end
-		end,
-		__pow = function(v, u)
-			if type(v) == 'number' then
-				return rgbm(v, v, v) ^ u
-			end
-			if rgbm.isrgbm(u) then
-				return v:pow(u, rgbm())
-			elseif type(u) == 'number' then
-				return rgbm(v.r ^ u, v.g ^ u, v.b ^ u, v.mult ^ u)
-			else
-				error('rgbms can only be raised to power of rgbms and numbers')
-			end
-		end,
-		__unm = function(v)
-			return v * -1
-		end,
-		__len = function(v)
-			return v:value()
-		end,
-		__eq = function(v, o)
-			return o ~= nil and v.rgb == o.rgb and v.mult == o.mult
-		end,
-		__lt = function(v, o)
-			return v:value() < o:value()
-		end,
-		__le = function(v, o)
-			return v:value() <= o:value()
-		end,
-		__index = {
-			new = function(r, g, b, m)
-				if rgbm.isrgbm(r) then
-					return r
-				end
-				if rgb.isrgb(r) then
-					return rgbm(r.r, r.g, r.b, g or 1)
-				end
-				if vec4.isvec4(r) then
-					return rgbm(r.x, r.y, r.z, r.w)
-				end
-				if vec3.isvec3(r) then
-					return rgbm(r.x, r.y, r.z, 1)
-				end
-				if type(r) ~= 'number' then
-					return rgbm(0, 0, 0, 1)
-				end
-				if type(g) ~= 'number' then
-					return rgbm(r, r, r, 1)
-				end
-				if type(b) ~= 'number' then
-					return rgbm(r, r, r, g)
-				end
-				return rgbm(r, g, b, __num_fallback(m, 1))
+		type = {
+			__call = function(_, r, g, b, mult)
+				return setmetatable({
+					r = r or 0,
+					g = g or 0,
+					b = b or 0,
+					mult = mult or 0
+				}, rgbm)
 			end,
-			from0255 = function(r, g, b, a)
-				if type(r) ~= 'number' then
-					r = 0
+			__tostring = function(v)
+				return string.format('(rgb=(%f, %f, %f), mult=%f)', v.rgb.r, v.rgb.g, v.rgb.b, v.mult)
+			end,
+			__add = function(v, u)
+				if type(v) == 'number' then
+					return rgbm(v, v, v, v):add(u, rgbm())
 				end
-				if type(g) ~= 'number' then
-					g = r
+				return v:add(u, rgbm())
+			end,
+			__sub = function(v, u)
+				if type(v) == 'number' then
+					return rgbm(v, v, v, v):sub(u, rgbm())
 				end
-				if type(b) ~= 'number' then
-					b = g
+				return v:sub(u, rgbm())
+			end,
+			__mul = function(v, u)
+				if type(v) == 'number' then
+					return rgbm(v, v, v, v) * u
 				end
-				return rgbm(r / 255, g / 255, b / 255, __num_fallback(a, 1))
-			end,
-			isrgbm = function(r)
-				return ffi.istype('rgbm', r)
-			end,
-			type = function(x)
-				return rgbm
-			end,
-			clone = function(v)
-				return rgbm(v.r, v.g, v.b, v.mult)
-			end,
-			unpack = function(v)
-				return v.rgb,  v.mult
-			end,
-			set = function(v, rgb, mult)
-				if rgbm.isrgbm(r) then
-					rgb, mult = r.rgb, r.mult
-				end
-				v.rgb = rgb
-				v.mult = mult
-				return v
-			end,
-			setLerp = function(v, a, b, k)
-				v.r = math.lerp(a.r, b.r, k)
-				v.g = math.lerp(a.g, b.g, k)
-				v.b = math.lerp(a.b, b.b, k)
-				v.mult = math.lerp(a.mult, b.mult, k)
-				return v
-			end,
-			add = function(v, u, out)
-				out = out or v
 				if rgbm.isrgbm(u) then
-					out.rgb = v.rgb + u.rgb
-					out.mult = v.mult + u.mult
+					return v:mul(u, rgbm())
+				elseif type(u) == 'number' then
+					return v:scale(u, rgbm())
 				else
-					out.rgb = v.rgb + u
-					out.mult = v.mult + u
+					error('rgbms can only be multiplied by rgbms and numbers')
 				end
-				return out
 			end,
-			sub = function(v, u, out)
-				out = out or v
+			__div = function(v, u)
+				if type(v) == 'number' then
+					return rgbm(v, v, v, v) / u
+				end
 				if rgbm.isrgbm(u) then
-					out.rgb = v.rgb - u.rgb
-					out.mult = v.mult - u.mult
+					return v:div(u, rgbm())
+				elseif type(u) == 'number' then
+					return v:scale(1 / u, rgbm())
 				else
-					out.rgb = v.rgb - u
-					out.mult = v.mult - u
+					error('rgbms can only be divided by rgbms and numbers')
 				end
-				return out
 			end,
-			mul = function(v, u, out)
-				out = out or v
-				out.rgb = v.rgb * u.rgb
-				out.mult = v.mult * u.mult
-				return out
-			end,
-			div = function(v, u, out)
-				out = out or v
-				out.rgb = v.rgb / u.rgb
-				out.mult = v.mult / u.mult
-				return out
-			end,
-			pow = function(v, u, out)
-				out = out or v
-				if type(u) == 'number' then
-					out.r = v.r ^ u
-					out.g = v.g ^ u
-					out.b = v.b ^ u
-					out.mult = v.mult ^ u
+			__pow = function(v, u)
+				if type(v) == 'number' then
+					return rgbm(v, v, v) ^ u
+				end
+				if rgbm.isrgbm(u) then
+					return v:pow(u, rgbm())
+				elseif type(u) == 'number' then
+					return rgbm(v.r ^ u, v.g ^ u, v.b ^ u, v.mult ^ u)
 				else
-					out.r = v.r ^ u.r
-					out.g = v.g ^ u.g
-					out.b = v.b ^ u.b
-					out.mult = v.mult ^ u.mult
+					error('rgbms can only be raised to power of rgbms and numbers')
 				end
-				return out
 			end,
-			scale = function(v, s, out)
-				out = out or v
-				out.rgb = v.rgb * s
-				out.mult = v.mult * s
-				return out
+			__unm = function(v)
+				return v * -1
 			end,
-			saturate = function(v, out)
-				out = out or v
-				out.r = math.saturateN(v.r)
-				out.g = math.saturateN(v.g)
-				out.b = math.saturateN(v.b)
-				out.mult = math.saturateN(v.mult)
-				return out
+			__len = function(v)
+				return v:value()
 			end,
-			clamp = function(v, min, max, out)
-				out = out or v
-				out.r = math.clampN(v.r, min.r, max.r)
-				out.g = math.clampN(v.g, min.g, max.g)
-				out.b = math.clampN(v.b, min.b, max.b)
-				out.mult = math.clampN(v.mult, min.mult, max.mult)
-				return out
+			__eq = function(v, o)
+				return o ~= nil and v.rgb == o.rgb and v.mult == o.mult
 			end,
-			normalize = function(v)
-				local m = v:value()
-				if m > 1 then
-					return v / m
+			__lt = function(v, o)
+				return v:value() < o:value()
+			end,
+			__le = function(v, o)
+				return v:value() <= o:value()
+			end,
+			__index = {
+				new = function(r, g, b, m)
+					if rgbm.isrgbm(r) then
+						return r
+					end
+					if rgb.isrgb(r) then
+						return rgbm(r.r, r.g, r.b, g or 1)
+					end
+					if vec4.isvec4(r) then
+						return rgbm(r.x, r.y, r.z, r.w)
+					end
+					if vec3.isvec3(r) then
+						return rgbm(r.x, r.y, r.z, 1)
+					end
+					if type(r) ~= 'number' then
+						return rgbm(0, 0, 0, 1)
+					end
+					if type(g) ~= 'number' then
+						return rgbm(r, r, r, 1)
+					end
+					if type(b) ~= 'number' then
+						return rgbm(r, r, r, g)
+					end
+					return rgbm(r, g, b, __num_fallback(m, 1))
+				end,
+				from0255 = function(r, g, b, a)
+					if type(r) ~= 'number' then
+						r = 0
+					end
+					if type(g) ~= 'number' then
+						g = r
+					end
+					if type(b) ~= 'number' then
+						b = g
+					end
+					return rgbm(r / 255, g / 255, b / 255, __num_fallback(a, 1))
+				end,
+				isrgbm = function(r)
+					return ffi.istype('rgbm', r)
+				end,
+				tmp = function()
+					return vtmp1
+				end,
+				type = function(x)
+					return rgbm
+				end,
+				clone = function(v)
+					return rgbm(v.r, v.g, v.b, v.mult)
+				end,
+				unpack = function(v)
+					return v.rgb,  v.mult
+				end,
+				set = function(v, rgb, mult)
+					if rgbm.isrgbm(r) then
+						rgb, mult = r.rgb, r.mult
+					end
+					v.rgb = rgb
+					v.mult = mult
+					return v
+				end,
+				setLerp = function(v, a, b, k)
+					v.r = math.lerp(a.r, b.r, k)
+					v.g = math.lerp(a.g, b.g, k)
+					v.b = math.lerp(a.b, b.b, k)
+					v.mult = math.lerp(a.mult, b.mult, k)
+					return v
+				end,
+				add = function(v, u, out)
+					out = out or v
+					if rgbm.isrgbm(u) then
+						out.rgb = v.rgb + u.rgb
+						out.mult = v.mult + u.mult
+					else
+						out.rgb = v.rgb + u
+						out.mult = v.mult + u
+					end
+					return out
+				end,
+				sub = function(v, u, out)
+					out = out or v
+					if rgbm.isrgbm(u) then
+						out.rgb = v.rgb - u.rgb
+						out.mult = v.mult - u.mult
+					else
+						out.rgb = v.rgb - u
+						out.mult = v.mult - u
+					end
+					return out
+				end,
+				mul = function(v, u, out)
+					out = out or v
+					out.rgb = v.rgb * u.rgb
+					out.mult = v.mult * u.mult
+					return out
+				end,
+				div = function(v, u, out)
+					out = out or v
+					out.rgb = v.rgb / u.rgb
+					out.mult = v.mult / u.mult
+					return out
+				end,
+				pow = function(v, u, out)
+					out = out or v
+					if type(u) == 'number' then
+						out.r = v.r ^ u
+						out.g = v.g ^ u
+						out.b = v.b ^ u
+						out.mult = v.mult ^ u
+					else
+						out.r = v.r ^ u.r
+						out.g = v.g ^ u.g
+						out.b = v.b ^ u.b
+						out.mult = v.mult ^ u.mult
+					end
+					return out
+				end,
+				scale = function(v, s, out)
+					out = out or v
+					out.rgb = v.rgb * s
+					out.mult = v.mult * s
+					return out
+				end,
+				saturate = function(v, out)
+					out = out or v
+					out.r = math.saturateN(v.r)
+					out.g = math.saturateN(v.g)
+					out.b = math.saturateN(v.b)
+					out.mult = math.saturateN(v.mult)
+					return out
+				end,
+				clamp = function(v, min, max, out)
+					out = out or v
+					out.r = math.clampN(v.r, min.r, max.r)
+					out.g = math.clampN(v.g, min.g, max.g)
+					out.b = math.clampN(v.b, min.b, max.b)
+					out.mult = math.clampN(v.mult, min.mult, max.mult)
+					return out
+				end,
+				normalize = function(v)
+					local m = v:value()
+					if m > 1 then
+						return v / m
+					end
+					return v
+				end,
+				value = function(v)
+					return v.rgb:value() * v.mult
+				end,
+				getValue = function(v)
+					return v.rgb:value() * v.mult
+				end,
+				luminance = function(v)
+					return v.rgb:luminance() * v.mult
+				end,
+				getLuminance = function(v)
+					return v.rgb:luminance() * v.mult
+				end,
+				color = function(v)
+					return v.rgb * v.mult
+				end,
+				toRgb = function(v)
+					return v.rgb * v.mult
+				end,
+				hsv = function(v)
+					return v:color():hsv()
+				end,
+				toHsv = function(v)
+					return v:color():hsv()
+				end,
+				vec3 = function(v)
+					return v:color():vec()
+				end,
+				toVec3 = function(v)
+					return v:color():vec()
+				end,
+				vec4 = function(v)
+					return vec4(v.rgb.r, v.rgb.g, v.rgb.b, v.mult)
+				end,
+				toVec4 = function(v)
+					return vec4(v.rgb.r, v.rgb.g, v.rgb.b, v.mult)
 				end
-				return v
-			end,
-			value = function(v)
-				return v.rgb:value() * v.mult
-			end,
-			getValue = function(v)
-				return v.rgb:value() * v.mult
-			end,
-			luminance = function(v)
-				return v.rgb:luminance() * v.mult
-			end,
-			getLuminance = function(v)
-				return v.rgb:luminance() * v.mult
-			end,
-			color = function(v)
-				return v.rgb * v.mult
-			end,
-			toRgb = function(v)
-				return v.rgb * v.mult
-			end,
-			hsv = function(v)
-				return v:color():hsv()
-			end,
-			toHsv = function(v)
-				return v:color():hsv()
-			end,
-			vec3 = function(v)
-				return v:color():vec()
-			end,
-			toVec3 = function(v)
-				return v:color():vec()
-			end,
-			vec4 = function(v)
-				return vec4(v.rgb.r, v.rgb.g, v.rgb.b, v.mult)
-			end,
-			toVec4 = function(v)
-				return vec4(v.rgb.r, v.rgb.g, v.rgb.b, v.mult)
-			end
+			}
 		}
 	}
 end
 local function __ac_primitive_quat()
+	local vtmp1
+	local vtmp2
+	local qtmp1
+	local qtmp2
+	local forward
 	return {
-		__call = function(_, x, y, z, w)
-			return setmetatable({
-				x = x,
-				y = y,
-				z = z,
-				w = w
-			}, quat)
+		init = function()
+			vtmp1 = vec3()
+			vtmp2 = vec3()
+			qtmp1 = quat()
+			qtmp2 = quat()
+			forward = vec3(0, 0, -1)
 		end,
-		__tostring = function(q)
-			return string.format('(%f, %f, %f, %f)', q.x, q.y, q.z, q.w)
-		end,
-		__add = function(q, r)
-			return q:add(r, quat())
-		end,
-		__sub = function(q, r)
-			return q:sub(r, quat())
-		end,
-		__mul = function(q, r)
-			if quat.isquat(r) then
-				return q:mul(r, quat())
-			elseif vec3.isvec3(r) then
-				return r:rotate(q, vec3())
-			else
-				error('quats can only be multiplied by quats and vec3s')
-			end
-		end,
-		__unm = function(q)
-			return q:scale(-1)
-		end,
-		__len = function(q)
-			return q:length()
-		end,
-		__index = {
-			type = function(x)
-				return quat
+		type = {
+			__call = function(_, x, y, z, w)
+				return setmetatable({
+					x = x,
+					y = y,
+					z = z,
+					w = w
+				}, quat)
 			end,
-			isquat = function(x)
-				return ffi and ffi.istype('quat', x) or getmetatable(x) == quat
+			__tostring = function(q)
+				return string.format('(%f, %f, %f, %f)', q.x, q.y, q.z, q.w)
 			end,
-			clone = function(q)
-				return quat(q.x, q.y, q.z, q.w)
+			__add = function(q, r)
+				return q:add(r, quat())
 			end,
-			unpack = function(q)
-				return q.x,  q.y,  q.z,  q.w
+			__sub = function(q, r)
+				return q:sub(r, quat())
 			end,
-			set = function(q, x, y, z, w)
-				if quat.isquat(x) then
-					x, y, z, w = x.x, x.y, x.z, x.w
+			__mul = function(q, r)
+				if quat.isquat(r) then
+					return q:mul(r, quat())
+				elseif vec3.isvec3(r) then
+					return r:rotate(q, vec3())
+				else
+					error('quats can only be multiplied by quats and vec3s')
 				end
-				q.x = x
-				q.y = y
-				q.z = z
-				q.w = w
-				return q
 			end,
-			fromAngleAxis = function(angle, x, y, z)
-				return quat():setAngleAxis(angle, x, y, z)
+			__unm = function(q)
+				return q:scale(-1)
 			end,
-			setAngleAxis = function(q, angle, x, y, z)
-				if vec3.isvec3(x) then
-					x, y, z = x.x, x.y, x.z
-				end
-				local s = math.sin(angle * .5)
-				local c = math.cos(angle * .5)
-				q.x = x * s
-				q.y = y * s
-				q.z = z * s
-				q.w = c
-				return q
+			__len = function(q)
+				return q:length()
 			end,
-			getAngleAxis = function(q)
-				if q.w > 1 or q.w < -1 then
-					q:normalize()
-				end
-				local s = math.sqrt(1 - q.w * q.w)
-				s = s < .0001 and 1 or 1 / s
-				return 2 * math.acos(q.w),  q.x * s,  q.y * s,  q.z * s
-			end,
-			between = function(u, v)
-				return quat():setBetween(u, v)
-			end,
-			setBetween = function(q, u, v)
-				local dot = u:dot(v)
-				if dot > .99999 then
-					q.x, q.y, q.z, q.w = 0, 0, 0, 1
-					return q
-				elseif dot < -.99999 then
-					vtmp1.x, vtmp1.y, vtmp1.z = 1, 0, 0
-					vtmp1:cross(u)
-					if #vtmp1 < .00001 then
-						vtmp1.x, vtmp1.y, vtmp1.z = 0, 1, 0
-						vtmp1:cross(u)
+			__index = {
+				type = function(x)
+					return quat
+				end,
+				isquat = function(x)
+					return ffi and ffi.istype('quat', x) or getmetatable(x) == quat
+				end,
+				tmp = function()
+					return qtmp2
+				end,
+				clone = function(q)
+					return quat(q.x, q.y, q.z, q.w)
+				end,
+				unpack = function(q)
+					return q.x,  q.y,  q.z,  q.w
+				end,
+				set = function(q, x, y, z, w)
+					if quat.isquat(x) then
+						x, y, z, w = x.x, x.y, x.z, x.w
 					end
-					vtmp1:normalize()
-					return q:setAngleAxis(math.pi, vtmp1)
+					q.x = x
+					q.y = y
+					q.z = z
+					q.w = w
+					return q
+				end,
+				fromAngleAxis = function(angle, x, y, z)
+					return quat():setAngleAxis(angle, x, y, z)
+				end,
+				setAngleAxis = function(q, angle, x, y, z)
+					if vec3.isvec3(x) then
+						x, y, z = x.x, x.y, x.z
+					end
+					local s = math.sin(angle * .5)
+					local c = math.cos(angle * .5)
+					q.x = x * s
+					q.y = y * s
+					q.z = z * s
+					q.w = c
+					return q
+				end,
+				getAngleAxis = function(q)
+					if q.w > 1 or q.w < -1 then
+						q:normalize()
+					end
+					local s = math.sqrt(1 - q.w * q.w)
+					s = s < .0001 and 1 or 1 / s
+					return 2 * math.acos(q.w),  q.x * s,  q.y * s,  q.z * s
+				end,
+				between = function(u, v)
+					return quat():setBetween(u, v)
+				end,
+				setBetween = function(q, u, v)
+					local dot = u:dot(v)
+					if dot > .99999 then
+						q.x, q.y, q.z, q.w = 0, 0, 0, 1
+						return q
+					elseif dot < -.99999 then
+						vtmp1.x, vtmp1.y, vtmp1.z = 1, 0, 0
+						vtmp1:cross(u)
+						if #vtmp1 < .00001 then
+							vtmp1.x, vtmp1.y, vtmp1.z = 0, 1, 0
+							vtmp1:cross(u)
+						end
+						vtmp1:normalize()
+						return q:setAngleAxis(math.pi, vtmp1)
+					end
+					q.x, q.y, q.z = u.x, u.y, u.z
+					vec3.cross(q, v)
+					q.w = 1 + dot
+					return q:normalize()
+				end,
+				fromDirection = function(x, y, z)
+					return quat():setDirection(x, y, z)
+				end,
+				setDirection = function(q, x, y, z)
+					if vec3.isvec3(x) then
+						x, y, z = x.x, x.y, x.z
+					end
+					vtmp2.x, vtmp2.y, vtmp2.z = x, y, z
+					return q:setBetween(forward, vtmp2)
+				end,
+				add = function(q, r, out)
+					out = out or q
+					out.x = q.x + r.x
+					out.y = q.y + r.y
+					out.z = q.z + r.z
+					out.w = q.w + r.w
+					return out
+				end,
+				sub = function(q, r, out)
+					out = out or q
+					out.x = q.x - r.x
+					out.y = q.y - r.y
+					out.z = q.z - r.z
+					out.w = q.w - r.w
+					return out
+				end,
+				mul = function(q, r, out)
+					out = out or q
+					local qx, qy, qz, qw = q:unpack()
+					local rx, ry, rz, rw = r:unpack()
+					out.x = qx * rw + qw * rx + qy * rz - qz * ry
+					out.y = qy * rw + qw * ry + qz * rx - qx * rz
+					out.z = qz * rw + qw * rz + qx * ry - qy * rx
+					out.w = qw * rw - qx * rx - qy * ry - qz * rz
+					return out
+				end,
+				scale = function(q, s, out)
+					out = out or q
+					out.x = q.x * s
+					out.y = q.y * s
+					out.z = q.z * s
+					out.w = q.w * s
+					return out
+				end,
+				length = function(q)
+					return math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w)
+				end,
+				normalize = function(q, out)
+					out = out or q
+					local len = q:length()
+					return len == 0 and q or q:scale(1 / len, out)
+				end,
+				lerp = function(q, r, t, out)
+					out = out or q
+					r:scale(t, qtmp1)
+					q:scale(1 - t, out)
+					return out:add(qtmp1)
+				end,
+				slerp = function(q, r, t, out)
+					out = out or q
+					local dot = q.x * r.x + q.y * r.y + q.z * r.z + q.w * r.w
+					if dot < 0 then
+						dot = -dot
+						r:scale(-1)
+					end
+					if 1 - dot < .0001 then
+						return q:lerp(r, t, out)
+					end
+					local theta = math.acos(dot)
+					q:scale(math.sin((1 - t) * theta), out)
+					r:scale(math.sin(t * theta), qtmp1)
+					return out:add(qtmp1):scale(1 / math.sin(theta))
 				end
-				q.x, q.y, q.z = u.x, u.y, u.z
-				vec3.cross(q, v)
-				q.w = 1 + dot
-				return q:normalize()
-			end,
-			fromDirection = function(x, y, z)
-				return quat():setDirection(x, y, z)
-			end,
-			setDirection = function(q, x, y, z)
-				if vec3.isvec3(x) then
-					x, y, z = x.x, x.y, x.z
-				end
-				vtmp2.x, vtmp2.y, vtmp2.z = x, y, z
-				return q:setBetween(forward, vtmp2)
-			end,
-			add = function(q, r, out)
-				out = out or q
-				out.x = q.x + r.x
-				out.y = q.y + r.y
-				out.z = q.z + r.z
-				out.w = q.w + r.w
-				return out
-			end,
-			sub = function(q, r, out)
-				out = out or q
-				out.x = q.x - r.x
-				out.y = q.y - r.y
-				out.z = q.z - r.z
-				out.w = q.w - r.w
-				return out
-			end,
-			mul = function(q, r, out)
-				out = out or q
-				local qx, qy, qz, qw = q:unpack()
-				local rx, ry, rz, rw = r:unpack()
-				out.x = qx * rw + qw * rx + qy * rz - qz * ry
-				out.y = qy * rw + qw * ry + qz * rx - qx * rz
-				out.z = qz * rw + qw * rz + qx * ry - qy * rx
-				out.w = qw * rw - qx * rx - qy * ry - qz * rz
-				return out
-			end,
-			scale = function(q, s, out)
-				out = out or q
-				out.x = q.x * s
-				out.y = q.y * s
-				out.z = q.z * s
-				out.w = q.w * s
-				return out
-			end,
-			length = function(q)
-				return math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w)
-			end,
-			normalize = function(q, out)
-				out = out or q
-				local len = q:length()
-				return len == 0 and q or q:scale(1 / len, out)
-			end,
-			lerp = function(q, r, t, out)
-				out = out or q
-				r:scale(t, qtmp1)
-				q:scale(1 - t, out)
-				return out:add(qtmp1)
-			end,
-			slerp = function(q, r, t, out)
-				out = out or q
-				local dot = q.x * r.x + q.y * r.y + q.z * r.z + q.w * r.w
-				if dot < 0 then
-					dot = -dot
-					r:scale(-1)
-				end
-				if 1 - dot < .0001 then
-					return q:lerp(r, t, out)
-				end
-				local theta = math.acos(dot)
-				q:scale(math.sin((1 - t) * theta), out)
-				r:scale(math.sin(t * theta), qtmp1)
-				return out:add(qtmp1):scale(1 / math.sin(theta))
-			end
+			}
 		}
 	}
 end
@@ -1565,10 +1674,6 @@ local function __ac_smoothing()
 	})
 end
 local function __ac_primitive()
-	local forward
-	local vtmp1
-	local vtmp2
-	local qtmp1
 	ffi.cdef [[
   typedef struct { float x, y; } vec2;
   typedef struct { float x, y, z; } vec3;
@@ -1578,18 +1683,28 @@ local function __ac_primitive()
   typedef struct { union { struct { float r, g, b; }; struct { rgb rgb; }; }; float mult; } rgbm;
   typedef struct { float x, y, z, w; } quat;
 ]]
-	vec2 = ffi.metatype('vec2', __ac_primitive_vec2())
-	vec3 = ffi.metatype('vec3', __ac_primitive_vec3())
-	vec4 = ffi.metatype('vec4', __ac_primitive_vec4())
-	rgb = ffi.metatype('rgb', __ac_primitive_rgb())
-	hsv = ffi.metatype('hsv', __ac_primitive_hsv())
-	rgbm = ffi.metatype('rgbm', __ac_primitive_rgbm())
-	quat = ffi.metatype('quat', __ac_primitive_quat())
+	local _vec2 = __ac_primitive_vec2()
+	local _vec3 = __ac_primitive_vec3()
+	local _vec4 = __ac_primitive_vec4()
+	local _rgb = __ac_primitive_rgb()
+	local _hsv = __ac_primitive_hsv()
+	local _rgbm = __ac_primitive_rgbm()
+	local _quat = __ac_primitive_quat()
+	vec2 = ffi.metatype('vec2', _vec2.type)
+	vec3 = ffi.metatype('vec3', _vec3.type)
+	vec4 = ffi.metatype('vec4', _vec4.type)
+	rgb = ffi.metatype('rgb', _rgb.type)
+	hsv = ffi.metatype('hsv', _hsv.type)
+	rgbm = ffi.metatype('rgbm', _rgbm.type)
+	quat = ffi.metatype('quat', _quat.type)
 	smoothing = __ac_smoothing()
-	local forward = vec3(0, 0, -1)
-	local vtmp1 = vec3()
-	local vtmp2 = vec3()
-	local qtmp1 = quat()
+	_vec2.init()
+	_vec3.init()
+	_vec4.init()
+	_rgb.init()
+	_hsv.init()
+	_rgbm.init()
+	_quat.init()
 end
 local function __vector()
 	local ffi = require 'ffi'
@@ -1929,17 +2044,35 @@ local function __math()
 	local function __clamp(x, min, max)
 		return math.min(math.max(x, min), max)
 	end
+	function math.gaussianAdjustment(x, k)
+		k = k or 0.52
+		local i = 1 - math.abs(x * 2 - 1)
+		if i <= 0 then
+			return x
+		end
+		return math.lerp((1 - math.pow(i, k)) * math.sign(x - 0.5), x * 2 - 1, math.log(i) * k * 0.5) * 0.5 + 0.5
+	end
+	local poissonData = __bound_array(ffi.typeof('vec2'), nil)
+	function math.poissonSamplerCircle(size)
+		ffi.C.lj_poissonsampler_circle(poissonData, size)
+		local result = {}
+		for i = 1, #poissonData do
+			result[i] = poissonData:get(i)
+		end
+		poissonData:clear()
+		return result
+	end
 	math.clampN = __clamp
-	math.saturateN = function(x)
+	function math.saturateN(x)
 		return math.min(math.max(x, 0), 1)
 	end
-	math.clampV = function(x, min, max)
+	function math.clampV(x, min, max)
 		return x:clone():clamp(min, max)
 	end
-	math.saturateV = function(x, min, max)
+	function math.saturateV(x, min, max)
 		return x:clone():saturate()
 	end
-	math.clamp = function(x, min, max)
+	function math.clamp(x, min, max)
 		if type(x) == 'number' then
 			return __clamp(x, min, max)
 		end
@@ -1981,7 +2114,7 @@ local function __math()
 		end
 		return __clamp(x, min, max)
 	end
-	math.sign = function(x)
+	function math.sign(x)
 		if x > 0 then
 			return 1
 		elseif x < 0 then
@@ -1990,63 +2123,57 @@ local function __math()
 			return 0
 		end
 	end
-	math.lerp = function(x, y, s)
+	function math.lerp(x, y, s)
 		return x * (1 - s) + y * s
 	end
-	math.lerpInvSat = function(s, min, max)
+	function math.lerpInvSat(s, min, max)
 		return math.saturate((s - min) / (max - min))
 	end
-	math.saturate = function(x)
+	function math.saturate(x)
 		return math.clamp(x, 0, 1)
 	end
-	math.smoothstep = function(x)
+	function math.smoothstep(x)
 		return x * x * (3 - 2 * x)
 	end
-	math.smootherstep = function(x)
+	function math.smootherstep(x)
 		return x * x * x * (x * (x * 6 - 15) + 10)
 	end
-	math.normalize = function(x)
+	function math.normalize(x)
 		return x:clone():normalize()
 	end
-	math.cross = function(x, y)
+	function math.cross(x, y)
 		return x:clone():cross(y)
 	end
-	math.dot = function(x, y)
+	function math.dot(x, y)
 		return x:dot(y)
 	end
-	math.angle = function(x, y)
+	function math.angle(x, y)
 		return x:angle(y)
 	end
-	math.distance = function(x, y)
+	function math.distance(x, y)
 		return x:distance(y)
 	end
-	math.project = function(x, y)
+	function math.project(x, y)
 		return x:clone():project(y)
 	end
-	math.radians = function(x)
+	function math.radians(x)
 		return x * math.pi / 180
 	end
-	math.degress = function(x)
+	function math.degress(x)
 		return x * 180 / math.pi
 	end
-	math.lagMult = function(lag, dt)
+	function math.isNaN(x)
+		return x ~= x
+	end
+	math.NaN = 0 / 0
+	function math.lagMult(lag, dt)
 		return math.saturate((1.0 - lag) * dt * 60)
 	end
-	math.applyLag = function(v, target, lag, dt)
+	function math.applyLag(v, target, lag, dt)
 		if lag <= 0 then
 			return target
 		end
 		return v + (target - v) * math.lagMult(lag, dt)
-	end
-	local poissonData = __bound_array(ffi.typeof('vec2'), nil)
-	math.poissonSamplerCircle = function(size)
-		ffi.C.lj_poissonsampler_circle(poissonData, size)
-		local result = {}
-		for i = 1, #poissonData do
-			result[i] = poissonData:get(i)
-		end
-		poissonData:clear()
-		return result
 	end
 end
 local function __ac_audio()
@@ -2227,9 +2354,12 @@ float lj_getSunPitchAngle();
 float lj_getSunHeadingAngle();
 bool lj_isInteriorView();
 bool lj_isInReplayMode();
+float lj_getGroundYApproximation();
 float lj_getDeltaT();
 float lj_getGameDeltaT();
 float lj_getConditionsTimeScale();
+vec3 lj_getWindVelocity();
+void lj_getWindVelocityTo(vec3& r);
 const char* lj_readDataFile(const char* value);
 bool lj_loadSoundbank(const char* soundbank, const char* guids);
 audioevent* lj_audioevent_new(const char* path, bool reverb_response);
@@ -2319,9 +2449,14 @@ ac.getSunPitchAngle = ffi.C.lj_getSunPitchAngle
 ac.getSunHeadingAngle = ffi.C.lj_getSunHeadingAngle
 ac.isInteriorView = ffi.C.lj_isInteriorView
 ac.isInReplayMode = ffi.C.lj_isInReplayMode
+ac.getGroundYApproximation = ffi.C.lj_getGroundYApproximation
 ac.getDeltaT = ffi.C.lj_getDeltaT
 ac.getGameDeltaT = ffi.C.lj_getGameDeltaT
 ac.getConditionsTimeScale = ffi.C.lj_getConditionsTimeScale
+ac.getWindVelocity = ffi.C.lj_getWindVelocity
+ac.getWindVelocityTo = function(r)
+	ffi.C.lj_getWindVelocityTo(ac.__sane(r))
+end
 ac.readDataFile = function(value)
 	return ffi.string(ffi.C.lj_readDataFile(value ~= nil and tostring(value) or nil))
 end

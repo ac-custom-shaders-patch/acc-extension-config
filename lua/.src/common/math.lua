@@ -2,14 +2,39 @@ local function __clamp(x, min, max)
   return math.min(math.max(x, min), max)
 end
 
-math.clampN = __clamp
-math.saturateN = function(x) 
-  return math.min(math.max(x, 0), 1)
+-- Takes value with even 0…1 distribution and remaps it to recreate a distribution
+-- similar to Gaussian’s one (with k≈0.52, default value). Lower to make bell more
+-- compact, use a value above 1 to get some sort of inverse distibution.
+function math.gaussianAdjustment(x, k)
+  -- https://jsfiddle.net/9g03fkxm/
+  k = k or 0.52
+  local i = 1 - math.abs(x * 2 - 1)
+  if i <= 0 then return x end
+  return math.lerp((1 - math.pow(i, k)) * math.sign(x - 0.5), x * 2 - 1, math.log(i) * k * 0.5) * 0.5 + 0.5
 end
-math.clampV = function(x, min, max) return x:clone():clamp(min, max) end
-math.saturateV = function(x, min, max) return x:clone():saturate() end
 
-math.clamp = function (x, min, max)
+-- Builds a list of points (vec2) arranged in a circle with poisson distribution.
+local poissonData = __bound_array(ffi.typeof('vec2'), nil)
+function math.poissonSamplerCircle(size)
+  ffi.C.lj_poissonsampler_circle(poissonData, size)
+  local result = {}
+  for i = 1, #poissonData do
+    result[i] = poissonData:get(i)
+  end
+  poissonData:clear()
+  return result
+end
+
+-- …N functions are meant to work with numbers only, slightly faster
+math.clampN = __clamp
+function math.saturateN(x) return math.min(math.max(x, 0), 1) end
+
+-- …V functions are meant to work with vectors only, slightly faster
+function math.clampV(x, min, max) return x:clone():clamp(min, max) end
+function math.saturateV(x, min, max) return x:clone():saturate() end
+
+-- Universal version
+function math.clamp(x, min, max)
   if type(x) == 'number' then
     return __clamp(x, min, max)
   end
@@ -56,38 +81,29 @@ math.clamp = function (x, min, max)
   return __clamp(x, min, max)
 end
 
-math.sign = function (x) if x > 0 then return 1 elseif x < 0 then return -1 else return 0 end end
-math.lerp = function (x, y, s) return x * (1 - s) + y * s end
-math.lerpInvSat = function (s, min, max) return math.saturate((s - min) / (max - min)) end
-math.saturate = function (x) return math.clamp(x, 0, 1) end
-math.smoothstep = function (x) return x * x * (3 - 2 * x) end
-math.smootherstep = function (x) return x * x * x * (x * (x * 6 - 15) + 10) end
+function math.sign(x) if x > 0 then return 1 elseif x < 0 then return -1 else return 0 end end
+function math.lerp(x, y, s) return x * (1 - s) + y * s end
+function math.lerpInvSat(s, min, max) return math.saturate((s - min) / (max - min)) end
+function math.saturate(x) return math.clamp(x, 0, 1) end
+function math.smoothstep(x) return x * x * (3 - 2 * x) end
+function math.smootherstep(x) return x * x * x * (x * (x * 6 - 15) + 10) end
 
-math.normalize = function (x) return x:clone():normalize() end
-math.cross = function (x, y) return x:clone():cross(y) end
-math.dot = function (x, y) return x:dot(y) end
-math.angle = function (x, y) return x:angle(y) end
-math.distance = function (x, y) return x:distance(y) end
-math.project = function (x, y) return x:clone():project(y) end
-math.radians = function (x) return x * math.pi / 180 end
-math.degress = function (x) return x * 180 / math.pi end
+function math.normalize(x) return x:clone():normalize() end
+function math.cross(x, y) return x:clone():cross(y) end
+function math.dot(x, y) return x:dot(y) end
+function math.angle(x, y) return x:angle(y) end
+function math.distance(x, y) return x:distance(y) end
+function math.project(x, y) return x:clone():project(y) end
+function math.radians(x) return x * math.pi / 180 end
+function math.degress(x) return x * 180 / math.pi end
+function math.isNaN(x) return x ~= x end
+math.NaN = 0/0
 
-math.lagMult = function (lag, dt)
+function math.lagMult(lag, dt)
   return math.saturate((1.0 - lag) * dt * 60);
 end
 
-math.applyLag = function (v, target, lag, dt) 
+function math.applyLag(v, target, lag, dt) 
   if lag <= 0 then return target end
   return v + (target - v) * math.lagMult(lag, dt)
-end
-
-local poissonData = __bound_array(ffi.typeof('vec2'), nil)
-math.poissonSamplerCircle = function (size)
-  ffi.C.lj_poissonsampler_circle(poissonData, size)
-  local result = {}
-  for i = 1, #poissonData do
-    result[i] = poissonData:get(i)
-  end
-  poissonData:clear()
-  return result
 end

@@ -90,6 +90,7 @@ local function __ac_clouds()
     float contourExponent;
     float contourIntensity;
     bool useSceneAmbient;
+    float receiveShadowsOpacity;
   } cloud_material;
 
   typedef struct { 
@@ -118,6 +119,7 @@ local function __ac_clouds()
     bool useCustomLightColor;
     bool useCustomLightDirection;
     uint8_t version;
+    bool passedFrustumTest;
 
     cloud_material* __material;
     rgb extraDownlit;
@@ -135,6 +137,7 @@ local function __ac_clouds()
     float orderBy;
     float fogMultiplier;
     float extraFidelity;
+    float receiveShadowsOpacityMult;
   } cloud;
 
   typedef struct {
@@ -548,6 +551,10 @@ void lj_setLightColor__impl(const rgb& c);
 void lj_setLightShadowOpacity__impl(float value);
 float lj_getCloudsShadow__impl();
 void lj_setCloudShadowMaps__impl(bool value);
+void lj_setCloudShadowIndependantOpacity__impl(bool value);
+void lj_setCloudShadowDistance__impl(float value);
+void lj_setCloudShadowScalingFactor__impl(float value);
+void lj_setCloudArcMultiplier__impl(float value);
 void lj_setAmbientColor__impl(const rgb& c);
 void lj_setBaseAmbientColor__impl(const rgb& c);
 void lj_setExtraAmbientColor__impl(const rgb& c);
@@ -731,6 +738,11 @@ void lj_setSkyFogMultiplier__impl(float v);
 void lj_setHorizonFogMultiplier__impl(float horizon, float exp, float range_mult);
 void lj_resetHorizonFogMultiplier__impl();
 float lj_calculateSkyFog__impl(const vec3& v);
+void lj_fixSkyColorCalculateOrder__impl(bool value);
+void lj_fixSkyColorCalculateResult__impl(bool value);
+void lj_fixSkyV2Fog__impl(bool value);
+void lj_fixCloudsV2Fog__impl(bool value);
+bool lj_testFrustumIntersection__impl(const vec3& v, float radius);
 rgb lj_calculateSkyColor__impl(const vec3& v, bool include_sky_color, bool include_moon_color);
 void lj_calculateSkyColorTo__impl(rgb& r, const vec3& v, bool include_sky_color, bool include_moon_color);
 rgb lj_calculateSkyColorV2__impl(const vec3& v, bool include_sky_color, bool include_moon_color);
@@ -740,6 +752,8 @@ void lj_calculateSkyColorNoGradientsTo__impl(rgb& r, const vec3& v, bool include
 rgb lj_sampleSH__impl(const vec3& v);
 void lj_sampleSHTo__impl(rgb& r, const vec3& v);
 float lj_sampleCameraAO__impl(rgb& r);
+float lj_getCameraOcclusion__impl(const vec3& look);
+float lj_getCameraLookOcclusion__impl();
 bool lj_isBouncedLightActive__impl();
 void lj_generateCloudMap__impl(const cloud_map_settings& settings);
 void lj_setManualCloudsInvalidation__impl(bool value);
@@ -898,6 +912,18 @@ end
 ac.getCloudsShadow = ffi.C.lj_getCloudsShadow__impl
 ac.setCloudShadowMaps = function(value)
 	ffi.C.lj_setCloudShadowMaps__impl(ac.__sane(value))
+end
+ac.setCloudShadowIndependantOpacity = function(value)
+	ffi.C.lj_setCloudShadowIndependantOpacity__impl(ac.__sane(value))
+end
+ac.setCloudShadowDistance = function(value)
+	ffi.C.lj_setCloudShadowDistance__impl(ac.__sane(value))
+end
+ac.setCloudShadowScalingFactor = function(value)
+	ffi.C.lj_setCloudShadowScalingFactor__impl(ac.__sane(value))
+end
+ac.setCloudArcMultiplier = function(value)
+	ffi.C.lj_setCloudArcMultiplier__impl(ac.__sane(value))
 end
 ac.setAmbientColor = function(c)
 	ffi.C.lj_setAmbientColor__impl(ac.__sane_rgb(c))
@@ -1334,6 +1360,21 @@ ac.resetHorizonFogMultiplier = ffi.C.lj_resetHorizonFogMultiplier__impl
 ac.calculateSkyFog = function(v)
 	return ffi.C.lj_calculateSkyFog__impl(ac.__sane(v))
 end
+ac.fixSkyColorCalculateOrder = function(value)
+	ffi.C.lj_fixSkyColorCalculateOrder__impl(ac.__sane(value))
+end
+ac.fixSkyColorCalculateResult = function(value)
+	ffi.C.lj_fixSkyColorCalculateResult__impl(ac.__sane(value))
+end
+ac.fixSkyV2Fog = function(value)
+	ffi.C.lj_fixSkyV2Fog__impl(ac.__sane(value))
+end
+ac.fixCloudsV2Fog = function(value)
+	ffi.C.lj_fixCloudsV2Fog__impl(ac.__sane(value))
+end
+ac.testFrustumIntersection = function(v, radius)
+	return ffi.C.lj_testFrustumIntersection__impl(ac.__sane(v), ac.__sane(radius))
+end
 ac.calculateSkyColor = function(v, include_sky_color, include_moon_color)
 	return ffi.C.lj_calculateSkyColor__impl(ac.__sane(v), ac.__sane(include_sky_color), ac.__sane(include_moon_color))
 end
@@ -1361,6 +1402,10 @@ end
 ac.sampleCameraAO = function(r)
 	return ffi.C.lj_sampleCameraAO__impl(ac.__sane_rgb(r))
 end
+ac.getCameraOcclusion = function(look)
+	return ffi.C.lj_getCameraOcclusion__impl(ac.__sane(look))
+end
+ac.getCameraLookOcclusion = ffi.C.lj_getCameraLookOcclusion__impl
 ac.isBouncedLightActive = ffi.C.lj_isBouncedLightActive__impl
 ac.generateCloudMap = function(settings)
 	ffi.C.lj_generateCloudMap__impl(ac.__sane(settings))
