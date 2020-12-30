@@ -547,6 +547,8 @@ void lj_setFogExponent__impl(float value);
 void lj_setFogHeight__impl(float value);
 void lj_setFogDensity__impl(float value);
 void lj_setLightDirection__impl(const vec3& dir);
+void lj_setCameraExposure__impl(float value);
+void lj_setCarExposureActive__impl(bool value);
 void lj_setLightColor__impl(const rgb& c);
 void lj_setLightShadowOpacity__impl(float value);
 float lj_getCloudsShadow__impl();
@@ -902,6 +904,12 @@ ac.setFogDensity = function(value)
 end
 ac.setLightDirection = function(dir)
 	ffi.C.lj_setLightDirection__impl(ac.__sane(dir))
+end
+ac.setCameraExposure = function(value)
+	ffi.C.lj_setCameraExposure__impl(ac.__sane(value))
+end
+ac.setCarExposureActive = function(value)
+	ffi.C.lj_setCarExposureActive__impl(ac.__sane(value))
 end
 ac.setLightColor = function(c)
 	ffi.C.lj_setLightColor__impl(ac.__sane_rgb(c))
