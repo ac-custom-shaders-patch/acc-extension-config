@@ -53,7 +53,6 @@ await Object.keys(groups).map(x => $.glob(`${x}_*`)).flat()
     [].push.apply(icons, await run(x));
   }, 8);
 icons.sort((x, y) => +x.size - +y.size);
-// return;
 
 function getUV(a, b){
   if (a == 0) return '0.f';
@@ -74,6 +73,22 @@ function getName(icon){
   return path.basename(icon, '.png').replace(/-/g, '_').toUpperCase();
 }
 
+function useWideChar(type){
+  return type == 'FLAG';
+}
+
+function useVariables(type){
+  return type == 'ICON';
+}
+
+function useLowerCase(type){
+  return type == 'SMILEY';
+}
+
+function getMapType(type){
+  return type == 'ICON' || type == 'SMILEY' ? 'std::map' : 'std::unordered_map';
+}
+
 function getIconsLineH(item){
   function getIconLineH(icon, index){
     const res = path.dirname(icon);
@@ -84,34 +99,60 @@ function getIconsLineH(item){
   return item.icons.map(getIconLineH).join('\n    ');
 }
 
-function getIconsLineCpp(item){
+function getIconsLineCpp(items){
+  let iconsData = items.map(item => item.icons.map((icon, index) => ({
+    file: item.file,
+    tile: getTile(item.icons.length),
+    posX: index % getTile(item.icons.length).x,
+    posY: (index / getTile(item.icons.length).x) | 0,
+    res: path.dirname(icon).split('_')[1],
+    type: getType(icon),
+    name: getName(icon)
+  }))).flat(1);
+  let type = iconsData[0].type;
+  let strType = useWideChar(type) ? 'std::wstring' : 'std::string';
+
   function getIconLineCpp(icon, index){
-    const t = getTile(item.icons.length);
-    const pos_x = index % t.x;
-    const pos_y = (index / t.x) | 0;
-    const res = path.dirname(icon);
-    const type = getType(icon);
-    const name = getName(icon);
-    return `ImIcon ${type}_${res.split('_')[1]}_${name}{"textures/gui/${item.file}", `
-      + `float2(${getUV(pos_x, t.x)}, ${getUV(pos_y, t.y)}), float2(${getUV(pos_x + 1, t.x)}, ${getUV(pos_y + 1, t.y)})};`;
+    return `ImIcon ${icon.type}_${icon.res}_${icon.name}{"textures/gui/${icon.file}", `
+      + `float2(${getUV(icon.posX, icon.tile.x)}, ${getUV(icon.posY, icon.tile.y)}), float2(${getUV(icon.posX + 1, icon.tile.x)}, ${getUV(icon.posY + 1, icon.tile.y)})};`;
   }
-  return item.icons.map(getIconLineCpp).join('\n    ');
+
+  if (useVariables(type)){
+  return iconsData.map(getIconLineCpp).join('\n    ') + `\n    static ${getMapType(type)}<${strType}, ImIcon*> ${type.toLowerCase()}s_${iconsData[0].res} = {
+        ${iconsData.map(icon => `{ ${useWideChar(type) ? 'L' : ''}${JSON.stringify(useLowerCase(type) ? icon.name.toLowerCase() : icon.name)}, &${icon.type}_${icon.res}_${icon.name} }`).join(',\n        ')}
+    };\n`;
+  } else {
+    return `static ${getMapType(type)}<${strType}, ImIcon*> ${type.toLowerCase()}s_${iconsData[0].res} = {
+          ${iconsData.map(icon => `{ ${useWideChar(type) ? 'L' : ''}${JSON.stringify(useLowerCase(type) ? icon.name.toLowerCase() : icon.name)}, new ImIcon{"textures/gui/${icon.file}", `
+          + `float2(${getUV(icon.posX, icon.tile.x)}, ${getUV(icon.posY, icon.tile.y)}), float2(${getUV(icon.posX + 1, icon.tile.x)}, ${getUV(icon.posY + 1, icon.tile.y)})} }`).join(',\n        ')}
+    };\n`;
+  }
 }
 
-function getIconGetterH(name, type, useWideChar){
+function getIconGetterH(name, type){
   return icons.filter(x => x.type == type).map(x => x.size).unique()
-    .map(x => `utils::nullable<ImIcon> Get${name}${x}(const ${useWideChar ? 'std::wstring' : 'std::string'}& id);`).join('\n    ');
+    .map(x => `utils::nullable<ImIcon> Get${name}${x}(const ${useWideChar(type) ? 'std::wstring' : 'std::string'}& id);`).join('\n    ');
 }
 
-function getIconGetterCpp(name, type, useWideChar){
+function getIconsGetterH(name, type){
   return icons.filter(x => x.type == type).map(x => x.size).unique()
-  .map(size => `utils::nullable<ImIcon> Get${name}${size}(const ${useWideChar ? 'std::wstring' : 'std::string'}& id)
+    .map(x => `const ${getMapType(type)}<${useWideChar(type) ? 'std::wstring' : 'std::string'}, ImIcon*>& Get${name}s${x}();`).join('\n    ');
+}
+
+function getIconGetterCpp(name, type){
+  return icons.filter(x => x.type == type).map(x => x.size).unique()
+  .map(size => `utils::nullable<ImIcon> Get${name}${size}(const ${useWideChar(type) ? 'std::wstring' : 'std::string'}& id)
     {
-        ${icons.filter(x => x.size == size && x.type == type).map(x => x.icons).flat(1).map(y => {
-          return `if (id == ${useWideChar ? 'L' : ''}${JSON.stringify(getName(y))}) return &${getType(y)}_${size}_${getName(y)};`
-        }).join('\n        ')}
-        return nullptr;
-    }`).join('\n\n    ');
+        const auto f = ${type.toLowerCase()}s_${size}.find(id);
+        return f != ${type.toLowerCase()}s_${size}.end() ? f->second : nullptr;
+    }`).join('\n\n    ') + '\n    ';
+}
+
+function getIconsGetterCpp(name, type){
+  return icons.filter(x => x.type == type).map(x => x.size).unique()
+  .map(size => {
+    let list = icons.filter(x => x.size == size && x.type == type).map(x => x.icons).flat(1);
+    return `const ${getMapType(type)}<${useWideChar(type) ? 'std::wstring' : 'std::string'}, ImIcon*>& Get${name}s${size}() { return ${type.toLowerCase()}s_${size}; }`}).join('\n    ');
 }
 
 fs.writeFileSync(`C:/Development/acc-rendering-adv/source/imgui/icons.h`, `#pragma once
@@ -121,23 +162,27 @@ namespace ImGui
 {
     using namespace math;
 
-    struct ImIcon 
+    struct ImIcon
     {
-        const char* filename;
+        const char* filename{};
         float2 uv0, uv1;
         bool loaded{};
         ID3D11ShaderResourceView* view{};
-
-        ImIcon(const char* filename, float2 uv0, float2 uv1)
-            : filename(filename), uv0(uv0), uv1(uv1)
-        {}
-
+  
+        ImIcon(ID3D11ShaderResourceView* view) : uv0(0.f), uv1(1.f), loaded(true), view(view) {}
+        ImIcon(const char* filename, float2 uv0, float2 uv1) : filename(filename), uv0(uv0), uv1(uv1) {}
         ID3D11ShaderResourceView* get();
+  
+        ImIcon* ptr() { return this; }
     };
 
-    ${icons.map(getIconsLineH).join('\n    ')}
-    ${getIconGetterH('Icon', 'ICON', false)}
-    ${getIconGetterH('Flag', 'FLAG', true)}
+    ${icons.filter(x => x.type == 'ICON').map(getIconsLineH).join('\n    ')}
+    ${getIconGetterH('Icon', 'ICON')}
+    ${getIconGetterH('Smiley', 'SMILEY')}
+    ${getIconGetterH('Flag', 'FLAG')}
+    ${getIconsGetterH('Icon', 'ICON')}
+    ${getIconsGetterH('Smiley', 'SMILEY')}
+    ${getIconsGetterH('Flag', 'FLAG')}
 }`);
 
 fs.writeFileSync(`C:/Development/acc-rendering-adv/source/imgui/icons.cpp`, `#include "stdafx.h"
@@ -155,15 +200,19 @@ namespace ImGui
         {
             loaded = true;
             const auto tex = hooks::ac_hooks_instance->get_custom_textures()->load_texture(
-                utils::get_special_folder_path(utils::special_folder::ac_ext) / filename);
+                get_special_folder_path(utils::special_folder::ac_ext) / filename);
             view = tex ? tex->view : nullptr;
         }
         return view;
     }
 
-    ${icons.map(getIconsLineCpp).join('\n    ')}
-
-    ${getIconGetterCpp('Icon', 'ICON', false)}
-
-    ${getIconGetterCpp('Flag', 'FLAG', true)}
+    ${Object.values(icons.filter(x => x.type == 'ICON').groupBy(x => x.size)).map(getIconsLineCpp).join('\n    ')}
+    ${Object.values(icons.filter(x => x.type == 'SMILEY').groupBy(x => x.size)).map(getIconsLineCpp).join('\n    ')}
+    ${Object.values(icons.filter(x => x.type == 'FLAG').groupBy(x => x.size)).map(getIconsLineCpp).join('\n    ')}
+    ${getIconGetterCpp('Icon', 'ICON')}  
+    ${getIconGetterCpp('Smiley', 'SMILEY')}
+    ${getIconGetterCpp('Flag', 'FLAG')}  
+    ${getIconsGetterCpp('Icon', 'ICON')}
+    ${getIconsGetterCpp('Smiley', 'SMILEY')}
+    ${getIconsGetterCpp('Flag', 'FLAG')}
 }`);

@@ -20,6 +20,7 @@ ffi.cdef [[
     float contourExponent;
     float contourIntensity;
     bool useSceneAmbient;
+    float receiveShadowsOpacity;
   } cloud_material;
 
   typedef struct { 
@@ -48,6 +49,7 @@ ffi.cdef [[
     bool useCustomLightColor;
     bool useCustomLightDirection;
     uint8_t version;
+    bool passedFrustumTest;
 
     cloud_material* __material;
     rgb extraDownlit;
@@ -65,6 +67,7 @@ ffi.cdef [[
     float orderBy;
     float fogMultiplier;
     float extraFidelity;
+    float receiveShadowsOpacityMult;
   } cloud;
 
   typedef struct {

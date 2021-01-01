@@ -40,3 +40,4 @@ config/*.ini.off
 
 textures/common/dev/*
 vao-patches-cars
+textures/color_grading/__Sol*
