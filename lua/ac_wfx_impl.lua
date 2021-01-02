@@ -759,7 +759,7 @@ float lj_getCameraLookOcclusion__impl();
 bool lj_isBouncedLightActive__impl();
 void lj_generateCloudMap__impl(const cloud_map_settings& settings);
 void lj_setManualCloudsInvalidation__impl(bool value);
-void lj_invalidateCloudMaps__impl(const cloud_map_settings& settings);
+void lj_invalidateCloudMaps__impl();
 void lj_setAiHeadlights__impl(bool v);
 void lj_set_clouds__impl(const void* arr);
 void lj_set_gradients__impl(const void* arr);
@@ -1421,9 +1421,7 @@ end
 ac.setManualCloudsInvalidation = function(value)
 	ffi.C.lj_setManualCloudsInvalidation__impl(ac.__sane(value))
 end
-ac.invalidateCloudMaps = function(settings)
-	ffi.C.lj_invalidateCloudMaps__impl(ac.__sane(settings))
-end
+ac.invalidateCloudMaps = ffi.C.lj_invalidateCloudMaps__impl
 ac.setAiHeadlights = function(v)
 	ffi.C.lj_setAiHeadlights__impl(ac.__sane(v))
 end
