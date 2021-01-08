@@ -116,11 +116,11 @@ FALLBACK_LOWBEAM_COLOR=25, 12, 3
 
 ----------------------------------------------------
 [INCLUDE: common/materials_carpaint.ini]
-CarPaintMaterial = Material #CARPAINT,
+CarPaintMaterial = car_pint
 DisableDev = 1
+CarPaintVersionAware = 2
 
 [Material_CarPaint_Metallic]
-
 
 ----------------------------------------------------
 [INCLUDE]
@@ -156,47 +156,6 @@ SPEED_THRESHOLD = 15, 50
 
 [LIGHT_HEADLIGHT_1]
 RANGE=300
-
-
-
-[INCLUDE: common/materials_glass.ini]
-ExteriorGlassMaterials = CAR_Vetro
-
-[Material_PhotoelasticGlass]
-Materials = Material #88
-FilmIOR = 2
-ThicknessMult = 3
-Desaturate = 0
-MaskPass = 50
-
-
-
-[INCLUDE: common/materials_glass.ini]
-ExteriorGlassMaterials = CAR_Vetro
-
-[Material_PhotoelasticGlass]
-Materials =  Material #46
-FilmIOR = 2
-ThicknessMult = 1.2
-Desaturate = 0
-MaskPass = 5
-
-
-[INCLUDE: common/materials_glass.ini]
-ExteriorGlassMaterials = CAR_Vetro
-
-[Material_PhotoelasticGlass]
-Materials =  Material #96
-FilmIOR = 1.4
-ThicknessMult = 0.5
-Desaturate = 0
-MaskPass =0
-
-
-[SHADER_REPLACEMENT_...]
-MATERIALS = Material #46
-DOUBLE_FACE_SHADOW_BIASED = 0.0
-
 
 
 [SHADOWED_WHEELS_FRONT]
