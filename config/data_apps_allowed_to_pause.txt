@@ -1,0 +1,46 @@
+; 
+; New option in CPU optimizations, “Pause hidden apps”, stops AC from calling “acUpdate()”
+; for apps that don’t have any visibile elements (showing as inactive).
+; 
+; If there is a number after a semicolon, it would specify how many calls to skip before 
+; calling, thus reducing update rate for such apps, and without number, all calls will be 
+; skipped. Oh, and input deltaT parameter would be adjusted accordingly (but wouldn’t exceed
+; a second to keep things safe).
+; 
+; Please feel free to add other expensive apps in this list, but be careful, some of them
+; might be doing some background stuff when invisible. For example, OV1Info would calculate
+; fuel consumption.
+;
+; And if you’re working on your own app, you can override this list with new function 
+; “ac.ext_setPauseHidden(number)”, where number would specify calls to skip. Pass 0 to 
+; disable whole thing.
+;
+
+AccExt?
+CamTool_2
+D Extra
+D Tachometer
+IDAS6hud
+WMMT HUD
+carRadar
+map_display
+f12014hud
+
+; Uses acUpdate to calculate fuel consumption:
+OV1Info : 20
+
+; Uses acUpdate to keep track of some stats:
+RaceEssentials : 10
+Sidekick : 10
+
+; Checked a bit, but I’m not sure about these, so keeping it safe:
+ACRLfuel : 10
+EsoticShiftLight : 10
+GT HUD : 10
+batteryMeter : 10
+fuel_usage : 10
+ka0sdashboard : 10
+ka0sleaderboard : 10
+proTyres : 10
+prunn : 10
+tyre_temp : 10

@@ -744,7 +744,7 @@ void lj_fixSkyColorCalculateOrder__impl(bool value);
 void lj_fixSkyColorCalculateResult__impl(bool value);
 void lj_fixSkyV2Fog__impl(bool value);
 void lj_fixCloudsV2Fog__impl(bool value);
-bool lj_testFrustumIntersection__impl(const vec3& v, float radius);
+bool lj_testFrustumIntersection__impl(const vec3& v, float radius, bool apply_fix_heading);
 rgb lj_calculateSkyColor__impl(const vec3& v, bool include_sky_color, bool include_moon_color);
 void lj_calculateSkyColorTo__impl(rgb& r, const vec3& v, bool include_sky_color, bool include_moon_color);
 rgb lj_calculateSkyColorV2__impl(const vec3& v, bool include_sky_color, bool include_moon_color);
@@ -1380,8 +1380,8 @@ end
 ac.fixCloudsV2Fog = function(value)
 	ffi.C.lj_fixCloudsV2Fog__impl(ac.__sane(value))
 end
-ac.testFrustumIntersection = function(v, radius)
-	return ffi.C.lj_testFrustumIntersection__impl(ac.__sane(v), ac.__sane(radius))
+ac.testFrustumIntersection = function(v, radius, apply_fix_heading)
+	return ffi.C.lj_testFrustumIntersection__impl(ac.__sane(v), ac.__sane(radius), ac.__sane(apply_fix_heading or true))
 end
 ac.calculateSkyColor = function(v, include_sky_color, include_moon_color)
 	return ffi.C.lj_calculateSkyColor__impl(ac.__sane(v), ac.__sane(include_sky_color), ac.__sane(include_moon_color))

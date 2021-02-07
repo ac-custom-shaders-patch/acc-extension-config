@@ -37,7 +37,9 @@ shaders.zip
 config/tracks/unpacked*
 */.vscode/*
 config/*.ini.off
+module_*.ini
 
 textures/common/dev/*
 vao-patches-cars
 textures/color_grading/__Sol*
+textures/gui/module_*

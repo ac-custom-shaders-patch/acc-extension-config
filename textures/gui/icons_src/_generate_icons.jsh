@@ -22,22 +22,22 @@ async function run(params){
   let size = params.size;
   let icons = $.glob(`${params.group}_${size}/*.png`);
   let ret = [];
-  let atlas_size = Math.pow(tileSize(+size), 2);
-  for (let i = 0; i < icons.length; i += atlas_size) {
-    let tile = getTile(icons.slice(i, i + atlas_size).length);
+  let atlasSize = Math.pow(tileSize(+size), 2);
+  for (let i = 0; i < icons.length; i += atlasSize) {
+    let tile = getTile(icons.slice(i, i + atlasSize).length);
     let fill = params.group == 'flags' && size == 64;
     let args = ['-background', 'none', '-tile', `${tile.x}x${tile.y}`, '-geometry', `${size - 2}x${size - 2}${fill ? '^' : '>'}+1+1`];
-    [].push.apply(args, icons.slice(i, i + atlas_size));
-    args.push(`${params.group}_${size}_${i / atlas_size}.png`);
+    [].push.apply(args, icons.slice(i, i + atlasSize));
+    args.push(`${params.group}_${size}_${i / atlasSize}.png`);
     await $['D:/Applications/Cygwin/bin/magick.exe']['montage'].apply(null, args);
     if (params.group == 'icons'){
-      await $['D:/Applications/Cygwin/bin/magick.exe'](`${params.group}_${size}_${i / atlas_size}.png`, 
-        '-fill', '#ffffff', '-colorize', '100%', `../${params.group}_${size}_${i / atlas_size}.png`);
+      await $['D:/Applications/Cygwin/bin/magick.exe'](`${params.group}_${size}_${i / atlasSize}.png`, 
+        '-fill', '#ffffff', '-colorize', '100%', `../${params.group}_${size}_${i / atlasSize}.png`);
     } else {
-      $.cp(`${params.group}_${size}_${i / atlas_size}.png`, `../${params.group}_${size}_${i / atlas_size}.png`);
+      $.cp(`${params.group}_${size}_${i / atlasSize}.png`, `../${params.group}_${size}_${i / atlasSize}.png`);
     }
-    await $['D:/Applications/Cygwin/bin/optipng.exe']('-o7', '-clobber', '-strip', 'all', `../${params.group}_${size}_${i / atlas_size}.png`);
-    ret.push({ size: size, type: groups[params.group], icons: icons.slice(i, i + atlas_size), file: `${params.group}_${size}_${i / atlas_size}.png` });
+    await $['D:/Applications/Cygwin/bin/optipng.exe']('-o7', '-clobber', '-strip', 'all', `../${params.group}_${size}_${i / atlasSize}.png`);
+    ret.push({ size: size, type: groups[params.group], icons: icons.slice(i, i + atlasSize), file: `${params.group}_${size}_${i / atlasSize}.png` });
   }
   return ret;
 }
