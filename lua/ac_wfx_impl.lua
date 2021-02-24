@@ -629,6 +629,8 @@ void lj_resetSpecularColor__impl();
 void lj_setSpecularColor__impl(const rgb& c);
 void lj_resetEmissiveMultiplier__impl();
 void lj_setEmissiveMultiplier__impl(float v);
+void lj_resetReflectionEmissiveBoost__impl();
+void lj_setReflectionEmissiveBoost__impl(float v);
 void lj_resetGlowBrightness__impl();
 void lj_setGlowBrightness__impl(float v);
 void lj_resetGodraysCustomColor__impl();
@@ -1138,6 +1140,10 @@ end
 ac.resetEmissiveMultiplier = ffi.C.lj_resetEmissiveMultiplier__impl
 ac.setEmissiveMultiplier = function(v)
 	ffi.C.lj_setEmissiveMultiplier__impl(ac.__sane(v))
+end
+ac.resetReflectionEmissiveBoost = ffi.C.lj_resetReflectionEmissiveBoost__impl
+ac.setReflectionEmissiveBoost = function(v)
+	ffi.C.lj_setReflectionEmissiveBoost__impl(ac.__sane(v))
 end
 ac.resetGlowBrightness = ffi.C.lj_resetGlowBrightness__impl
 ac.setGlowBrightness = function(v)

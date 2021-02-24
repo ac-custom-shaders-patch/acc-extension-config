@@ -10,6 +10,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - Blamer: great app for setting up track lights and more;
 - Bombadil: new chaser camera script;
 - Chr0m3: tyre wear triggering tyres blowing;
+- clutch: ideas and a lot of testing;
 - leBluem: improvements for python apps, documentation;
 - Levels: new chaser camera script;
 - Peter Boese: incredible Weather FX implementation, Sol;
