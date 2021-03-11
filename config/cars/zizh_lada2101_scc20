@@ -1,0 +1,114 @@
+created by Den_88 for https://zizhgames.ru/
+
+[INCLUDE: common/custom_emissive.ini]
+
+[INCLUDE: common/materials_glass.ini]
+ExteriorGlassFilmedMaterials = ksGlass ,headlight
+IS_TRANSPARENT = 1
+
+
+[SHADER_REPLACEMENT_...]
+MATERIALS = ksGlass ,headlight
+PROP_... = ksAmbient, 0.04
+PROP_... = ksDiffuse, 0.3
+PROP_... = ksSpecular, 2.82
+PROP_... = FresnelMax = 0.8
+PROP_... = ColoredSpecular = 0.0
+
+[SHADER_REPLACEMENT_...]
+MATERIALS = dashboard,frame,Alcantara,fabric_022_custom_w,DASH,leather,roof,interior netting int
+PROP_... = ksAmbient, 0.2
+PROP_... = ksDiffuse, 0.1
+PROP_... = ksSpecular, 0.02
+
+[SHADER_REPLACEMENT_...]
+MATERIALS = CAR_tyre
+PROP_... = ksAmbient, 0.1
+PROP_... = ksDiffuse, 0.1
+PROP_... = ksSpecular,0.02
+
+[SHADER_REPLACEMENT_...]
+MATERIALS = chromeinterior,lenkrad,chrome,CAR_Chrome,chrome_front
+PROP_... = ksAmbient, 0.2
+PROP_... = ksDiffuse, 0.01
+PROP_... = ksSpecular, 5.82
+PROP_... = FresnelMax = 0.6
+PROP_... = FresnelC = 4.4
+PROP_... = ClearCoatThickness = 0.1
+
+[LIGHTING]
+EMISSIVE_HEADLIGHTS_MULT=1
+EMISSIVE_PARKINGLIGHTS_MULT=1
+EMISSIVE_BRAKELIGHTS_MULT=0.3
+
+[BOUNCED_HEADLIGHTS]
+ACTIVE=1
+FADE_AT=200
+FADE_SMOOTH=50
+FALLOFF=0.7
+GRADIENT_OFFSET=0.8
+MULT=1, 1, 1, 1
+OFFSET=7
+
+[CustomEmissive]
+Meshes = turn
+Resolution = 1024, 1024
+@ = CustomEmissive_Rect, Channel = 3, Mirror, Start = "43, 536", Size = "473, 274", CornerRadius = 0.4,0.4,Exponent = 2
+@ = TurningLightsFront, Channel = 3, Intensity = 13.0
+
+[CustomEmissive]
+Meshes = lampturn
+Resolution = 256, 256
+@ = CustomEmissive_Rect, Channel = 3, Mirror, Start = "2, 11", Size = "253, 246", CornerRadius = 0.4,0.4,Exponent = 2
+@ = TurningLightsFrontCorner, Channel = 3, Intensity = 5.0
+
+[CustomEmissive]
+Meshes =  turn4
+Resolution = 512, 512
+@ = CustomEmissive_Rect, Channel = 3, Mirror, Start = "19, 18", Size = "217, 428",CornerRadius = 0.4,0.4,Exponent = 2
+@ = TurningLightsRear, Channel = 3, Intensity = 20.0
+
+[CustomEmissive]
+Meshes = buttons
+Resolution = 1024, 1024
+@ = CustomEmissive_Rect, Channel = 2, Start = "629.9, 17.1", Size = "36.5, 29.2",CornerRadius = 1.0,1.0,Exponent = 1
+@ = DashIndicator, Input = HAZARD, Channel = 2, Intensity = 2.35,Lag = 0.56
+
+[CustomEmissive]
+Meshes = lightb
+Resolution = 512, 512
+@ = CustomEmissive_Rect, Channel = 0, Start = "256, 22", Size = "230, 231" ,CornerRadius = 0.4,0.4,Exponent = 2
+@ = ParkingLights, Channel = 0,Intensity = 17.0
+@ = CustomEmissive_Rect, Channel = 1, Start = "256, 22", Size = "230, 231",CornerRadius = 0.4,0.4,Exponent = 2
+@ = BrakingLights, Channel = 1, Lag = 0.76, Intensity = 10.4
+
+[CustomEmissive]
+Meshes = Circlelight
+Resolution = 1024, 1024
+@ = CustomEmissive_Rect, Channel = 0, Start = "49, 78", Size = "883, 834",CornerRadius = 1.0,1.0,Exponent = 1.5
+@ = Headlights, Channel = 0, Intensity = 30.0
+
+[CustomEmissive]
+Meshes = instrument_rpm, arrow_rpm_mesh, arrow_oil_mesh, arrow_temp_mesh
+@ = CustomEmissive_Rect, Channel = 1, Start = 0, Size = 0.0,CornerRadius = 0.0
+@ = DashHighlight, Channel = 1, Intensity = 1.46, Lag = 0.75
+
+[CustomEmissive]
+Meshes = Catafot_SUB1
+@ = CustomEmissive_Rect, Channel = 2,Start = 0, Size = 0.0
+@ = CustomEmissive_BounceBack, Channel = 2
+
+[PARTICLES_FX_EXHAUST_...]
+POSITION = -0.78, 0.16, -0.0 ;self explanatory
+DIRECTION =  -0.78, 0, -0.81  ; self explanatory
+COLOR = 0.05,0.05,0.051 			; RGB blend - 0,0,0 is black, 1,1,1 is white
+LIFE = 0.6, 2 				; how long particles last in the air before disappearing
+SPEED = 0.5, 5.3 				; how fast smoke particles fly from the exhaust
+SPREAD = 0.21				; initial spread of particles
+STARTING_SIZE = 0.04			; initial size of particles
+SPAWN_OFFSET = 0.020			; initial spawn point offset (length-wise)
+INTENSITY = 0.3, 0.78			; smoke intensity
+TEMPERATURE_LAG = 1 			; engine heating up (1 to disable)
+SPEED_THRESHOLD = 15, 100 		; speed at which the smoke disappears
+GAS_LAG = 0.6
+
