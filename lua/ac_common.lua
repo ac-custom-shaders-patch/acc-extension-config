@@ -2182,6 +2182,7 @@ typedef struct {
   void* host_;
   void* nativeEvent_;
   float volume;
+  float pitch;
   float cameraInteriorMultiplier;
   float cameraExteriorMultiplier;
   float cameraTrackMultiplier;
@@ -2352,6 +2353,7 @@ void lj_getCameraDirectionTo(vec3& r);
 float lj_getSunAngle();
 float lj_getSunPitchAngle();
 float lj_getSunHeadingAngle();
+float lj_getSoundSpeedMs();
 bool lj_isInteriorView();
 bool lj_isInReplayMode();
 float lj_getGroundYApproximation();
@@ -2447,6 +2449,7 @@ end
 ac.getSunAngle = ffi.C.lj_getSunAngle
 ac.getSunPitchAngle = ffi.C.lj_getSunPitchAngle
 ac.getSunHeadingAngle = ffi.C.lj_getSunHeadingAngle
+ac.getSoundSpeedMs = ffi.C.lj_getSoundSpeedMs
 ac.isInteriorView = ffi.C.lj_isInteriorView
 ac.isInReplayMode = ffi.C.lj_isInReplayMode
 ac.getGroundYApproximation = ffi.C.lj_getGroundYApproximation

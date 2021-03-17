@@ -11,7 +11,7 @@ function Audio:new(p1)
   return o
 end
 
-function Audio:set(pos, event, timeout, distanceToCamera, volumeMult)
+function Audio:set(pos, event, timeout, distanceToCamera, volumeMult, pitchMult)
   if self.timeout > 0 
       -- and (self.delay < 0 or distanceToCamera < self.nextDistance) 
       then 
@@ -26,9 +26,11 @@ function Audio:set(pos, event, timeout, distanceToCamera, volumeMult)
   end
 
   -- self.delay = math.min(1, distanceToCamera / 343)
-  self.delay = 0.001
+  self.delay = math.min(1.5, distanceToCamera / ac.getSoundSpeedMs()) + math.random() * 0.01
+  -- self.delay = 0.001 + math.random() * 0.01
   self.nextDistance = distanceToCamera
-  self.event.volume = volumeMult * math.pow(1 - math.saturate(distanceToCamera / 800), 2)
+  self.event.volume = volumeMult * math.pow(1 - math.saturate(distanceToCamera / 800), 2) * (0.5 + 0.5 * math.random())
+  self.event.pitch = (0.3 + 0.7 * (1 - math.saturate(distanceToCamera / 400 - 0.1))) * (0.85 + 0.3 * math.random()) * pitchMult
   self.nextPos = pos
   self.timeout = timeout + self.delay
 end
@@ -57,6 +59,10 @@ function Audio:update(dt)
   end
 end
 
+function Audio:busy()
+  return self.timeout > 0
+end
+
 ac.loadSoundbank('extra_fireworks.bank')
 
 function AudioPool(audioPoolSize, event, timeout, customTimeMode)
@@ -67,21 +73,21 @@ function AudioPool(audioPoolSize, event, timeout, customTimeMode)
       duration = timeout
     } 
   end
-  local audioNext = 1
 
   return {
     prepare = function (dt)
-      audioNext = 1
       for i = 1, audioPoolSize do
         audioPool[i]:update(dt)
+        -- ac.debug('pool '..event..(i < 10 and ' #0' or ' #')..i, audioPool[i]:busy())
       end
     end,
-    run = function (pos, distanceToCamera, volumeMult)
-      if audioNext > audioPoolSize then
-        return nil
+    run = function (pos, distanceToCamera, volumeMult, pitchMult)
+      for i = 1, audioPoolSize do
+        if not audioPool[i]:busy() then
+          audioPool[i]:set(pos, event, timeout, distanceToCamera, volumeMult, pitchMult)
+          break
+        end
       end
-      audioNext = audioNext + 1
-      audioPool[audioNext - 1]:set(pos, event, timeout, distanceToCamera, volumeMult)
     end
   }
 end
@@ -94,20 +100,20 @@ function audioPoolPrepare(dt)
   if poolHiss ~= nil then poolHiss.prepare(dt) end
 end
 
-function audioSetExplosion(pos, volumeMult)
+function audioSetExplosion(pos, volumeMult, pitchMult)
   local distanceToCamera = #(ac.getCameraPosition() - pos)
-  if distanceToCamera > 800 then return end
+  if distanceToCamera > 500 then return end
   if poolExplosions == nil then
-    poolExplosions = AudioPool(16, '/extra_fireworks/firework', 0.1, true)
+    poolExplosions = AudioPool(32, '/extra_fireworks/firework', 0.5, true)
   end
-  poolExplosions.run(pos, distanceToCamera, (volumeMult or 1))
+  poolExplosions.run(pos, distanceToCamera, (volumeMult or 1), pitchMult or 1)
 end
 
-function audioSetHiss(pos, volumeMult)
+function audioSetHiss(pos, volumeMult, pitchMult)
   local distanceToCamera = #(ac.getCameraPosition() - pos)
-  if distanceToCamera > 400 then return end
+  if distanceToCamera > 250 then return end
   if poolHiss == nil then
     poolHiss = AudioPool(8, '/extra_fireworks/hiss', 4)
   end
-  poolHiss.run(pos, distanceToCamera, (volumeMult or 1) * 0.7)
+  poolHiss.run(pos, distanceToCamera, (volumeMult or 1) * 0.7, pitchMult or 1)
 end

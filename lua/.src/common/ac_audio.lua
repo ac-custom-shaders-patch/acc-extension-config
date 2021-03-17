@@ -3,6 +3,7 @@ typedef struct {
   void* host_;
   void* nativeEvent_;
   float volume;
+  float pitch;
   float cameraInteriorMultiplier;
   float cameraExteriorMultiplier;
   float cameraTrackMultiplier;
