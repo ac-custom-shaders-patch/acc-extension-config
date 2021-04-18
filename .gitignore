@@ -38,6 +38,10 @@ config/tracks/unpacked*
 */.vscode/*
 config/*.ini.off
 module_*.ini
+lua/.src/ac_module_*
+lua/.src/.out
+lua/module-*
+*.pak
 
 textures/common/dev/*
 vao-patches-cars

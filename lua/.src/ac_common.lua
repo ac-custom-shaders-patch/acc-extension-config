@@ -1,3 +1,5 @@
+-- source: lua/api_common.cpp
+
 ac = {}
 
 function __sane(x)

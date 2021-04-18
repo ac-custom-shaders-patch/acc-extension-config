@@ -16,7 +16,7 @@ function Rocket:init(P)
   self:setSmokingVelocity(-self.dir * (self.force * 0.15))
 end
 function Rocket:audio(P)
-  audioSetHiss(P.pos)
+  audioSetHiss(P.pos, 1, 2)
 end
 function Rocket:update(P, dt)
   P.pos = P.pos + P.velocity * dt
@@ -53,7 +53,7 @@ function ArcingRocket:init(P, o)
   P.velocity = self.dir
 end
 function ArcingRocket:audio(P)
-  audioSetHiss(P.pos)
+  audioSetHiss(P.pos, 0.5, 1.5)
 end
 function ArcingRocket:update(P, dt)
   P.pos = P.pos + P.velocity * dt
@@ -96,7 +96,7 @@ function GlowingRocket:init(P)
   self:setSmokingVelocity(-self.dir * (self.force * 0.15))
 end
 function GlowingRocket:audio(P)
-  audioSetHiss(P.pos)
+  audioSetHiss(P.pos, 0.5, 1.5)
 end
 function GlowingRocket:update(P, dt)
   P.pos = P.pos + P.velocity * dt
@@ -153,7 +153,7 @@ function Fountain:init(P)
   self.time = 0
 end
 function Fountain:audio(P)
-  audioSetHiss(P.pos)
+  audioSetHiss(P.pos, 1, 2)
 end
 function Fountain:update(P, dt)
   self.time = self.time + dt * 3
@@ -220,7 +220,7 @@ function FastExplosion:init(P)
   P.pushingForce = 5 * self.size
 end
 function FastExplosion:audio(P)
-  audioSetExplosion(P.pos, self.size)
+  audioSetExplosion(P.pos, self.size, 2)
 end
 
 -- Massive explosion
@@ -240,7 +240,7 @@ function MassiveExplosion:init(P)
   P.pushingForce = 15 * self.size
 end
 function MassiveExplosion:audio(P)
-  audioSetExplosion(P.pos, self.size * 1.5)
+  audioSetExplosion(P.pos, self.size * 1.5, 0.85)
 end
 
 -- Ordered explosion
@@ -281,7 +281,7 @@ function MassiveSpark:init(P)
   P.glowColor = rgb(0, 1, 1)
 end
 function MassiveSpark:audio(P)
-  audioSetHiss(P.pos)
+  -- audioSetHiss(P.pos)
 end
 function MassiveSpark:update(P, dt)
   P.velocity.y = P.velocity.y - 10 * dt
@@ -312,7 +312,7 @@ function TrailingSpark:init(P)
   P.glowColor = rgb(0, 1, 0)
 end
 function TrailingSpark:audio(P)
-  audioSetHiss(P.pos)
+  -- audioSetHiss(P.pos)
 end
 function TrailingSpark:update(P, dt)
   P.velocity:add(randomVec3():scale(dt * 150))
@@ -341,7 +341,7 @@ function ConeSpark:init(P)
   self:setSmoking(1, 1)
 end
 function ConeSpark:audio(P)
-  audioSetHiss(P.pos)
+  -- audioSetHiss(P.pos)
 end
 function ConeSpark:update(P, dt)
   P.velocity.y = P.velocity.y - 5 * dt
@@ -380,7 +380,7 @@ function Spiral:init(P)
   self:setSmokingColor(1)
 end
 function Spiral:audio(P)
-  audioSetHiss(P.pos, 2)
+  audioSetHiss(P.pos, 2, 3)
 end
 function Spiral:update(P, dt)
   local newPos = self.pos 
@@ -421,7 +421,7 @@ function Twirl:init(P)
   self:setSmokingColor(1)
 end
 function Twirl:audio(P)
-  audioSetHiss(P.pos, 2)
+  audioSetHiss(P.pos, 2, 3)
 end
 function Twirl:update(P, dt)
   local sideA = self.sideA or math.normalize(math.cross(P.velocity, vec3(0, 0, 1)))

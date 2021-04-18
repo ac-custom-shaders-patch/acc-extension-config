@@ -1,4 +1,6 @@
-require './ac_common'
+-- source: extensions/weather_fx/ac_ext_weather_fx__lua.h
+-- namespace: impl
+
 require './wfx_common/ac_trackconfig'
 require './wfx_common/ac_weatherconditions'
 require './wfx_impl/ac_clouds'
