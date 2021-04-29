@@ -13,3 +13,5 @@ PyroSchemes[ac.HolidayType.JapanFestival] = require 'schemes/default'
 PyroSchemes[ac.HolidayType.ChineseNewYear] = require 'schemes/default'
 PyroSchemes[ac.HolidayType.EidAlAdha] = require 'schemes/default'
 PyroSchemes[ac.HolidayType.GuyFawkesNight] = require 'schemes/default'
+
+-- PyroSchemes[ac.HolidayType.None] = require 'schemes/christmas'

@@ -1,4 +1,4 @@
-require './ac_common'
+-- source: extensions/chaser_camera/ac_ext_chaser_camera.cpp
 
 ffi.cdef [[
 DEFINITIONS
