@@ -41,7 +41,7 @@ module_*.ini
 lua/.src/ac_module_*
 lua/.src/.out
 lua/module-*
-*.pak
+std.zip
 
 textures/common/dev/*
 vao-patches-cars
