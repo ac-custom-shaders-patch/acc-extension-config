@@ -110,7 +110,7 @@ function getLuaCode(filename, mode, base){
       var wrapped = args.split(',').map(x => x.split('=')[0].trim()).filter(x => x).map((x, i) => 
         /const char\*/.test(x) ? `${names[i]} ~= nil and tostring(${names[i]}) or nil` :
         /\brgb\b/.test(x) ? `ac.__sane_rgb(${names[i]})` :
-        names[i]).map((x, i) => /\b(tostring|__sane_\w+)\(/.test(x) ? x : sane(defaultValues[i] ? `${x} or ${defaultValues[i]}` : x)).join(', ');
+        names[i]).map((x, i) => /\b(tostring|__sane_\w+)\(/.test(x) ? x : sane(defaultValues[i] ? `${x} or ${defaultValues[i].replace(/f$/, '')}` : x)).join(', ');
       var returnPrefix = resultType == 'void' ? '' : 'return ';
       var resultWrap = /const char\*/.test(resultType) ? x => `ffi.string(${x})` : x => x;
       exps.push(`ac.${name.replace(/^lj_|__\w+$/g, '')} = function(${names.join(', ')}) ${returnPrefix}${resultWrap(`ffi.C.${name}(${wrapped})`)} end`)
@@ -228,4 +228,4 @@ for (let filename of $.glob(`./ac_*.lua`)){
   const name = path.basename(filename, '.lua');
   packedPieces.push({ key: name, data: await precompileLua(name, processTarget(filename)) });
 }
-await $.zip(packedPieces, { to: '../std.pak' });
+await $.zip(packedPieces, { to: '../std.zip' });
