@@ -9,9 +9,8 @@ require './wfx_impl/ac_colorcorrections'
 require './wfx_impl/ac_particlematerials'
 require './wfx_impl/ac_lightpollution'
 
-ffi.cdef [[
-DEFINITIONS
-]]
+ffi.cdef [[ STRUCT_DEFINITIONS ]]
+ffi.cdef [[ DEFINITIONS ]]
 SANE
 EXPORT
 
