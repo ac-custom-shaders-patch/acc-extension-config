@@ -137,6 +137,9 @@ struct state_car {
 	bool isAiControlled;
 	bool isInPitlane;
 	bool headlightsActive;
+	int wiperMode;
+	float wiperProgress;
+	float bodyWetness;
 }
 
 struct state_sim {

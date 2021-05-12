@@ -3,6 +3,8 @@
 -- As for car, you can, for example, google for “buick gsx assetto corsa”. And you can even try it in original
 -- game too now: https://www.retrogames.cc/psx-games/driver-you-are-the-wheelman.html.
 
+-- Here’s a dark blue skin if needed: https://files.acstuff.ru/shared/OCEs/driver-0-20210509-162556.zip
+
 -- All the tasks seem to work here, definitely passable with that Buick, not sure about other cars. But I’m not 
 -- sure if it can all be done in a minute though.
 
@@ -212,6 +214,9 @@ local tasks = {
         if car.speedKmh < 10 then
           return true
         else
+          if car.collisionDepth > 0 then
+            self.enoughSpeed = false
+          end
           if car.brake < 0.05 then
             self.brakeReleased = self.brakeReleased + dt
             if self.brakeReleased > 0.1 then
@@ -220,7 +225,7 @@ local tasks = {
           end
           if math.abs(car.wheels[0].angularSpeed) < 0.1 and math.abs(car.wheels[1].angularSpeed) < 0.1 then
             self.wheelsLocked = self.wheelsLocked + dt
-            if self.wheelsLocked > 0.4 then
+            if self.wheelsLocked > 0.6 then
               self.enoughSpeed = false
             end
           end
@@ -264,6 +269,7 @@ local hitCooldown = 0
 local messageToShow = nil
 local messageCooldown = 0
 local messageAlpha = 0
+local available = ac.getTrackId() == 'driver'
 
 function showMessage(message)
   messageToShow = message
@@ -271,6 +277,9 @@ function showMessage(message)
 end
 
 function update(dt)
+  ac.debug('available', available)
+  if not available then return end
+
   messageAlpha = math.applyLag(messageAlpha, messageCooldown > 0 and 1 or 0, 0.7, dt)
   if messageCooldown > 0 then
     messageCooldown = messageCooldown - dt
@@ -314,11 +323,17 @@ function update(dt)
   if timePassed > 60 then
     ac.endSession('You ran out of time! Loser…', false)
   end
+
+  if notFinished == 0 then
+    ac.endSession('Good driving, you got the job. Your time: '..(math.floor(timePassed * 10) / 10)..'s')
+  end
 end
 
 local speedWarning = 0
 local flashingRed = 0
 function drawUI()
+  if not available then return end
+
   local ui = ac.getUiState()
   flashingRed = flashingRed + ui.dt
 
