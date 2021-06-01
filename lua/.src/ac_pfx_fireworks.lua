@@ -2,9 +2,8 @@
 
 require './pfx_fireworks/ac_fireworks'
 
-ffi.cdef [[
-DEFINITIONS
-]]
+ffi.cdef [[ STRUCT_DEFINITIONS ]]
+ffi.cdef [[ DEFINITIONS ]]
 SANE
 EXPORT
 

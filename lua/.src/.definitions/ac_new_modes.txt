@@ -1,0 +1,3 @@
+ac.setStartMessage(message, icon)
+ac.endSession(message, successful_run)
+

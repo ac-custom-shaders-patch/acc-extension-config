@@ -1,4 +1,6 @@
 -- source: lua/api_common.cpp
+-- source: lua/api_state_provider.cpp
+-- source: lua/api_ui.cpp
 
 ac = {}
 
@@ -32,6 +34,11 @@ ac.__sane_rgb = function(x)
   end
 end
 
+ac.__fallback = function(x, y)
+  if x == nil then return y end
+  return x
+end
+
 ac.skipSaneChecks = function()
   ac.__sane = function(x) return x end
   ac.__sane_rgb = function(x) 
@@ -56,6 +63,8 @@ require './common/vector'
 require './common/ac_enums'
 require './common/math'
 require './common/ac_audio'
+require './common/ac_state'
+require './common/ac_ui'
 
 ac.store = function(key, value)
   key = tostring(key or "")
@@ -75,8 +84,7 @@ ac.load = function(key)
   end
 end
 
-ffi.cdef [[
-DEFINITIONS
-]]
+ffi.cdef [[ STRUCT_DEFINITIONS ]]
+ffi.cdef [[ DEFINITIONS ]]
 SANE
 EXPORT

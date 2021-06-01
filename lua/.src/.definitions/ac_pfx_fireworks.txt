@@ -1,0 +1,5 @@
+ac.getRandomFireworksSpot()
+ac.getFireworksSpot(index)
+ac.getFireworksSpotCount()
+ac.addFireworkFlash(group, pos, color, duration)
+

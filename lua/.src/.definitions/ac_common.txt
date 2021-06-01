@@ -1,0 +1,163 @@
+ac.debug(key, value)
+ac.log(value)
+ac.warn(value)
+ac.error(value)
+ac.dirname()
+ac.getPatchVersion()
+ac.getPatchVersionCode()
+ac.getFolder(f)
+ac.getTrackId()
+ac.getTrackLayout()
+ac.getCameraPosition()
+ac.getCameraUp()
+ac.getCameraSide()
+ac.getCameraForward()
+ac.getCameraDirection()
+ac.getCameraFOV()
+ac.getCameraPositionTo(r)
+ac.getCameraUpTo(r)
+ac.getCameraSideTo(r)
+ac.getCameraForwardTo(r)
+ac.getCameraDirectionTo(r)
+ac.getSunAngle()
+ac.getSunPitchAngle()
+ac.getSunHeadingAngle()
+ac.getSoundSpeedMs()
+ac.isInteriorView()
+ac.isInReplayMode()
+ac.getAudioVolume(key)
+ac.getCarSpeedKmh(car_index)
+ac.getGroundYApproximation()
+ac.getDeltaT()
+ac.getGameDeltaT()
+ac.getConditionsTimeScale()
+ac.getWindVelocity()
+ac.getWindVelocityTo(r)
+ac.readDataFile(value)
+ac.isWeatherFxActive()
+ac.getTrackCoordinatesDeg()
+ac.getTrackTimezoneBaseDst()
+ac.hasTrackSpline()
+ac.worldCoordinateToTrackProgress(v)
+ac.trackProgressToWorldCoordinate(v)
+ac.trackProgressToWorldCoordinateTo(v, r)
+ac.worldCoordinateToTrack(v)
+ac.trackCoordinateToWorld(v)
+ac.setSystemMessage(msg, description)
+ac.loadSoundbank(soundbank, guids)
+ac.isJoystickButtonPressed(joystick, button)
+ac.getJoystickAxisValue(joystick, axis)
+ac.isJoystickAxisValue(joystick, axis)
+ac.getJoystickDpadValue(joystick, dpad)
+ac.isJoystickDpadValue(joystick, dpad)
+ac.getSimState()
+ac.getUiState()
+ac.getCarState(index)
+ac.uiBeginToolWindow(window_id, pos, size)
+ac.uiEndToolWindow()
+ac.uiBeginTransparentWindow(window_id, pos, size)
+ac.uiEndTransparentWindow()
+ac.uiText(text)
+ac.uiTextAligned(text, alignment, size)
+ac.uiTextWrapped(text)
+ac.uiTextColored(text, color)
+ac.uiIcon24(icon_id, size, tint_col)
+ac.uiIcon32(icon_id, size, tint_col)
+ac.uiIcon64(icon_id, size, tint_col)
+ac.uiGetCursor()
+ac.uiSetCursor(v)
+ac.uiGetCursorX()
+ac.uiSetCursorX(v)
+ac.uiGetCursorY()
+ac.uiSetCursorY(v)
+ac.uiOffsetCursorX(v)
+ac.uiOffsetCursorY(v)
+ac.uiSameLine(offset_from_start, spacing)
+ac.uiDrawImage(filename, p1, p2, color, uv0, uv1, keep_aspect_ratio)
+ac.uiDrawRect(p1, p2, color, rounding, rounding_flags, thickness)
+ac.uiDrawRectFilled(p1, p2, color, rounding, rounding_flags)
+ac.uiDrawLine(p1, p2, color, thickness)
+ac.uiDrawCircle(p1, radius, color, num_segments, thickness)
+ac.uiDrawCircleFilled(p1, radius, color, num_segments)
+ac.uiDrawEllipseFilled(p1, radius, color, num_segments)
+ac.uiBeginOutline()
+ac.uiEndOutline(color)
+ac.uiBeginRotation()
+ac.uiEndRotation(deg)
+ac.uiBeginScale()
+ac.uiEndScale(scale)
+ac.uiPopStyleVar(count)
+ac.uiPushStyleColor(var_id, value)
+ac.uiPopStyleColor(count)
+ac.uiPushFont(font_type)
+ac.uiPopFont()
+
+struct state_wheel {
+	float tyreDirty;
+	float tyreWear;
+	float angularSpeed;
+	float loadK;
+	float slip;
+	vec3 contactNormal;
+	vec3 contactPoint;
+}
+
+struct state_car {
+	vec3 pos;
+	vec3 velocity;
+	vec3 acceleration;
+	vec3 angularVelocity;
+	vec3 localAngularVelocity;
+	vec3 up;
+	vec3 look;
+	vec3 side;
+	float gas;
+	float brake;
+	float clutch;
+	float steer;
+	float handbrake;
+	int gear;
+	float fuel;
+	float rpm;
+	float rpmLimiter;
+	float speedKmh;
+	float turboBoost;
+	float finalForceFeedback;
+	float cgHeight;
+	int wheelsOutside;
+	float engineLifeLeft;
+	float damage[5];
+	int nodeIndex;
+	int visibleIndex;
+	float distanceToCamera;
+	float splinePosition;
+	float collisionDepth;
+	int collidedWith; // 0 for track, non-zero for cars
+	state_wheel wheels[4];
+	bool isAiControlled;
+	bool isInPitlane;
+	bool headlightsActive;
+	int wiperMode;
+	float wiperProgress;
+	float bodyWetness;
+}
+
+struct state_sim {
+	vec3 cameraPosition;
+	vec3 cameraLook;
+	vec3 cameraUp;
+	int carsCount;
+	int focusedCar;
+	float dt;
+	bool isReplayActive;
+	bool isFocusedOnInterior;
+}
+
+struct state_ui {
+	vec2 windowSize;
+	vec2 mousePos;
+	float dt;
+	bool isMouseLeftKeyClicked;
+	bool isMouseRightKeyClicked;
+}
+

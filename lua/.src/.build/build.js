@@ -90,33 +90,64 @@ var processMacros = (src => {
 var sanePiece = ``;
 
 function getDefaultValue(x){
-  return x.replace(/(\d)f\b/, '$1');
+  return x.replace(/(\d)f\b/, '$1').replace(/\{/g, '(').replace(/\}/g, ')');
 }
 
-function getLuaCode(filename, mode, base){
+function getLuaCode(filenames, mode, base, definitionsCallback){
   var defs = [];
+  var structs = [];
   var exps = [];
+  var definitions = '';
 
-  var data = $.readText(filename);
-  processMacros(data).replace(/\bLUAEXPORT\s+((?:const\s+)?\w+\*?)\s+(lj_\w+)\s*\((.*?)\)/g, (_, resultType, name, args) => {
+  var data = filenames.map(x => $.readText(x)).join('\n\n');
+  data = data.replace(/,\s*\r?\n\s*/g, ', ');
+  var prepared = processMacros(data);
+  
+  prepared.replace(/\bLUAEXPORT\s+((?:const\s+)?\w+\*?)\s+(lj_\w+)\s*\((.*)/g, (_, resultType, name, args) => {
     if (/__(\w+)$/.test(name) && RegExp.$1 != mode) return;
+    args = args.split(/\)\s*(\{|$)/)[0].trim();
+    // if (/rgbm\(1, 1, 1, 1\)/.test(args)) console.log(args);
+
+    let defaultMap = {};
+    args = args.replace(/\(.+?\)|\{.+?\}/g, _ => {
+      const key = Math.random().toString(32).substr(2);
+      defaultMap[key] = _;
+      return key;
+    });
+
+    const unwrap = x => {
+      for (let k in defaultMap){
+        x = x.replace(k, defaultMap[k]);
+      }
+      return x;
+    };
+
     defs.push(mapTypes(resultType) + ' ' + name + '(' + mapTypes(args.split(',').map(x => x.split('=')[0].trim()).join(', ')) + ');');
 
     if (notForExport(name)) return;
     if (/const char\*|\brgb\b/.test(args) || /const char\*/.test(resultType) || saneChecks && args){
       var names = args.split(',').map(x => x.split('=')[0].trim().match(/\S+$/)).filter(x => x);
       var sane = saneChecks ? x => `ac.__sane(${x})` : x => x;
-      var defaultValues = args.split(',').map(x => x.indexOf('=') !== -1 ? getDefaultValue(x.split('=')[1]).trim() : null);
+      var defaultValues = args.split(',').map(x => x.indexOf('=') !== -1 ? getDefaultValue(unwrap(x.split('=')[1])).trim() : null);
       var wrapped = args.split(',').map(x => x.split('=')[0].trim()).filter(x => x).map((x, i) => 
         /const char\*/.test(x) ? `${names[i]} ~= nil and tostring(${names[i]}) or nil` :
         /\brgb\b/.test(x) ? `ac.__sane_rgb(${names[i]})` :
-        names[i]).map((x, i) => /\b(tostring|__sane_\w+)\(/.test(x) ? x : sane(defaultValues[i] ? `${x} or ${defaultValues[i].replace(/f$/, '')}` : x)).join(', ');
+        names[i]).map((x, i) => /\b(tostring|__sane_\w+)\(/.test(x) ? x : sane(defaultValues[i] ? `ac.__fallback(${x}, ${defaultValues[i].replace(/f$/, '')})` : x)).join(', ');
       var returnPrefix = resultType == 'void' ? '' : 'return ';
       var resultWrap = /const char\*/.test(resultType) ? x => `ffi.string(${x})` : x => x;
-      exps.push(`ac.${name.replace(/^lj_|__\w+$/g, '')} = function(${names.join(', ')}) ${returnPrefix}${resultWrap(`ffi.C.${name}(${wrapped})`)} end`)
+      exps.push(`ac.${name.replace(/^lj_|__\w+$/g, '')} = function(${names.join(', ')}) ${returnPrefix}${resultWrap(`ffi.C.${name}(${wrapped})`)} end`);
+      definitions += `ac.${name.replace(/^lj_|__\w+$/g, '')}(${names.join(', ')})\n`;
     } else {
-      exps.push(`ac.${name.replace(/^lj_|__\w+$/g, '')} = ffi.C.${name}`)
+      exps.push(`ac.${name.replace(/^lj_|__\w+$/g, '')} = ffi.C.${name}`);
+      definitions += `ac.${name.replace(/^lj_|__\w+$/g, '')}()\n`;
     }
+  });
+
+  if (definitions) definitions += '\n';
+  data.replace(/\bLUASTRUCT\s+(\w+)([\s\S]+?)\};/g, (_, name, content) => {
+    const fields = content.split('\n').map(x => /^\s+(\w+)\s+(\w+)(\[\d+\])?;\s*(\/\/.+\s*)?$/.test(x) ? x.trim() : null).filter(x => x).join('\n\t');
+    definitions += `struct ${name} {\n\t${fields}\n}\n\n`
+    structs.push(`typedef struct {\n\t${fields}\n} ${name};`);
   });
 
   var gets = {};
@@ -138,8 +169,13 @@ function getLuaCode(filename, mode, base){
     })`);
   }
 
+  if (definitionsCallback){
+    definitionsCallback(definitions);
+  }
+
   return base
-    .replace(/\bDEFINITIONS\b/, defs.join('\n'))
+    .replace(/\bDEFINITIONS\b/, '\n' + defs.join('\n') + '\n')
+    .replace(/\bSTRUCT_DEFINITIONS\b/, '\n' + structs.join('\n') + '\n')
     .replace(/\bEXPORT\b/, exps.join('\n'))
     .replace(/\bSANE\b/, saneChecks ? sanePiece : '');
 }
@@ -213,10 +249,18 @@ function processTarget(filename){
   $.echo(β.grey(`Processing Lua: ${filename}`));
 
   const base = $.readText(filename);
-  const source = /--\s+source:\s+(\S+)/.test(base) ? RegExp.$1 : null;
+  const source = []; base.replace(/--\s+source:\s+(\S+)/g, (_, g) => source.push(g));
   const filter = /--\s+namespace:\s+(\S+)/.test(base) ? RegExp.$1 : '';
-  const code = getLuaCode(`${cspSource}/${source}`, filter, base);
-  const ast = resolveRequires(code, filename);
+  const code = getLuaCode(source.map(x => `${cspSource}/${x}`), filter, base, definitions => {
+    fs.writeFileSync(`.definitions/${path.basename(filename, '.lua')}.txt`, definitions)
+  });
+  let ast = null;
+  try {
+    ast = resolveRequires(code, filename);
+  } catch (e){
+    fs.writeFileSync(`.out/failed.lua`, code)
+    throw e;
+  }
   return minify ? luamin.minify(ast) : luamax.maxify(ast);
 }
 
