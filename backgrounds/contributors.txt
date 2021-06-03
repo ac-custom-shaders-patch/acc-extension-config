@@ -50,4 +50,5 @@ goodwood_hillclimb/2: Gunnar333
 goodwood_hillclimb/3: Gunnar333
 g333_borgloh/1: Gunnar333
 g333_borgloh/2: Gunnar333
-
+wicklow_m/1: JakeGrafton
+wicklow_m/2: JakeGrafton
