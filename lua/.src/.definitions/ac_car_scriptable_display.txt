@@ -1,0 +1,5 @@
+ac.boostFrameRate()
+ac.loadDisplayValue(key: string, defaultValue: string = ""): string
+ac.saveDisplayValue(key: string, value: string)
+ac.setDynamicTextureShift(name: string, opacity: number = 1, offset: vec2 = vec2(), scale: vec2 = vec2(1, 1))
+ac.estimateSatelliteOcclusion(): number

@@ -1,3 +1,2 @@
-ac.setStartMessage(message, icon)
-ac.endSession(message, successful_run)
-
+ac.setStartMessage(message: string, icon: string = "DRIVE"): boolean
+ac.endSession(message: string, successfulRun: boolean = true): boolean

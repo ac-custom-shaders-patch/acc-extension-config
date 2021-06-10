@@ -1,26 +1,25 @@
-ac.getCurrentTime()
-ac.getDaySeconds()
-ac.getDayOfTheYear()
-ac.getTimeMultiplier()
-ac.getSunDirection()
-ac.getSunDirectionTo(r)
-ac.getMoonDirection()
-ac.getMoonDirectionTo(r)
-ac.getMoonFraction()
-ac.getAltitude()
-ac.getSunAltitude()
-ac.getTrackCoordinates()
-ac.getInputDate()
-ac.getRealTrackHeadingAngle()
-ac.getTimeZoneOffset()
-ac.getTimeZoneDstOffset()
-ac.getTimeZoneBaseOffset()
-ac.getConditionsSet()
-ac.getConditionsSetTo(r)
-ac.getPpFilter()
-ac.getInputWeatherType()
-ac.getInputTemperatures()
-ac.getInputWind()
-ac.getInputTrackState()
-ac.setConditionsSet(c)
-
+ac.getCurrentTime(): ?
+ac.getDaySeconds(): number
+ac.getDayOfTheYear(): number
+ac.getTimeMultiplier(): number
+ac.getSunDirection(): vec3
+ac.getSunDirectionTo(r: vec3)
+ac.getMoonDirection(): vec3
+ac.getMoonDirectionTo(r: vec3)
+ac.getMoonFraction(): number
+ac.getAltitude(): number
+ac.getSunAltitude(): number
+ac.getTrackCoordinates(): vec2
+ac.getInputDate(): ?
+ac.getRealTrackHeadingAngle(): number
+ac.getTimeZoneOffset(): number
+ac.getTimeZoneDstOffset(): number
+ac.getTimeZoneBaseOffset(): number
+ac.getConditionsSet(): ac.ConditionsSet
+ac.getConditionsSetTo(r: ac.ConditionsSet)
+ac.getPpFilter(): string
+ac.getInputWeatherType(): ?
+ac.getInputTemperatures(): ac.TemperatureParams
+ac.getInputWind(): ac.WindParams
+ac.getInputTrackState(): ac.TrackConditions
+ac.setConditionsSet(c: ac.ConditionsSet)

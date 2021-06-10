@@ -11,8 +11,6 @@ typedef struct {
 } audioevent;
 ]]
 
--- bool padding_[7];
-
 ac.AudioEvent = function (s, reverbResponse) 
   local created = ffi.C.lj_audioevent_new(tostring(s), reverbResponse and true or false) 
   return ffi.gc(created, ffi.C.lj_audioevent_gc) 

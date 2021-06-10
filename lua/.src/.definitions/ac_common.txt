@@ -1,108 +1,151 @@
-ac.debug(key, value)
-ac.log(value)
-ac.warn(value)
-ac.error(value)
-ac.dirname()
-ac.getPatchVersion()
-ac.getPatchVersionCode()
-ac.getFolder(f)
-ac.getTrackId()
-ac.getTrackLayout()
-ac.getCameraPosition()
-ac.getCameraUp()
-ac.getCameraSide()
-ac.getCameraForward()
-ac.getCameraDirection()
-ac.getCameraFOV()
-ac.getCameraPositionTo(r)
-ac.getCameraUpTo(r)
-ac.getCameraSideTo(r)
-ac.getCameraForwardTo(r)
-ac.getCameraDirectionTo(r)
-ac.getSunAngle()
-ac.getSunPitchAngle()
-ac.getSunHeadingAngle()
-ac.getSoundSpeedMs()
-ac.isInteriorView()
-ac.isInReplayMode()
-ac.getAudioVolume(key)
-ac.getCarSpeedKmh(car_index)
-ac.getGroundYApproximation()
-ac.getDeltaT()
-ac.getGameDeltaT()
-ac.getConditionsTimeScale()
-ac.getWindVelocity()
-ac.getWindVelocityTo(r)
-ac.readDataFile(value)
-ac.isWeatherFxActive()
-ac.getTrackCoordinatesDeg()
-ac.getTrackTimezoneBaseDst()
-ac.hasTrackSpline()
-ac.worldCoordinateToTrackProgress(v)
-ac.trackProgressToWorldCoordinate(v)
-ac.trackProgressToWorldCoordinateTo(v, r)
-ac.worldCoordinateToTrack(v)
-ac.trackCoordinateToWorld(v)
-ac.setSystemMessage(msg, description)
-ac.loadSoundbank(soundbank, guids)
-ac.isJoystickButtonPressed(joystick, button)
-ac.getJoystickAxisValue(joystick, axis)
-ac.isJoystickAxisValue(joystick, axis)
-ac.getJoystickDpadValue(joystick, dpad)
-ac.isJoystickDpadValue(joystick, dpad)
-ac.getSimState()
-ac.getUiState()
-ac.getCarState(index)
-ac.uiBeginToolWindow(window_id, pos, size)
+ac.debug(key: string, value: string)
+ac.log(value: string)
+ac.warn(value: string)
+ac.error(value: string)
+ac.dirname(): string
+ac.getPatchVersion(): string
+ac.getPatchVersionCode(): number
+ac.getFolder(f: ac.FolderId): string
+ac.getTrackId(): string
+ac.getTrackLayout(): string
+ac.getCameraPosition(): vec3
+ac.getCameraUp(): vec3
+ac.getCameraSide(): vec3
+ac.getCameraForward(): vec3
+ac.getCameraDirection(): vec3
+ac.getCameraFOV(): number
+ac.getCameraPositionTo(r: vec3)
+ac.getCameraUpTo(r: vec3)
+ac.getCameraSideTo(r: vec3)
+ac.getCameraForwardTo(r: vec3)
+ac.getCameraDirectionTo(r: vec3)
+ac.getSunAngle(): number
+ac.getSunPitchAngle(): number
+ac.getSunHeadingAngle(): number
+ac.getSoundSpeedMs(): number
+ac.isInteriorView(): boolean
+ac.isInReplayMode(): boolean
+ac.getAudioVolume(key: string): number
+ac.getCarSpeedKmh(carIndex: number): number
+ac.getGroundYApproximation(): number
+ac.getDeltaT(): number
+ac.getGameDeltaT(): number
+ac.getConditionsTimeScale(): number
+ac.getWindVelocity(): vec3
+ac.getWindVelocityTo(r: vec3)
+ac.readDataFile(value: string): string
+ac.isWeatherFxActive(): boolean
+ac.getTrackCoordinatesDeg(): vec2
+ac.getTrackTimezoneBaseDst(): vec2
+ac.hasTrackSpline(): boolean
+ac.worldCoordinateToTrackProgress(v: vec3): number
+ac.trackProgressToWorldCoordinate(v: number): vec3
+ac.trackProgressToWorldCoordinateTo(v: number, r: vec3)
+ac.worldCoordinateToTrack(v: vec3): vec3
+ac.trackCoordinateToWorld(v: vec3): vec3
+ac.setSystemMessage(msg: string, description: string)
+ac.loadSoundbank(soundbank: string, guids: string): boolean
+ac.isJoystickButtonPressed(joystick: number, button: number): boolean
+ac.getJoystickAxisValue(joystick: number, axis: number): number
+ac.isJoystickAxisValue(joystick: number, axis: number): number
+ac.getJoystickDpadValue(joystick: number, dpad: number): number
+ac.isJoystickDpadValue(joystick: number, dpad: number): number
+ac.uiBeginToolWindow(windowId: string, pos: vec2, size: vec2)
 ac.uiEndToolWindow()
-ac.uiBeginTransparentWindow(window_id, pos, size)
+ac.uiBeginTransparentWindow(windowId: string, pos: vec2, size: vec2)
 ac.uiEndTransparentWindow()
-ac.uiText(text)
-ac.uiTextAligned(text, alignment, size)
-ac.uiTextWrapped(text)
-ac.uiTextColored(text, color)
-ac.uiIcon24(icon_id, size, tint_col)
-ac.uiIcon32(icon_id, size, tint_col)
-ac.uiIcon64(icon_id, size, tint_col)
-ac.uiGetCursor()
-ac.uiSetCursor(v)
-ac.uiGetCursorX()
-ac.uiSetCursorX(v)
-ac.uiGetCursorY()
-ac.uiSetCursorY(v)
-ac.uiOffsetCursorX(v)
-ac.uiOffsetCursorY(v)
-ac.uiSameLine(offset_from_start, spacing)
-ac.uiDrawImage(filename, p1, p2, color, uv0, uv1, keep_aspect_ratio)
-ac.uiDrawRect(p1, p2, color, rounding, rounding_flags, thickness)
-ac.uiDrawRectFilled(p1, p2, color, rounding, rounding_flags)
-ac.uiDrawLine(p1, p2, color, thickness)
-ac.uiDrawCircle(p1, radius, color, num_segments, thickness)
-ac.uiDrawCircleFilled(p1, radius, color, num_segments)
-ac.uiDrawEllipseFilled(p1, radius, color, num_segments)
+ac.uiText(text: string)
+ac.uiTextAligned(text: string, alignment: vec2, size: vec2 = vec2())
+ac.uiTextWrapped(text: string)
+ac.uiTextColored(text: string, color: rgbm)
+ac.uiIcon24(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
+ac.uiIcon32(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
+ac.uiIcon64(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
+ac.uiGetCursor(): vec2
+ac.uiSetCursor(v: vec2)
+ac.uiGetCursorX(): number
+ac.uiSetCursorX(v: number)
+ac.uiGetCursorY(): number
+ac.uiSetCursorY(v: number)
+ac.uiOffsetCursorX(v: number)
+ac.uiOffsetCursorY(v: number)
+ac.uiSameLine(offsetFrom_start: number = 0, spacing: number = -1)
+ac.uiDrawImage(filename: string, p1: vec2, p2: vec2, color: rgbm = rgbm(1, 1, 1, 1), uv1: vec2 = vec2(), uv2: vec2 = vec2(1, 1), keepAspect_ratio: boolean = false)
+ac.uiDrawImageQuad(filename: string, p1: vec2, p2: vec2, p3: vec2, p4: vec2, color: rgbm = rgbm(1, 1, 1, 1), uv1: vec2 = vec2(), uv2: vec2 = vec2(1, 0), uv3: vec2 = vec2(1, 1), uv4: vec2 = vec2(0, 1))
+ac.uiDrawQuadFilled(p1: vec2, p2: vec2, p3: vec2, p4: vec2, color: rgbm = rgbm(1, 1, 1, 1))
+ac.uiDrawQuad(p1: vec2, p2: vec2, p3: vec2, p4: vec2, color: rgbm = rgbm(1, 1, 1, 1))
+ac.uiSetShadingOffset(texBrightness: number = 1, texOffset: number = 0, alphaMult: number = 1, alphaOffset: number = 0)
+ac.uiBeginTextureShade(filename: string)
+ac.uiEndTextureShade(p1: vec2, p2: vec2, uv1: vec2 = vec2(), uv2: vec2 = vec2(1, 1), clamp: boolean = true)
+ac.uiBeginGradientShade()
+ac.uiEndGradientShade(p1: vec2, p2: vec2, col1: rgbm = rgbm(1, 1, 1, 1), col2: rgbm = rgbm(1, 1, 1, 1))
+ac.uiPushClipRect(p1: vec2, p2: vec2, intersectWith_existing: boolean = true)
+ac.uiPopClipRect()
+ac.uiDrawRect(p1: vec2, p2: vec2, color: rgbm, rounding: number = 0, roundingFlags: number = 15, thickness: number = 1)
+ac.uiDrawRectFilled(p1: vec2, p2: vec2, color: rgbm, rounding: number = 0, roundingFlags: number = 15)
+ac.uiDrawLine(p1: vec2, p2: vec2, color: rgbm, thickness: number = 1)
+ac.uiDrawCircle(p1: vec2, radius: number, color: rgbm, numSegments: number = 12, thickness: number = 1)
+ac.uiDrawCircleFilled(p1: vec2, radius: number, color: rgbm, numSegments: number = 12)
+ac.uiDrawEllipseFilled(p1: vec2, radius: vec2, color: rgbm, numSegments: number = 12)
+ac.uiBeginTextureSaturationAdjustment()
+ac.uiEndTextureSaturationAdjustment(value: number)
 ac.uiBeginOutline()
-ac.uiEndOutline(color)
+ac.uiEndOutline(color: rgbm)
 ac.uiBeginRotation()
-ac.uiEndRotation(deg)
+ac.uiEndRotation(deg: number)
 ac.uiBeginScale()
-ac.uiEndScale(scale)
-ac.uiPopStyleVar(count)
-ac.uiPushStyleColor(var_id, value)
-ac.uiPopStyleColor(count)
-ac.uiPushFont(font_type)
+ac.uiEndScale(scale: vec2)
+ac.uiPopStyleVar(count: number = 1)
+ac.uiPushStyleColor(varId: number, value: rgbm)
+ac.uiPopStyleColor(count: number = 1)
+ac.uiPushFont(fontType: number)
 ac.uiPopFont()
+ac.uiRectHovered(p1: vec2, p2: vec2): boolean
+ac.uiMouseClicked(button: number = 0): boolean
+ac.uiMouseDown(button: number = 0): boolean
+ac.uiMouseDoubleClicked(button: number = 0): boolean
+ac.uiMousePos(): vec2
+ac.uiACText(text: string, letter: vec2, marginOffset: number = 0, color: rgbm = rgbm(1, 1, 1, 1))
+ac.uiPushACFont(name: string)
+ac.uiPopACFont()
+ac.getSimState(): stateSim
+ac.getUiState(): stateUi
+ac.getCarState(index: number): stateCar
 
-struct state_wheel {
+struct stateWheel {
+	float tyreRadius;
+	float tyreWidth;
+	float rimRadius;
 	float tyreDirty;
 	float tyreWear;
+	float tyrePressure;
+	float tyreTemperature;
+	float discTemperature;
 	float angularSpeed;
 	float loadK;
 	float slip;
+	float slipAngle;
+	float slipRatio;
+	float ndSlip;
+	float suspensionDamage;
+	float suspensionTravel;
 	vec3 contactNormal;
 	vec3 contactPoint;
+	vec3 pos;
+	vec3 look;
+	vec3 up;
+	vec3 outside;
+	bool isBlown;
 }
 
-struct state_car {
+struct stateCar {
+	float mass;
+	float maxFuel;
+	float exposureOutside;
+	float exposureInside;
+	float shakeMultiplier;
+	vec3 aabbCenter;
+	vec3 aabbSize;
 	vec3 pos;
 	vec3 velocity;
 	vec3 acceleration;
@@ -123,10 +166,13 @@ struct state_car {
 	float speedKmh;
 	float turboBoost;
 	float finalForceFeedback;
+	float drivetrainSpeed;
+	float waterTemperature;
 	float cgHeight;
 	int wheelsOutside;
 	float engineLifeLeft;
 	float damage[5];
+	float gearboxDamage;
 	int nodeIndex;
 	int visibleIndex;
 	float distanceToCamera;
@@ -136,13 +182,64 @@ struct state_car {
 	state_wheel wheels[4];
 	bool isAiControlled;
 	bool isInPitlane;
+	bool isRetired;
+	bool gearGrinding;
 	bool headlightsActive;
+	bool brakeLightsActive;
+	bool flashingLightsActive;
+	bool hornActive;
+	bool focused;
+	bool focusedOnInterior;
+	bool hazardLights;
+	bool turningLeftLights;
+	bool turningRightLights;
+	bool turningLeftOnly;
+	bool turningRightOnly;
+	bool lowBeams;
+	bool extraA;
+	bool extraB;
+	bool extraC;
+	bool extraD;
+	float distanceDrivenTotalKm;
+	float distanceDrivenSessionKm;
+	float poweredWheelsSpeed;
+	float batteryVoltage;
+	float oilPressure;
+	float oilTemperature;
+	float exhaustTemperature;
 	int wiperMode;
 	float wiperProgress;
 	float bodyWetness;
+	float compass;
+	int lapTimeMs;
+	int bestLapTimeMs;
+	int previousLapTimeMs;
+	int lapCount;
+	int racePosition;
+	int estimatedLapTimeMs;
+	float performanceMeter;
+	float performanceMeterSpeedDifferenceMs;
+	int sessionLapCount;
+	int compoundIndex;
+	bool physicsAvailable;
+	bool speedLimiterInAction;
+	bool absInAction;
+	bool tractionControlInAction;
+	int tractionControlMode; // 0 for disabled TC
+	int absMode; // 0 for disabled ABS
+	float speedLimiter;
+	float differentialPreload;
+	float awdFrontShare;
+	float drivetrainTorque;
+	float drivetrainPower;
+	float brakeBias;
+	float turboBoosts[8];
+	float turboWastegates[8];
+	float tractionControl2;
+	float fuelMap;
 }
 
-struct state_sim {
+struct stateSim {
 	vec3 cameraPosition;
 	vec3 cameraLook;
 	vec3 cameraUp;
@@ -151,13 +248,32 @@ struct state_sim {
 	float dt;
 	bool isReplayActive;
 	bool isFocusedOnInterior;
+	bool isSessionStarted;
+	float ambientTemperature;
+	float roadTemperature;
+	float windSpeedKmh;
+	vec2 windVelocityKmh;
+	float windDirectionDeg;
+	float rainIntensity;
+	float rainWetness;
+	float rainWater;
+	float timeTotalSeconds;
+	int timeHours;
+	int timeMinutes;
+	int timeSeconds;
+	int raceFlagType;
+	int raceSessionType;
+	float timeToSessionStart;
+	float sessionTimeLeft;
+	int currentSessionIndex;
+	int sessionsCoint;
+	float trackLengthM;
 }
 
-struct state_ui {
+struct stateUi {
 	vec2 windowSize;
 	vec2 mousePos;
 	float dt;
 	bool isMouseLeftKeyClicked;
 	bool isMouseRightKeyClicked;
 }
-

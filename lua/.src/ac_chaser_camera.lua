@@ -3,7 +3,6 @@
 ffi.cdef [[
 DEFINITIONS
 ]]
-SANE
 EXPORT
 
 ac.getCameraParameters = function (index)

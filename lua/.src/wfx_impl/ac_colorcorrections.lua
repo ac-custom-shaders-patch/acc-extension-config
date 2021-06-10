@@ -13,7 +13,7 @@ ffi.cdef [[ typedef struct { void* __vfptr; float value; } cc_sepia_tone; ]]
 ffi.metatype('cc_sepia_tone', { __index = {} })
 ac.ColorCorrectionSepiaTone = function (t) 
   local r = ffi.C.lj_cc_sepiatone_new__impl() 
-  r.value = type(t) == 'table' and t['value'] or __num_fallback(t, 1)
+  r.value = type(t) == 'table' and t['value'] or __util.num_or(t, 1)
   return ffi.gc(r, ffi.C.lj_cc_sepiatone_gc__impl) 
 end
 
@@ -22,7 +22,7 @@ ffi.cdef [[ typedef struct { void* __vfptr; float value; } cc_brightness; ]]
 ffi.metatype('cc_brightness', { __index = {} })
 ac.ColorCorrectionBrightness = function (t) 
   local r = ffi.C.lj_cc_brightness_new__impl() 
-  r.value = type(t) == 'table' and t['value'] or __num_fallback(t, 1)
+  r.value = type(t) == 'table' and t['value'] or __util.num_or(t, 1)
   return ffi.gc(r, ffi.C.lj_cc_brightness_gc__impl) 
 end
 
@@ -31,7 +31,7 @@ ffi.cdef [[ typedef struct { void* __vfptr; float value; } cc_saturation; ]]
 ffi.metatype('cc_saturation', { __index = {} })
 ac.ColorCorrectionSaturation = function (t) 
   local r = ffi.C.lj_cc_saturation_new__impl() 
-  r.value = type(t) == 'table' and t['value'] or __num_fallback(t, 1)
+  r.value = type(t) == 'table' and t['value'] or __util.num_or(t, 1)
   return ffi.gc(r, ffi.C.lj_cc_saturation_gc__impl) 
 end
 
@@ -40,7 +40,7 @@ ffi.cdef [[ typedef struct { void* __vfptr; float value; } cc_contrast; ]]
 ffi.metatype('cc_contrast', { __index = {} })
 ac.ColorCorrectionContrast = function (t) 
   local r = ffi.C.lj_cc_contrast_new__impl() 
-  r.value = type(t) == 'table' and t['value'] or __num_fallback(t, 1)
+  r.value = type(t) == 'table' and t['value'] or __util.num_or(t, 1)
   return ffi.gc(r, ffi.C.lj_cc_contrast_gc__impl) 
 end
 
@@ -136,8 +136,8 @@ ffi.metatype('cc_hsb', { __index = {} })
 ac.ColorCorrectionHsb = function (t) 
   local r = ffi.C.lj_cc_hsb_new__impl() 
   r.hue = type(t) == 'table' and t['hue'] or t or 0
-  r.saturation = type(t) == 'table' and t['saturation'] or t or __num_fallback(t, 1)
-  r.brightness = type(t) == 'table' and t['brightness'] or t or __num_fallback(t, 1)
+  r.saturation = type(t) == 'table' and t['saturation'] or t or __util.num_or(t, 1)
+  r.brightness = type(t) == 'table' and t['brightness'] or t or __util.num_or(t, 1)
   return ffi.gc(r, ffi.C.lj_cc_hsb_gc__impl) 
 end
 
@@ -146,7 +146,7 @@ ffi.cdef [[ typedef struct { void* __vfptr; float temperature; float luminance; 
 ffi.metatype('cc_temperature', { __index = {} })
 ac.ColorCorrectionTemperature = function (t) 
   local r = ffi.C.lj_cc_temperature_new__impl() 
-  r.temperature = type(t) == 'table' and t['temperature'] or __num_fallback(t, 6500.0)
+  r.temperature = type(t) == 'table' and t['temperature'] or __util.num_or(t, 6500.0)
   r.luminance = type(t) == 'table' and t['luminance'] or 0.0
   return ffi.gc(r, ffi.C.lj_cc_temperature_gc__impl) 
 end
@@ -156,7 +156,7 @@ ffi.cdef [[ typedef struct { void* __vfptr; float whitebalance; float luminance;
 ffi.metatype('cc_white_balance', { __index = {} })
 ac.ColorCorrectionWhiteBalance = function (t) 
   local r = ffi.C.lj_cc_whitebalance_new__impl() 
-  r.temperature = type(t) == 'table' and t['temperature'] or __num_fallback(t, 6500.0)
+  r.temperature = type(t) == 'table' and t['temperature'] or __util.num_or(t, 6500.0)
   r.luminance = type(t) == 'table' and t['luminance'] or 0.0
   return ffi.gc(r, ffi.C.lj_cc_whitebalance_gc__impl) 
 end

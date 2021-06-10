@@ -4,8 +4,6 @@
 require './wfx_common/ac_trackconfig'
 require './wfx_common/ac_weatherconditions'
 
-ffi.cdef [[ STRUCT_DEFINITIONS ]]
 ffi.cdef [[ DEFINITIONS ]]
-SANE
 EXPORT
 

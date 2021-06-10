@@ -47,14 +47,14 @@ return {
         if type(r) ~= 'number' then return rgbm(0, 0, 0, 1) end
         if type(g) ~= 'number' then return rgbm(r, r, r, 1) end
         if type(b) ~= 'number' then return rgbm(r, r, r, g) end
-        return rgbm(r, g, b, __num_fallback(m, 1))
+        return rgbm(r, g, b, __util.num_or(m, 1))
       end,
 
       from0255 = function(r, g, b, a) 
         if type(r) ~= 'number' then r = 0 end
         if type(g) ~= 'number' then g = r end
         if type(b) ~= 'number' then b = g end
-        return rgbm(r / 255, g / 255, b / 255, __num_fallback(a, 1))
+        return rgbm(r / 255, g / 255, b / 255, __util.num_or(a, 1))
       end,
 
       isrgbm = function(r) return ffi.istype('rgbm', r) end,

@@ -1,5 +1,4 @@
-ac.getRandomFireworksSpot()
-ac.getFireworksSpot(index)
-ac.getFireworksSpotCount()
-ac.addFireworkFlash(group, pos, color, duration)
-
+ac.getRandomFireworksSpot(): vec3
+ac.getFireworksSpot(index: number): vec3
+ac.getFireworksSpotCount(): number
+ac.addFireworkFlash(group: number, pos: vec3, color: rgb, duration: number)

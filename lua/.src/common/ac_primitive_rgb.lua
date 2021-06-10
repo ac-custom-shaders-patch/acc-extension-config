@@ -219,8 +219,8 @@ return {
 
       hsv = function(v) return hsv(v:hue(), v:saturation(), v:value()) end,
       toHsv = function(v) return hsv(v:hue(), v:saturation(), v:value()) end,
-      rgbm = function(v, m) return rgbm(v.r, v.g, v.b, __num_fallback(m, 1)) end,
-      toRgbm = function(v, m) return rgbm(v.r, v.g, v.b, __num_fallback(m, 1)) end,
+      rgbm = function(v, m) return rgbm(v.r, v.g, v.b, __util.num_or(m, 1)) end,
+      toRgbm = function(v, m) return rgbm(v.r, v.g, v.b, __util.num_or(m, 1)) end,
       vec3 = function(v) return vec3(v.r, v.g, v.b) end,
       toVec3 = function(v) return vec3(v.r, v.g, v.b) end,
     }

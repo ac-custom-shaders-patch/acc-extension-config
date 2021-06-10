@@ -1,3 +1,5 @@
+-- To make things simpler, Lua’s math module is extended here
+
 local function __clamp(x, min, max)
   return math.min(math.max(x, min), max)
 end
