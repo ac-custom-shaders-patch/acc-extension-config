@@ -44,70 +44,11 @@ ac.trackProgressToWorldCoordinateTo(v: number, r: vec3)
 ac.worldCoordinateToTrack(v: vec3): vec3
 ac.trackCoordinateToWorld(v: vec3): vec3
 ac.setSystemMessage(msg: string, description: string)
-ac.loadSoundbank(soundbank: string, guids: string): boolean
 ac.isJoystickButtonPressed(joystick: number, button: number): boolean
 ac.getJoystickAxisValue(joystick: number, axis: number): number
 ac.isJoystickAxisValue(joystick: number, axis: number): number
 ac.getJoystickDpadValue(joystick: number, dpad: number): number
 ac.isJoystickDpadValue(joystick: number, dpad: number): number
-ac.uiBeginToolWindow(windowId: string, pos: vec2, size: vec2)
-ac.uiEndToolWindow()
-ac.uiBeginTransparentWindow(windowId: string, pos: vec2, size: vec2)
-ac.uiEndTransparentWindow()
-ac.uiText(text: string)
-ac.uiTextAligned(text: string, alignment: vec2, size: vec2 = vec2())
-ac.uiTextWrapped(text: string)
-ac.uiTextColored(text: string, color: rgbm)
-ac.uiIcon24(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
-ac.uiIcon32(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
-ac.uiIcon64(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
-ac.uiGetCursor(): vec2
-ac.uiSetCursor(v: vec2)
-ac.uiGetCursorX(): number
-ac.uiSetCursorX(v: number)
-ac.uiGetCursorY(): number
-ac.uiSetCursorY(v: number)
-ac.uiOffsetCursorX(v: number)
-ac.uiOffsetCursorY(v: number)
-ac.uiSameLine(offsetFrom_start: number = 0, spacing: number = -1)
-ac.uiDrawImage(filename: string, p1: vec2, p2: vec2, color: rgbm = rgbm(1, 1, 1, 1), uv1: vec2 = vec2(), uv2: vec2 = vec2(1, 1), keepAspect_ratio: boolean = false)
-ac.uiDrawImageQuad(filename: string, p1: vec2, p2: vec2, p3: vec2, p4: vec2, color: rgbm = rgbm(1, 1, 1, 1), uv1: vec2 = vec2(), uv2: vec2 = vec2(1, 0), uv3: vec2 = vec2(1, 1), uv4: vec2 = vec2(0, 1))
-ac.uiDrawQuadFilled(p1: vec2, p2: vec2, p3: vec2, p4: vec2, color: rgbm = rgbm(1, 1, 1, 1))
-ac.uiDrawQuad(p1: vec2, p2: vec2, p3: vec2, p4: vec2, color: rgbm = rgbm(1, 1, 1, 1))
-ac.uiSetShadingOffset(texBrightness: number = 1, texOffset: number = 0, alphaMult: number = 1, alphaOffset: number = 0)
-ac.uiBeginTextureShade(filename: string)
-ac.uiEndTextureShade(p1: vec2, p2: vec2, uv1: vec2 = vec2(), uv2: vec2 = vec2(1, 1), clamp: boolean = true)
-ac.uiBeginGradientShade()
-ac.uiEndGradientShade(p1: vec2, p2: vec2, col1: rgbm = rgbm(1, 1, 1, 1), col2: rgbm = rgbm(1, 1, 1, 1))
-ac.uiPushClipRect(p1: vec2, p2: vec2, intersectWith_existing: boolean = true)
-ac.uiPopClipRect()
-ac.uiDrawRect(p1: vec2, p2: vec2, color: rgbm, rounding: number = 0, roundingFlags: number = 15, thickness: number = 1)
-ac.uiDrawRectFilled(p1: vec2, p2: vec2, color: rgbm, rounding: number = 0, roundingFlags: number = 15)
-ac.uiDrawLine(p1: vec2, p2: vec2, color: rgbm, thickness: number = 1)
-ac.uiDrawCircle(p1: vec2, radius: number, color: rgbm, numSegments: number = 12, thickness: number = 1)
-ac.uiDrawCircleFilled(p1: vec2, radius: number, color: rgbm, numSegments: number = 12)
-ac.uiDrawEllipseFilled(p1: vec2, radius: vec2, color: rgbm, numSegments: number = 12)
-ac.uiBeginTextureSaturationAdjustment()
-ac.uiEndTextureSaturationAdjustment(value: number)
-ac.uiBeginOutline()
-ac.uiEndOutline(color: rgbm)
-ac.uiBeginRotation()
-ac.uiEndRotation(deg: number)
-ac.uiBeginScale()
-ac.uiEndScale(scale: vec2)
-ac.uiPopStyleVar(count: number = 1)
-ac.uiPushStyleColor(varId: number, value: rgbm)
-ac.uiPopStyleColor(count: number = 1)
-ac.uiPushFont(fontType: number)
-ac.uiPopFont()
-ac.uiRectHovered(p1: vec2, p2: vec2): boolean
-ac.uiMouseClicked(button: number = 0): boolean
-ac.uiMouseDown(button: number = 0): boolean
-ac.uiMouseDoubleClicked(button: number = 0): boolean
-ac.uiMousePos(): vec2
-ac.uiACText(text: string, letter: vec2, marginOffset: number = 0, color: rgbm = rgbm(1, 1, 1, 1))
-ac.uiPushACFont(name: string)
-ac.uiPopACFont()
 ac.getSimState(): stateSim
 ac.getUiState(): stateUi
 ac.getCarState(index: number): stateCar

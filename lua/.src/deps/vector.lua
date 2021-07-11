@@ -181,7 +181,7 @@ local VectorT__mt = {
     reserve_n = 16
     if reserve_n and reserve_n > 0 then
       local data = self.__alloc:allocate(reserve_n)
-      if not data then error('VectorT.new allocation failed') end
+      if data == nil then error('VectorT.new allocation failed') end
       self._data, self._size, self._cap = data, 0, reserve_n
     else
       self._data, self._size, self._cap = nil, 0, 0

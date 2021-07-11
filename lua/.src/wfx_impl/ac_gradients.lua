@@ -9,9 +9,9 @@ typedef struct {
     rgb color;
     float exponent;
   };
-} extra_gradient;
+} extragradient;
 ]]
-ffi.metatype('extra_gradient', { __index = {} })
+ffi.metatype('extragradient', { __index = {} })
 ac.SkyExtraGradient = function (t) 
   local r = ffi.C.lj_extragradient_new__impl() 
   -- r.temperature = type(t) == 'table' and t['temperature'] or __util.num_or(t, 6500.0)

@@ -1,6 +1,4 @@
--- source: lua/api_common.cpp
--- source: lua/api_ui.cpp
--- states: lua/api_state_provider.cpp
+__source 'lua/api_common.cpp'
 
 ac = {}
 
@@ -14,9 +12,8 @@ require './common/ac_primitive'
 require './common/math'
 require './common/internal'
 require './common/ac_enums'
-require './common/ac_audio'
 require './common/ac_state'
-require './common/ac_ui'
+require './common/ac_trackconfig'
 
 -- for better compatibility
 print = ac.log
@@ -41,5 +38,4 @@ ac.load = function(key)
 end
 
 -- automatically generated entries go here:
-ffi.cdef [[ DEFINITIONS ]]
-EXPORT
+__definitions()

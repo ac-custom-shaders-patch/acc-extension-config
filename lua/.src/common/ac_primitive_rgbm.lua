@@ -35,7 +35,7 @@ return {
     end,
     __unm = function(v) return v * -1 end,
     __len = function(v) return v:value() end,
-    __eq = function(v, o) return o ~= nil and v.rgb == o.rgb and v.mult == o.mult end,
+    __eq = function(v, o) return o ~= nil and ffi.istype('rgbm', o) and v.rgb == o.rgb and v.mult == o.mult end,
     __lt = function(v, o) return v:value() < o:value() end,
     __le = function(v, o) return v:value() <= o:value() end,
     __index = {
@@ -64,7 +64,7 @@ return {
       unpack = function(v) return v.rgb, v.mult end,
 
       set = function(v, rgb, mult)
-        if rgbm.isrgbm(r) then rgb, mult = r.rgb, r.mult end
+        if rgbm.isrgbm(rgb) then rgb, mult = rgb.rgb, rgb.mult end
         v.rgb = rgb
         v.mult = mult
         return v

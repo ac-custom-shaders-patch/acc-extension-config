@@ -1,9 +1,13 @@
--- source: extensions/car_instruments/scriptable_display.cpp
--- namespace: carscriptabledisplay
+__source 'extensions/car_instruments/scriptable_display.cpp'
+__allow 'carscriptabledisplay'
 
-ffi.cdef [[ DEFINITIONS ]]
-EXPORT
+require './common/ac_ui'
+require './common/ac_audio'
 
+-- automatically generated entries go here:
+__definitions()
+
+-- extra additions:
 car = nil
 sim = nil
 function __init__()
@@ -17,7 +21,7 @@ function display.rect(params)
   local pos = params.pos      -- rect position
   local size = params.size    -- rect size
   local color = params.color  -- rect color
-  ac.uiDrawRectFilled(pos, pos + size, color)
+  ui.drawRectFilled(pos, pos + size, color)
 end
 
 function display.image(params)
@@ -27,7 +31,7 @@ function display.image(params)
   local color = params.color      -- image tint
 	local uvStart = params.uvStart  -- UV for upper left corner, optional
 	local uvEnd = params.uvEnd      -- UV for bottom right corner, optional
-  ac.uiDrawImage(image, pos, pos + size, color, uvStart, uvEnd)
+  ui.drawImage(image, pos, pos + size, color, uvStart, uvEnd)
 end
 
 function display.text(params)
@@ -48,8 +52,9 @@ function display.text(params)
     pos.x = pos.x + (width - actualWidth) * alignment
   end
 
-  if font ~= nil then ac.uiPushACFont(font) end
-  if pos ~= nil then ac.uiSetCursor(pos) end  
-  ac.uiACText(text, letter, spacing, color)
-  if font ~= nil then ac.uiPopACFont() end
+  if font ~= nil then ui.pushACFont(font) end
+  if pos ~= nil then ui.setCursor(pos) end  
+  ui.acText(text, letter, spacing, color)
+  if font ~= nil then ui.popACFont() end
 end
+

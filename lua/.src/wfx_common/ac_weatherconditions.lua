@@ -12,8 +12,8 @@ typedef struct {
 } weather_conditions_wind;
 
 typedef struct {
-  char currentType;
-  char upcomingType;
+  weather_type currentType;
+  weather_type upcomingType;
   weather_conditions_temperatures temperatures;
   weather_conditions_track trackState;
   weather_conditions_wind wind;

@@ -2,3 +2,4 @@ ac.getRandomFireworksSpot(): vec3
 ac.getFireworksSpot(index: number): vec3
 ac.getFireworksSpotCount(): number
 ac.addFireworkFlash(group: number, pos: vec3, color: rgb, duration: number)
+ac.loadSoundbank(soundbank: string, guids: string): boolean

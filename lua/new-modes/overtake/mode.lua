@@ -196,11 +196,11 @@ end
 
 local speedWarning = 0
 function drawUI()
-  local ui = ac.getUiState()
-  updateMessages(ui.dt)
+  local uiState = ac.getUiState()
+  updateMessages(uiState.dt)
 
   local speedRelative = math.saturate(math.floor(ac.getCarState(1).speedKmh) / requiredSpeed)
-  speedWarning = math.applyLag(speedWarning, speedRelative < 1 and 1 or 0, 0.5, ui.dt)
+  speedWarning = math.applyLag(speedWarning, speedRelative < 1 and 1 or 0, 0.5, uiState.dt)
 
   local colorDark = rgbm(0.4, 0.4, 0.4, 1)
   local colorGrey = rgbm(0.7, 0.7, 0.7, 1)
@@ -208,62 +208,62 @@ function drawUI()
   local colorCombo = rgbm.new(hsv(comboColor, math.saturate(comboMeter / 10), 1):rgb(), math.saturate(comboMeter / 4))
 
   function speedMeter(ref)
-    ac.uiDrawRectFilled(ref + vec2(0, -4), ref + vec2(180, 5), colorDark, 1)
-    ac.uiDrawLine(ref + vec2(0, -4), ref + vec2(0, 4), colorGrey, 1)
-    ac.uiDrawLine(ref + vec2(requiredSpeed, -4), ref + vec2(requiredSpeed, 4), colorGrey, 1)
+    ui.drawRectFilled(ref + vec2(0, -4), ref + vec2(180, 5), colorDark, 1)
+    ui.drawLine(ref + vec2(0, -4), ref + vec2(0, 4), colorGrey, 1)
+    ui.drawLine(ref + vec2(requiredSpeed, -4), ref + vec2(requiredSpeed, 4), colorGrey, 1)
 
     local speed = math.min(ac.getCarState(1).speedKmh, 180)
     if speed > 1 then
-      ac.uiDrawLine(ref + vec2(0, 0), ref + vec2(speed, 0), colorAccent, 4)
+      ui.drawLine(ref + vec2(0, 0), ref + vec2(speed, 0), colorAccent, 4)
     end
   end
 
-  ac.uiBeginTransparentWindow('overtakeScore', vec2(ui.windowSize.x * 0.5 - 600, 100), vec2(400, 400))
-  ac.uiBeginOutline()
+  ui.beginTransparentWindow('overtakeScore', vec2(uiState.windowSize.x * 0.5 - 600, 100), vec2(400, 400))
+  ui.beginOutline()
 
-  ac.uiPushStyleVar(ac.UiStyleVar.Alpha, 1 - speedWarning)
-  ac.uiPushFont(ac.UiFont.Title)
-  ac.uiText('Overtake Run')
-  ac.uiPopFont()
-  ac.uiPopStyleVar()
+  ui.pushStyleVar(ui.StyleVar.Alpha, 1 - speedWarning)
+  ui.pushFont(ui.Font.Title)
+  ui.text('Overtake Run')
+  ui.popFont()
+  ui.popStyleVar()
 
-  ac.uiPushFont(ac.UiFont.Huge)
-  ac.uiText(totalScore .. ' pts')
-  ac.uiSameLine(0, 40)
-  ac.uiBeginRotation()
-  ac.uiTextColored(math.ceil(comboMeter * 10) / 10 .. 'x', colorCombo)
+  ui.pushFont(ui.Font.Huge)
+  ui.text(totalScore .. ' pts')
+  ui.sameLine(0, 40)
+  ui.beginRotation()
+  ui.textColored(math.ceil(comboMeter * 10) / 10 .. 'x', colorCombo)
   if comboMeter > 20 then
-    ac.uiEndRotation(math.sin(comboMeter / 180 * 3141.5) * 3 * math.lerpInvSat(comboMeter, 20, 30) + 90)
+    ui.endRotation(math.sin(comboMeter / 180 * 3141.5) * 3 * math.lerpInvSat(comboMeter, 20, 30) + 90)
   end
-  ac.uiPopFont()
-  ac.uiEndOutline(rgbm(0, 0, 0, 0.3))
+  ui.popFont()
+  ui.endOutline(rgbm(0, 0, 0, 0.3))
   
-  ac.uiOffsetCursorY(20)
-  ac.uiPushFont(ac.UiFont.Title)
-  local startPos = ac.uiGetCursor()
+  ui.offsetCursorY(20)
+  ui.pushFont(ui.Font.Title)
+  local startPos = ui.getCursor()
   for i = 1, #messages do
     local m = messages[i]
     local f = math.saturate(4 - m.currentPos) * math.saturate(8 - m.age)
-    ac.uiSetCursor(startPos + vec2(20 + math.saturate(1 - m.age * 10) ^ 2 * 100, (m.currentPos - 1) * 30))
-    ac.uiTextColored(m.text, m.mood == 1 and rgbm(0, 1, 0, f) 
+    ui.setCursor(startPos + vec2(20 + math.saturate(1 - m.age * 10) ^ 2 * 100, (m.currentPos - 1) * 30))
+    ui.textColored(m.text, m.mood == 1 and rgbm(0, 1, 0, f) 
       or m.mood == -1 and rgbm(1, 0, 0, f) or rgbm(1, 1, 1, f))
   end
   for i = 1, glitterCount do
     local g = glitter[i]
     if g ~= nil then
-      ac.uiDrawLine(g.pos, g.pos + g.velocity * 4, g.color, 2)
+      ui.drawLine(g.pos, g.pos + g.velocity * 4, g.color, 2)
     end
   end
-  ac.uiPopFont()
-  ac.uiSetCursor(startPos + vec2(0, 4 * 30))
+  ui.popFont()
+  ui.setCursor(startPos + vec2(0, 4 * 30))
 
-  ac.uiPushStyleVar(ac.UiStyleVar.Alpha, speedWarning)
-  ac.uiSetCursorY(0)
-  ac.uiPushFont(ac.UiFont.Main)
-  ac.uiTextColored('Keep speed above '..requiredSpeed..' km/h:', colorAccent)
-  speedMeter(ac.uiGetCursor() + vec2(-9, 4))
-  ac.uiPopFont()
-  ac.uiPopStyleVar()
+  ui.pushStyleVar(ui.StyleVar.Alpha, speedWarning)
+  ui.setCursorY(0)
+  ui.pushFont(ui.Font.Main)
+  ui.textColored('Keep speed above '..requiredSpeed..' km/h:', colorAccent)
+  speedMeter(ui.getCursor() + vec2(-9, 4))
+  ui.popFont()
+  ui.popStyleVar()
 
-  ac.uiEndTransparentWindow()
+  ui.endTransparentWindow()
 end

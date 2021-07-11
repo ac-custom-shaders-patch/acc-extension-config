@@ -1,4 +1,4 @@
-ac.getCurrentTime(): ?
+ac.getCurrentTime(): <double>
 ac.getDaySeconds(): number
 ac.getDayOfTheYear(): number
 ac.getTimeMultiplier(): number
@@ -10,7 +10,7 @@ ac.getMoonFraction(): number
 ac.getAltitude(): number
 ac.getSunAltitude(): number
 ac.getTrackCoordinates(): vec2
-ac.getInputDate(): ?
+ac.getInputDate(): uint64
 ac.getRealTrackHeadingAngle(): number
 ac.getTimeZoneOffset(): number
 ac.getTimeZoneDstOffset(): number
@@ -18,7 +18,7 @@ ac.getTimeZoneBaseOffset(): number
 ac.getConditionsSet(): ac.ConditionsSet
 ac.getConditionsSetTo(r: ac.ConditionsSet)
 ac.getPpFilter(): string
-ac.getInputWeatherType(): ?
+ac.getInputWeatherType(): ac.WeatherType
 ac.getInputTemperatures(): ac.TemperatureParams
 ac.getInputWind(): ac.WindParams
 ac.getInputTrackState(): ac.TrackConditions

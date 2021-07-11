@@ -1,15 +1,15 @@
-ac.FogAlgorithm = { 
+ac.FogAlgorithm = __enum({ cpp = 'fog_algorithm' }, { 
   Original = 0,
   New = 1
-}
+})
 
-ac.ShadowsState = { 
+ac.ShadowsState = __enum({ cpp = 'shadows_state' }, { 
   Off = 0,
   On = 1,
   EverythingShadowed = 2
-}
+})
 
-ac.WeatherType = { 
+ac.WeatherType = __enum({ cpp = 'weather_type', underlyingType = 'char' }, { 
   LightThunderstorm = 0,
   Thunderstorm = 1,
   HeavyThunderstorm = 2,
@@ -43,9 +43,9 @@ ac.WeatherType = {
   Hot = 30,
   Windy = 31,
   Hail = 32 
-}
+})
 
-ac.TonemapFunction = {
+ac.TonemapFunction = __enum({ cpp = 'tonemap_function' }, {
   Linear = 0,         -- simple linear mapping.
   LinearClamped = 1,  -- linear mapping (LDR clamp)
   Sensitometric = 2,  -- simple simulation of response of film, CCD, etc., recommended
@@ -53,9 +53,9 @@ ac.TonemapFunction = {
   ReinhardLum = 4,    -- saturation retention type Reinhard tone map function
   Log = 5,            -- tone map function for the logarithmic space
   LogLum = 6          -- saturation retention type logarithmic space tone map function
-}
+})
 
-ac.FolderId = {   
+ac.FolderId = __enum({ cpp = 'special_folder' }, {   
   AppData = 0,
   Documents = 1,   
   Root = 4,
@@ -79,9 +79,9 @@ ac.FolderId = {
   ExtCfgState = 25,
   ContentFonts = 26,
   RaceResults = 27
-}
+})
 
-ac.HolidayType = {
+ac.HolidayType = __enum({ cpp = 'holiday_type' }, {
   None = 0,
   NewYear = 1,
   Christmas = 2,
@@ -92,11 +92,11 @@ ac.HolidayType = {
   ChineseNewYear = 7,
   EidAlAdha = 8,
   GuyFawkesNight = 9
-}
+})
 
-ac.SkyRegion = {
+ac.SkyRegion = __enum({ cpp = 'sky_side', passThrough = true }, {
   None = 0,
   Sun = 1,
   Opposite = 2,
   All = 3
-}
+})

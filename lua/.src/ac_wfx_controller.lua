@@ -1,9 +1,7 @@
--- source: extensions/weather_fx/ac_ext_weather_fx__lua.h
--- namespace: controller
+__source 'extensions/weather_fx/ac_ext_weather_fx__lua.h'
+__allow 'controller'
 
-require './wfx_common/ac_trackconfig'
 require './wfx_common/ac_weatherconditions'
 
-ffi.cdef [[ DEFINITIONS ]]
-EXPORT
-
+-- automatically generated entries go here:
+__definitions()

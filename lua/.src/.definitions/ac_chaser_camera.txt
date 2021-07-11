@@ -26,3 +26,4 @@ ac.getGear(): number
 ac.looksLeft(): boolean
 ac.looksRight(): boolean
 ac.looksBehind(): boolean
+ac.loadSoundbank(soundbank: string, guids: string): boolean

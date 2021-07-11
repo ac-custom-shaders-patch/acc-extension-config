@@ -38,7 +38,7 @@ return {
     end,
     __unm = function(v) return vec3(-v.x, -v.y, -v.z) end,
     __len = function(v) return v:length() end,
-    __eq = function(v, o) return o ~= nil and v.x == o.x and v.y == o.y and v.z == o.z end,
+    __eq = function(v, o) return o ~= nil and ffi.istype('vec3', o) and v.x == o.x and v.y == o.y and v.z == o.z end,
     __index = {
       new = function(x, y, z) 
         if type(x) ~= 'number' then x = 0 end

@@ -1,4 +1,4 @@
-ac.getCurrentTime(): ?
+ac.getCurrentTime(): <double>
 ac.getDaySeconds(): number
 ac.getDayOfTheYear(): number
 ac.getTimeMultiplier(): number
@@ -10,7 +10,7 @@ ac.getMoonFraction(): number
 ac.getAltitude(): number
 ac.getSunAltitude(): number
 ac.getTrackCoordinates(): vec2
-ac.getInputDate(): ?
+ac.getInputDate(): uint64
 ac.getRealTrackHeadingAngle(): number
 ac.getTimeZoneOffset(): number
 ac.getTimeZoneDstOffset(): number
@@ -28,15 +28,15 @@ ac.fixHeading(dir: vec3): vec3
 ac.fixHeadingSelf(dir: vec3)
 ac.fixHeadingInv(dir: vec3): vec3
 ac.fixHeadingInvSelf(dir: vec3)
-ac.setShadows(value: number)
+ac.setShadows(value: ac.ShadowsState)
 ac.resetShadowsResolution()
 ac.setShadowsResolution(value: number)
 ac.resetShadowsSplits()
 ac.setShadowsSplits(interior: vec3, exterior: vec3)
+ac.setFogAlgorithm(value: ac.FogAlgorithm)
 ac.setFogColor(c: rgb)
 ac.setFogBlend(blend: number)
 ac.setFogDistance(distance: number)
-ac.setFogAlgorithm(value: number)
 ac.setFogBacklitExponent(value: number)
 ac.setFogBacklitMultiplier(value: number)
 ac.setFogExponent(value: number)
@@ -65,6 +65,7 @@ ac.setRainAmount(v: number)
 ac.setRainWetness(v: number)
 ac.setReflectionsBrightness(v: number)
 ac.setReflectionsSaturation(v: number)
+ac.setCameraOcclusionDepthBoost(v: number)
 ac.setSunColor(c: rgb)
 ac.setSkyStarsMap(v: string)
 ac.setSkyMoonTexture(v: string)
@@ -96,27 +97,27 @@ ac.setSkyDensity(v: number)
 ac.setSkySunBaseColor(v: rgb)
 ac.setSkySunBrightness(v: number)
 ac.setSkySunMieExp(v: number)
-ac.setSkyV2RefractiveIndex(side: number, v: number)
-ac.setSkyV2DepolarizationFactor(side: number, v: number)
-ac.setSkyV2Luminance(side: number, v: number)
-ac.setSkyV2MieCoefficient(side: number, v: number)
-ac.setSkyV2MieDirectionalG(side: number, v: number)
-ac.setSkyV2MieZenithLength(side: number, v: number)
-ac.setSkyV2MieV(side: number, v: number)
-ac.setSkyV2NumMolecules(side: number, v: number)
-ac.setSkyV2Rayleigh(side: number, v: number)
-ac.setSkyV2YOffset(side: number, v: number)
-ac.setSkyV2YScale(side: number, v: number)
-ac.setSkyV2RayleighZenithLength(side: number, v: number)
-ac.setSkyV2SunIntensityFactor(side: number, v: number)
-ac.setSkyV2SunIntensityFalloffSteepness(side: number, v: number)
-ac.setSkyV2Turbidity(side: number, v: number)
-ac.setSkyV2SunShapeMult(side: number, v: number)
-ac.setSkyV2BackgroundLight(side: number, v: number)
-ac.setSkyV2Saturation(side: number, v: number)
-ac.setSkyV2Gamma(side: number, v: number)
-ac.setSkyV2MieKCoefficient(side: number, v: vec3)
-ac.setSkyV2Primaries(side: number, v: vec3)
+ac.setSkyV2RefractiveIndex(side: ac.SkyRegion, v: number)
+ac.setSkyV2DepolarizationFactor(side: ac.SkyRegion, v: number)
+ac.setSkyV2Luminance(side: ac.SkyRegion, v: number)
+ac.setSkyV2MieCoefficient(side: ac.SkyRegion, v: number)
+ac.setSkyV2MieDirectionalG(side: ac.SkyRegion, v: number)
+ac.setSkyV2MieZenithLength(side: ac.SkyRegion, v: number)
+ac.setSkyV2MieV(side: ac.SkyRegion, v: number)
+ac.setSkyV2NumMolecules(side: ac.SkyRegion, v: number)
+ac.setSkyV2Rayleigh(side: ac.SkyRegion, v: number)
+ac.setSkyV2YOffset(side: ac.SkyRegion, v: number)
+ac.setSkyV2YScale(side: ac.SkyRegion, v: number)
+ac.setSkyV2RayleighZenithLength(side: ac.SkyRegion, v: number)
+ac.setSkyV2SunIntensityFactor(side: ac.SkyRegion, v: number)
+ac.setSkyV2SunIntensityFalloffSteepness(side: ac.SkyRegion, v: number)
+ac.setSkyV2Turbidity(side: ac.SkyRegion, v: number)
+ac.setSkyV2SunShapeMult(side: ac.SkyRegion, v: number)
+ac.setSkyV2BackgroundLight(side: ac.SkyRegion, v: number)
+ac.setSkyV2Saturation(side: ac.SkyRegion, v: number)
+ac.setSkyV2Gamma(side: ac.SkyRegion, v: number)
+ac.setSkyV2MieKCoefficient(side: ac.SkyRegion, v: vec3)
+ac.setSkyV2Primaries(side: ac.SkyRegion, v: vec3)
 ac.setSkyV2Rainbow(v: number)
 ac.setSkyV2RainbowSecondary(v: number)
 ac.setSkyV2RainbowDarkening(v: number)
@@ -150,7 +151,7 @@ ac.setPpSepia(v: number)
 ac.setPpSaturation(v: number)
 ac.setPpBrightness(v: number)
 ac.setPpContrast(v: number)
-ac.setPpTonemapFunction(v: number)
+ac.setPpTonemapFunction(v: ac.TonemapFunction)
 ac.setPpTonemapExposure(v: number)
 ac.setPpTonemapGamma(v: number)
 ac.setPpTonemapUseHdrSpace(v: boolean)
@@ -242,13 +243,13 @@ ac.fixSkyColorCalculateOrder(value: boolean)
 ac.fixSkyColorCalculateResult(value: boolean)
 ac.fixSkyV2Fog(value: boolean)
 ac.fixCloudsV2Fog(value: boolean)
-ac.testFrustumIntersection(v: vec3, radius: number, applyFix_heading: boolean = true): boolean
-ac.calculateSkyColor(v: vec3, includeSky_color: boolean, includeMoon_color: boolean): rgb
-ac.calculateSkyColorTo(r: rgb, v: vec3, includeSky_color: boolean, includeMoon_color: boolean)
-ac.calculateSkyColorV2(v: vec3, includeSky_color: boolean, includeMoon_color: boolean): rgb
-ac.calculateSkyColorV2To(r: rgb, v: vec3, includeSky_color: boolean, includeMoon_color: boolean)
-ac.calculateSkyColorNoGradients(v: vec3, includeSky_color: boolean, includeMoon_color: boolean): rgb
-ac.calculateSkyColorNoGradientsTo(r: rgb, v: vec3, includeSky_color: boolean, includeMoon_color: boolean)
+ac.testFrustumIntersection(v: vec3, radius: number, applyFixHeading: boolean = true): boolean
+ac.calculateSkyColor(v: vec3, includeSkyColor: boolean, includeMoonColor: boolean): rgb
+ac.calculateSkyColorTo(r: rgb, v: vec3, includeSkyColor: boolean, includeMoonColor: boolean)
+ac.calculateSkyColorV2(v: vec3, includeSkyColor: boolean, includeMoonColor: boolean): rgb
+ac.calculateSkyColorV2To(r: rgb, v: vec3, includeSkyColor: boolean, includeMoonColor: boolean)
+ac.calculateSkyColorNoGradients(v: vec3, includeSkyColor: boolean, includeMoonColor: boolean): rgb
+ac.calculateSkyColorNoGradientsTo(r: rgb, v: vec3, includeSkyColor: boolean, includeMoonColor: boolean)
 ac.sampleSH(v: vec3): rgb
 ac.sampleSHTo(r: rgb, v: vec3)
 ac.sampleCameraAO(r: rgb): number
@@ -259,3 +260,18 @@ ac.generateCloudMap(settings: ac.SkyCloudMapParams)
 ac.setManualCloudsInvalidation(value: boolean)
 ac.invalidateCloudMaps()
 ac.setAiHeadlights(v: boolean)
+ac.loadSoundbank(soundbank: string, guids: string): boolean
+render.isVisible(center: vec3, radius: number): boolean
+render.setBlendMode(mode: render.BlendMode)
+render.setCullMode(mode: render.CullMode)
+render.setDepthMode(mode: render.DepthMode)
+render.glSetColor(color: rgbm)
+render.glBegin(primitiveType: render.GLPrimitiveType)
+render.glVertex(v: vec3)
+render.glVertexTextured(v: vec3, uv: vec2)
+render.glTexture(filename: string)
+render.glEnd()
+render.debugSphere(center: vec3, radius: number, color: rgbm = rgbm(3, 0, 0, 1))
+render.debugCross(center: vec3, size: number, color: rgbm = rgbm(3, 0, 0, 1))
+render.debugPoint(center: vec3, size: number, color: rgbm = rgbm(3, 0, 0, 1))
+render.debugPlane(center: vec3, dir: vec3, color: rgbm = rgbm(3, 0, 0, 1), size: number = 1)

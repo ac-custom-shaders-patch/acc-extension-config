@@ -1,3 +1,5 @@
+__source 'lua/api_audio.cpp'
+
 ffi.cdef [[ 
 typedef struct {
   void* host_;
@@ -33,9 +35,10 @@ ffi.metatype('audioevent', {
     if key == 'resumeIf' then return ffi.C.lj_audioevent_resume_if end
     if key == 'stop' then return ffi.C.lj_audioevent_stop end
     if key == 'start' then return ffi.C.lj_audioevent_start end
-    error('audioevent has no member called \'' .. key .. '\'')
+    if key == 'dispose' then return function (s) table.removeItem(__audioEventKeepAlive, s) ffi.C.lj_audioevent_dispose(s) end end
+    error('AudioEvent has no member called \'' .. key .. '\'')
   end,
   __newindex = function(self, key, value) 
-    error('audioevent has no member called \'' .. key .. '\'')
+    error('AudioEvent has no member called \'' .. key .. '\'')
   end,
 })

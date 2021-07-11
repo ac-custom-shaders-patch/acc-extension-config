@@ -3,6 +3,13 @@
 
 __util = {}
 
+function __util.cast_enum(value, min, max, def)
+  if value == nil then return def end
+  local i = math.floor(tonumber(value))
+  if i < min or i > max then return def end
+  return i
+end
+
 function __util.cast_vec2(ret, arg)
   if type(arg) == 'cdata' then
     error('Cannot convert '..tostring(arg)..' to vec2')
@@ -92,6 +99,24 @@ function __util.cast_rgbm(ret, arg)
     ret.g = num
     ret.b = num
     ret.mult = 1
+  end
+  return ret
+end
+
+function __util.cast_mat3x3(ret, arg)
+  if type(arg) == 'cdata' then
+    if ffi.istype('mat3x3', arg) then
+      ret.row1:set(arg.row1)
+      ret.row2:set(arg.row2)
+      ret.row3:set(arg.row3)
+    else
+      error('Cannot convert '..tostring(arg)..' to mat3x3')
+    end
+  else
+    local num = tonumber(arg) or 0
+    ret.row1:set(num, num, num)
+    ret.row2:set(num, num, num)
+    ret.row3:set(num, num, num)
   end
   return ret
 end

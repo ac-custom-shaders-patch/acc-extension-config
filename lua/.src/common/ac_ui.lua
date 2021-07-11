@@ -1,5 +1,11 @@
-ac.UiFont = {
-  Main = 0,
+__source 'lua/api_ui.cpp'
+__namespace 'ui'
+
+require './ac_matrices'
+
+ui = {}
+
+ui.Font = {
   Small = 1,
   Tiny = 2,
   Monospace = 3,
@@ -9,7 +15,7 @@ ac.UiFont = {
   Huge = 7
 }
 
-ac.UiStyleVar = {
+ui.StyleVar = {
   Alpha = 0,
   WindowPadding = 1,
   WindowRounding = 2,
@@ -36,7 +42,7 @@ ac.UiStyleVar = {
   SelectablePadding = 23,
 }
 
-ac.UiStyleColor = {
+ui.StyleColor = {
   Text = 0,
   TextDisabled = 1,
   WindowBg = 2,
@@ -89,10 +95,10 @@ ac.UiStyleColor = {
   TextActive = 49
 }
 
-ac.uiPushStyleVar = function(var_id, value)
+ui.pushStyleVar = function(var_id, value)
   if type(value) == 'number' then
-    ffi.C.lj_uiPushStyleVar_v1(var_id, value)
+    ffi.C.lj_pushStyleVar_v1__ui(var_id, value)
   else
-    ffi.C.lj_uiPushStyleVar_v2(var_id, value)
+    ffi.C.lj_pushStyleVar_v2__ui(var_id, value)
   end
 end

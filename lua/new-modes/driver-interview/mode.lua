@@ -1,5 +1,6 @@
--- Tried to recreate that old mission: https://www.youtube.com/watch?v=XFXc_37BafI, thanks to 
+-- Tried to recreate that old mission: https://www.youtube.com/watch?v=XFXc_37BafI, thanks to
 -- starblind94 for creating a track for it: https://www.racedepartment.com/downloads/driver-the-interview.38965/.
+-- Also works with: https://assettocorsamods.net/resources/the-parking-interview.58/.
 -- As for car, you can, for example, google for “buick gsx assetto corsa”. And you can even try it in original
 -- game too now: https://www.retrogames.cc/psx-games/driver-you-are-the-wheelman.html.
 
@@ -7,6 +8,38 @@
 
 -- All the tasks seem to work here, definitely passable with that Buick, not sure about other cars. But I’m not 
 -- sure if it can all be done in a minute though.
+
+-- Helper functions:
+local function createSlalomPaths(columnRows, targetRadius)
+  local function createPath(row, flipSide, flipDirection)
+    local function pointAt(index)
+      return row[flipDirection and #row - (index - 1) or index]
+    end
+    local dir = (row[#row] - row[1]):normalize() * (flipDirection and -1 or 1)
+    local side = vec3.cross(vec3(0, 1, 0), dir):normalize() * (flipSide and -1 or 1)
+    local path = {}
+    path[#path + 1] = pointAt(1) - dir * targetRadius
+    for j = 1, #row do
+      path[#path + 1] = pointAt(j) + side * targetRadius
+      side = -side
+    end
+    path[#path + 1] = pointAt(#row) + dir * targetRadius
+    for j = #row, 1, -1 do
+      path[#path + 1] = pointAt(j) + side * targetRadius
+      side = -side
+    end
+    path[#path + 1] = pointAt(1) - dir * targetRadius
+    return path
+  end
+  local ret = {}
+  for i = 1, #columnRows do
+    ret[#ret + 1] = createPath(columnRows[i], false, false)
+    ret[#ret + 1] = createPath(columnRows[i], true, false)
+    ret[#ret + 1] = createPath(columnRows[i], false, true)
+    ret[#ret + 1] = createPath(columnRows[i], true, true)
+  end
+  return ret
+end
 
 -- Tasks to complete:
 local tasks = {
@@ -30,21 +63,20 @@ local tasks = {
   },
   { 
     name = 'Handbrake', 
-    test = function(self, car) return math.abs(math.dot(car.velocity, car.side)) > 5 and car.handbrake > 0.8 and car.gear > 1 end,
+    test = function(self, car) return math.abs(math.dot(car.velocity, car.side)) > 5 and car.handbrake > 0.8 and car.gear > 0 end,
     cross = vec2(40, 200)
   },
   { 
     name = 'Slalom', 
     test = function(self, car) 
-      local leftToPass = 0
       for i = 1, #self.paths do
         local path = self.paths[i]
         local nextPoint = 0
         for j = 1, #path do
-          -- ac.debug('Slalom: path #'..i..', p'..j..', state', path[j])
-          if path[j] ~= nil then
-            if car.pos:closerToThan(path[j], 4) then
-              path[j] = nil
+          ac.debug('Slalom: path #'..i..', p'..j..', state', path[j])
+          if path[j] ~= true then
+            if car.pos:closerToThan(path[j], self.triggerRadius) then
+              path[j] = true
             end
             nextPoint = j
             break
@@ -58,24 +90,16 @@ local tasks = {
       return false
     end,
     cross = vec2(65, 140),
-    paths = {
-      { vec3(11.5, 0, 22.5), vec3(20, 0, 7.5), vec3(11.5, 0, -7.5), vec3(20, 0, -22.5), 
-        vec3(11.5, 0, -22.5), vec3(20, 0, -7.5), vec3(11.5, 0, 7.5), vec3(20, 0, 22.5) },
-      { vec3(20, 0, 22.5), vec3(11.5, 0, 7.5), vec3(20, 0, -7.5), vec3(11.5, 0, -22.5), 
-        vec3(20, 0, -22.5), vec3(11.5, 0, -7.5), vec3(20, 0, 7.5), vec3(11.5, 0, 22.5) },
-      { vec3(-11.5, 0, 22.5), vec3(-20, 0, 7.5), vec3(-11.5, 0, -7.5), vec3(-20, 0, -22.5), 
-        vec3(-11.5, 0, -22.5), vec3(-20, 0, -7.5), vec3(-11.5, 0, 7.5), vec3(-20, 0, 22.5) },
-      { vec3(-20, 0, 22.5), vec3(-11.5, 0, 7.5), vec3(-20, 0, -7.5), vec3(-11.5, 0, -22.5), 
-        vec3(-20, 0, -22.5), vec3(-11.5, 0, -7.5), vec3(-20, 0, 7.5), vec3(-11.5, 0, 22.5) },
-      { vec3(11.5, 0, -22.5), vec3(20, 0, -7.5), vec3(11.5, 0, 7.5), vec3(20, 0, 22.5), 
-        vec3(11.5, 0, 22.5), vec3(20, 0, 7.5), vec3(11.5, 0, -7.5), vec3(20, 0, -22.5) },
-      { vec3(20, 0, -22.5), vec3(11.5, 0, -7.5), vec3(20, 0, 7.5), vec3(11.5, 0, 22.5), 
-        vec3(20, 0, 22.5), vec3(11.5, 0, 7.5), vec3(20, 0, -7.5), vec3(11.5, 0, -22.5) },
-      { vec3(-11.5, 0, -22.5), vec3(-20, 0, -7.5), vec3(-11.5, 0, 7.5), vec3(-20, 0, 22.5), 
-        vec3(-11.5, 0, 22.5), vec3(-20, 0, 7.5), vec3(-11.5, 0, -7.5), vec3(-20, 0, -22.5) },
-      { vec3(-20, 0, -22.5), vec3(-11.5, 0, -7.5), vec3(-20, 0, 7.5), vec3(-11.5, 0, 22.5), 
-        vec3(-20, 0, 22.5), vec3(-11.5, 0, 7.5), vec3(-20, 0, -7.5), vec3(-11.5, 0, -22.5) },
-    }
+    triggerRadius = ac.getTrackId() == 'driver' and 8 or 12,
+    paths = ac.getTrackId() == 'driver' 
+      and createSlalomPaths({
+        { vec3(-15.5, 0, 22.25), vec3(-15.5, 0, 7.75), vec3(-15.5, 0, -7.25), vec3(-15.5, 0, -22.25) },
+        { vec3(15.5, 0, 22.25), vec3(15.5, 0, 7.75), vec3(15.5, 0, -7.25), vec3(15.5, 0, -22.25) }
+      }, 8) 
+      or createSlalomPaths({
+        { vec3(32.2, 5.07, 20.8), vec3(10.7, 5.15, 20.8), vec3(-10.7, 5.13, 20.8), vec3(-32.2, 5.12, 20.8) },
+        { vec3(32.2, 5.07, -20.8), vec3(10.7, 5.15, -20.8), vec3(-10.7, 5.13, -20.8), vec3(-32.2, 5.12, -20.8) }
+      }, 10)
   },
   { 
     name = '180', 
@@ -165,7 +189,7 @@ local tasks = {
     name = 'Reverse 180', 
     test = function(self, car, dt) 
       local signedSpeed = math.dot(car.velocity, car.look) * 3.6
-      if not self.inProcess and signedSpeed < -20 then 
+      if not self.inProcess and signedSpeed < -10 then 
         self.inProcess = true
         self.initialDirection = car.look:clone()
         self.facingWrongWay = 0
@@ -183,7 +207,7 @@ local tasks = {
             self.inProcess = false
           end
         end
-        if signedSpeed > 20 and dirDot < -0.7 then
+        if signedSpeed > 10 and dirDot < -0.6 then
           return true
         end
       end
@@ -225,7 +249,9 @@ local tasks = {
           end
           if math.abs(car.wheels[0].angularSpeed) < 0.1 and math.abs(car.wheels[1].angularSpeed) < 0.1 then
             self.wheelsLocked = self.wheelsLocked + dt
-            if self.wheelsLocked > 0.6 then
+            if self.wheelsLocked > 5 then 
+              -- originally locking brakes for more than half a second would fail the attempt, but now threshold is 
+              -- increased to 5 seconds to disable that condition. lock-free braking is not quite in the spirit of the task
               self.enoughSpeed = false
             end
           end
@@ -245,10 +271,13 @@ local tasks = {
     name = 'Lap', 
     test = function(self, car) 
       local leftToPass = 0
+      if car.pos:closerToThan(self.exclusionAreaCenter, self.exclusionAreaRadius) then
+        self.pointsPassed = { false, false, false, false }
+      end
       for i = 1, #self.points do
-        if self.points[i] ~= nil then
-          if car.pos:closerToThan(self.points[i], 10) then
-            self.points[i] = nil
+        if self.pointsPassed[i] ~= true then
+          if car.pos:closerToThan(self.points[i], self.triggerRadius) then
+            self.pointsPassed[i] = true
           else
             leftToPass = leftToPass + 1
           end
@@ -258,7 +287,13 @@ local tasks = {
       return leftToPass == 0
     end,
     cross = vec2(65, 140),
-    points = { vec3(25, 0, -25), vec3(-25, 0, -25), vec3(25, 0, 25), vec3(-25, 0, 25) },
+    points = ac.getTrackId() == 'driver' 
+      and { vec3(25, 0, -25), vec3(-25, 0, -25), vec3(25, 0, 25), vec3(-25, 0, 25) }
+      or { vec3(35, 5, -30), vec3(-35, 5, -30), vec3(35, 5, 30), vec3(-35, 5, 30) },
+    pointsPassed = { false, false, false, false },
+    triggerRadius = 10,
+    exclusionAreaCenter = ac.getTrackId() == 'driver' and vec3(0, 0, 0) or vec3(0, 5, 0),
+    exclusionAreaRadius = ac.getTrackId() == 'driver' and 16 or 22,
   },
 }
 
@@ -269,7 +304,7 @@ local hitCooldown = 0
 local messageToShow = nil
 local messageCooldown = 0
 local messageAlpha = 0
-local available = ac.getTrackId() == 'driver'
+local available = ac.getTrackId() == 'driver' or ac.getTrackId() == 'acm_parking_interview'
 
 function showMessage(message)
   messageToShow = message
@@ -288,7 +323,7 @@ function update(dt)
   local car = ac.getCarState(1)
   if timePassed == 0 then
     showMessage('Show us what you can do...')
-    if car.gas == 0 then
+    if car.gas == 0 or car.speedKmh < 1 then
       return
     end
   end
@@ -317,63 +352,83 @@ function update(dt)
   end
 
   if carHits == 4 then
+    -- Might seem a bit rude, but I’m just copying messages from original game
     ac.endSession('The car’s wrecked. Get out of my sight.', false)
   end
 
   if timePassed > 60 then
-    ac.endSession('You ran out of time! Loser…', false)
+    ac.endSession('You ran out of time!', false)
   end
 
   if notFinished == 0 then
-    ac.endSession('Good driving, you got the job. Your time: '..(math.floor(timePassed * 10) / 10)..'s')
+    ac.endSession('That’s it, you get the job. Your time: '..(math.floor(timePassed * 10) / 10)..'s')
   end
 end
 
-local speedWarning = 0
 local flashingRed = 0
 function drawUI()
   if not available then return end
 
-  local ui = ac.getUiState()
-  flashingRed = flashingRed + ui.dt
+  local uiState = ac.getUiState()
+  flashingRed = flashingRed + uiState.dt
 
   local needlePos = vec2(97, 172)
   local needleAngle = math.pi * 2 * timePassed / 60
   local flashing = timePassed > 45 and 0.6 + 0.4 * math.sin(flashingRed * 9) or 1
-  ac.uiBeginTransparentWindow('driverStopwatch', vec2(80, 80), vec2(250, 300))
-  ac.uiDrawImage('stopwatch.png', vec2(), vec2(191, 259), rgbm(1, flashing, flashing, 1))
-  ac.uiDrawLine(needlePos, needlePos + 60 * vec2(math.sin(needleAngle), -math.cos(needleAngle)), rgbm(0, 0, 0, 1), 1)
-  ac.uiEndTransparentWindow()
+  ui.beginTransparentWindow('driverStopwatch', vec2(80, 80), vec2(250, 300))
+  ui.drawImage('stopwatch.png', vec2(), vec2(191, 259), rgbm(1, flashing, flashing, 1))
+  ui.drawLine(needlePos, needlePos + 60 * vec2(math.sin(needleAngle), -math.cos(needleAngle)), rgbm(0, 0, 0, 1), 1)
+  ui.endTransparentWindow()
 
   local penColor = rgbm(0.5, 0, 0, 1)
   local penThickness = 2
-  ac.uiBeginTransparentWindow('driverList', vec2(ui.windowSize.x - 300 - 80, 80), vec2(300, 300))
-  ac.uiDrawImage('tasks.png', vec2(), vec2(284, 267))
+  ui.beginTransparentWindow('driverList', vec2(uiState.windowSize.x - 300 - 80, 80), vec2(300, 300))
+  ui.drawImage('tasks.png', vec2(), vec2(284, 267))
   for i = 1, #tasks do
     local task = tasks[i]
     if task.complete ~= nil then
       local animation = math.saturate(task.complete * 2)
-      ac.uiDrawLine(vec2(task.cross.x, 30 + i * 23.3), 
+      ui.drawLine(vec2(task.cross.x, 30 + i * 23.3), 
         vec2(math.lerp(task.cross.x, task.cross.y, animation), 30 + i * 23.3 + (task.cross.y - task.cross.x) * animation * 0.02), 
         penColor, penThickness)
     end
   end
   for i = 1, carHits do
     local pivot = vec2(50 * i, 15)
-    ac.uiDrawLine(pivot, pivot + vec2(18, 22), penColor, penThickness)
-    ac.uiDrawLine(pivot + vec2(0, 21), pivot + vec2(20, 2), penColor, penThickness)
+    ui.drawLine(pivot, pivot + vec2(18, 22), penColor, penThickness)
+    ui.drawLine(pivot + vec2(0, 21), pivot + vec2(20, 2), penColor, penThickness)
   end
-  ac.uiEndTransparentWindow()
+  ui.endTransparentWindow()
 
   if messageAlpha > 0 then
-    ac.uiPushStyleVar(ac.UiStyleVar.Alpha, messageAlpha)
-    ac.uiBeginTransparentWindow('driverMessage', vec2(ui.windowSize.x * 0.5 - 400, ui.windowSize.y * 0.65), vec2(800, 400))
-    ac.uiBeginOutline()    
-    ac.uiPushFont(ac.UiFont.Huge)
-    ac.uiTextAligned(messageToShow, vec2(0.5), vec2(800, 0))
-    ac.uiPopFont()
-    ac.uiEndOutline(rgbm(0, 0, 0, 1))
-    ac.uiEndTransparentWindow()
-    ac.uiPopStyleVar()
+    ui.pushStyleVar(ui.StyleVar.Alpha, messageAlpha)
+    ui.beginTransparentWindow('driverMessage', vec2(uiState.windowSize.x * 0.5 - 400, uiState.windowSize.y * 0.65), vec2(800, 400))
+    ui.beginOutline()    
+    ui.pushFont(ui.Font.Huge)
+    ui.textAligned(messageToShow, vec2(0.5), vec2(800, 0))
+    ui.popFont()
+    ui.endOutline(rgbm(0, 0, 0, 1))
+    ui.endTransparentWindow()
+    ui.popStyleVar()
   end
+end
+
+function draw3D()
+  -- local car = ac.getCarState(1)
+  -- local slalom = tasks[3]
+  -- local path = slalom.paths[1]
+  -- for j = 1, #path do
+  --   if path[j] ~= true then
+  --     local closeEnough = car.pos:closerToThan(path[j], 8)
+  --     render.debugSphere(path[j], slalom.triggerRadius, rgbm(3, 0, closeEnough and 5 or 0, 1))
+  --   end
+  -- end
+
+  -- local lap = tasks[#tasks]
+  -- render.debugSphere(lap.exclusionAreaCenter, lap.exclusionAreaRadius)
+  -- for j = 1, #lap.points do
+  --   if lap.pointsPassed[j] ~= true then
+  --     render.debugSphere(lap.points[j], lap.triggerRadius)
+  --   end
+  -- end
 end

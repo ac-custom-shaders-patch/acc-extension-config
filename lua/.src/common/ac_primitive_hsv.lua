@@ -35,7 +35,7 @@ return {
       return string.format('(H=%f, S=%f, V=%f)', v.h, v.s, v.v)
     end,
 
-    __eq = function(v, o) return o ~= nil and v.h == o.h and v.s == o.s and v.v == o.v end,
+    __eq = function(v, o) return o ~= nil and ffi.istype('hsv', o) and v.h == o.h and v.s == o.s and v.v == o.v end,
     __index = {
       new = function(h, s, v) 
         if type(h) ~= 'number' then h = 0 end

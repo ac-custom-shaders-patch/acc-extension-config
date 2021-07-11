@@ -21,7 +21,8 @@ ffi.cdef [[
     float contourIntensity;
     bool useSceneAmbient;
     float receiveShadowsOpacity;
-  } cloud_material;
+    float alphaSmoothTransition;
+  } cloudmaterial;
 
   typedef struct { 
     struct {
@@ -51,7 +52,7 @@ ffi.cdef [[
     uint8_t version;
     bool passedFrustumTest;
 
-    cloud_material* __material;
+    cloudmaterial* __material;
     rgb extraDownlit;
     rgb customLightColor;
     vec3 customLightDirection;
@@ -90,15 +91,15 @@ ffi.cdef [[
   void lj_cloud_set_noise_texture(cloud* self, const char*);
   void lj_cloud_gc(cloud*);
 
-  cloud_material* lj_cloudmaterial_new();
-  void lj_cloudmaterial_gc(cloud_material*);
+  cloudmaterial* lj_cloudmaterial_new();
+  void lj_cloudmaterial_gc(cloudmaterial*);
   
   void lj_set_clouds__impl(void*);
   void lj_set_corrections__impl(void*);
 ]]
 
 -- ac.SkyCloudMaterial, simple thing
-ffi.metatype('cloud_material', {
+ffi.metatype('cloudmaterial', {
   __index = {}
 })
 ac.SkyCloudMaterial = function () return ffi.gc(ffi.C.lj_cloudmaterial_new__impl(), ffi.C.lj_cloudmaterial_gc__impl) end
@@ -115,16 +116,16 @@ ffi.metatype('cloud', {
       if __cloudExtraData[self.__id] == nil then __cloudExtraData[self.__id] = {} end
       return __cloudExtraData[self.__id] 
     end
-    error('cloud has no member called \'' .. key .. '\'')
+    error('Cloud has no member called \'' .. key .. '\'')
   end,
   __newindex = function(self, key, value) 
     if key == 'material' then 
-      if value == nil then error('cloud material cannot be nil') end
+      if value == nil then error('Cloud material cannot be nil') end
       self.__material = value
       __cloudMaterialKeepAlive[self.__id] = value
       return
     end
-    error('cloud has no member called \'' .. key .. '\'')
+    error('Cloud has no member called \'' .. key .. '\'')
   end,
 })
 ac.SkyCloud = function () 

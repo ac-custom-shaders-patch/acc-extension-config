@@ -53,16 +53,16 @@ end
 
 local speedWarning = 0
 function drawUI()
-  local ui = ac.getUiState()
+  local uiState = ac.getUiState()
 
-  ac.uiBeginTransparentWindow('economyScore', vec2(ui.windowSize.x * 0.5 - 100, 100), vec2(300, 400))
-  ac.uiBeginOutline()
-  ac.uiPushFont(ac.UiFont.Main)
-  ac.uiText('Economy score:')
-  ac.uiPopFont()
-  ac.uiPushFont(ac.UiFont.Title)
-  ac.uiText(calculateScore())
-  ac.uiPopFont()
-  ac.uiEndOutline(rgbm(0, 0, 0, 0.3))
-  ac.uiEndTransparentWindow()
+  ui.beginTransparentWindow('economyScore', vec2(uiState.windowSize.x * 0.5 - 100, 100), vec2(300, 400))
+  ui.beginOutline()
+  ui.pushFont(ui.Font.Main)
+  ui.text('Economy score:')
+  ui.popFont()
+  ui.pushFont(ui.Font.Title)
+  ui.text(calculateScore())
+  ui.popFont()
+  ui.endOutline(rgbm(0, 0, 0, 0.3))
+  ui.endTransparentWindow()
 end
