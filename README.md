@@ -1,5 +1,6 @@
 # Custom Shaders Patch configs
 
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/ac-custom-shaders-patch/acc-extension-config)
 [![More information: https://trello.com/b/xq54vHsX/ac-patch](https://img.shields.io/badge/trello-more%20info-brightgreen.svg)](https://trello.com/b/xq54vHsX/ac-patch) 
 [![Join the chat in Discord: https://discord.gg/buxkYNT](https://img.shields.io/badge/discord-join%20chat-brightgreen.svg)](https://discord.gg/W2KQCMH)
 [![Cars configs status](https://acstuff.ru/patch/cars-configs/warnings/icon?t=0)](https://acstuff.ru/patch/cars-configs/warnings/list)
