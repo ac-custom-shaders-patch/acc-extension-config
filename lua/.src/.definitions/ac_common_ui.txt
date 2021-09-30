@@ -1,5 +1,3 @@
-ac.setStartMessage(message: string, icon: string = "DRIVE"): boolean
-ac.endSession(message: string, successfulRun: boolean = true): boolean
 ac.loadSoundbank(soundbank: string, guids: string): boolean
 render.isVisible(center: vec3, radius: number): boolean
 render.setBlendMode(mode: render.BlendMode)

@@ -9,6 +9,13 @@ ac.ShadowsState = __enum({ cpp = 'shadows_state' }, {
   EverythingShadowed = 2
 })
 
+ac.TextureState = __enum({ cpp = 'async_texture_state' }, { 
+  Empty = 0,
+  Loading = 1,
+  Failed = 2,
+  Ready = 3
+})
+
 ac.WeatherType = __enum({ cpp = 'weather_type', underlyingType = 'char' }, { 
   LightThunderstorm = 0,
   Thunderstorm = 1,
@@ -55,7 +62,7 @@ ac.TonemapFunction = __enum({ cpp = 'tonemap_function' }, {
   LogLum = 6          -- saturation retention type logarithmic space tone map function
 })
 
-ac.FolderId = __enum({ cpp = 'special_folder' }, {   
+ac.FolderId = __enum({ cpp = 'known_dir' }, {   
   AppData = 0,
   Documents = 1,   
   Root = 4,

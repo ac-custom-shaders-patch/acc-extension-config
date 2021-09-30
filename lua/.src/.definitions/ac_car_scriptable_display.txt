@@ -1,8 +1,21 @@
+ac.setABS(mode: number)
+ac.setTC(mode: number)
+ac.isTurboWastegateAdjustable(turboIndex: number): boolean
+ac.setTurboWastegate(wastegate: number, turboIndex: number = -1)
+ac.setBrakeBias(balance: number)
+ac.setHeadlights(active: boolean)
+ac.setHighBeams(active: boolean)
+ac.setExtraSwitch(index: number, value: boolean)
+ac.getRealMirrorUV(index: number): vec4
+ac.pauseRealMirror(mirrorIndex: number, pause: boolean)
 ac.boostFrameRate()
 ac.loadDisplayValue(key: string, defaultValue: string = ""): string
 ac.saveDisplayValue(key: string, value: string)
 ac.setDynamicTextureShift(name: string, opacity: number = 1, offset: vec2 = vec2(), scale: vec2 = vec2(1, 1))
+ac.setRenderingCameraActive(name: string, active: boolean)
 ac.estimateSatelliteOcclusion(): number
+ac.isMeshClicked(name: string, uvFrom: vec2 = vec2(), uvSize: vec2 = vec2(1, 1)): boolean
+ac.isMeshPressed(name: string, uvFrom: vec2 = vec2(), uvSize: vec2 = vec2(1, 1)): boolean
 ui.beginToolWindow(windowId: string, pos: vec2, size: vec2)
 ui.endToolWindow()
 ui.beginTransparentWindow(windowId: string, pos: vec2, size: vec2)
@@ -46,6 +59,7 @@ ui.beginOutline()
 ui.endOutline(color: rgbm)
 ui.beginRotation()
 ui.endRotation(deg: number)
+ui.endPivotRotation(deg: number, pivot: vec2, offset: vec2 = vec2())
 ui.beginScale()
 ui.endScale(scale: vec2)
 ui.beginTransformMatrix()

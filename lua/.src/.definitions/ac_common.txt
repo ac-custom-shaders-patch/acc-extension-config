@@ -25,6 +25,7 @@ ac.getSunHeadingAngle(): number
 ac.getSoundSpeedMs(): number
 ac.isInteriorView(): boolean
 ac.isInReplayMode(): boolean
+ac.lapTimeToString(time: number): string
 ac.getAudioVolume(key: string): number
 ac.getCarSpeedKmh(carIndex: number): number
 ac.getGroundYApproximation(): number
@@ -87,6 +88,14 @@ struct stateCar {
 	float shakeMultiplier;
 	vec3 aabbCenter;
 	vec3 aabbSize;
+	int gearCount;
+	int turboCount;
+	bool hShifter;
+	bool adjustableTurbo;
+	bool brakesCockpitBias;
+	float brakesBiasLimitDown;
+	float brakesBiasLimitUp;
+	float brakesBiasStep;
 	vec3 pos;
 	vec3 velocity;
 	vec3 acceleration;
@@ -141,6 +150,12 @@ struct stateCar {
 	bool extraB;
 	bool extraC;
 	bool extraD;
+	bool extraE;
+	bool extraF;
+	bool kersCharging;
+	float kersCharge;
+	float kersInput;
+	float kersCurrentKJ;
 	float distanceDrivenTotalKm;
 	float distanceDrivenSessionKm;
 	float poweredWheelsSpeed;
@@ -166,6 +181,7 @@ struct stateCar {
 	bool speedLimiterInAction;
 	bool absInAction;
 	bool tractionControlInAction;
+	bool hasUserBrakeBias;
 	int tractionControlMode; // 0 for disabled TC
 	int absMode; // 0 for disabled ABS
 	float speedLimiter;
@@ -178,6 +194,8 @@ struct stateCar {
 	float turboWastegates[8];
 	float tractionControl2;
 	float fuelMap;
+	float ffbFinal;
+	float ffbPure;
 }
 
 struct stateSim {
@@ -187,9 +205,11 @@ struct stateSim {
 	int carsCount;
 	int focusedCar;
 	float dt;
+	bool isFreeCameraOutside;
 	bool isReplayActive;
 	bool isFocusedOnInterior;
 	bool isSessionStarted;
+	bool controlsWithShifter;
 	float ambientTemperature;
 	float roadTemperature;
 	float windSpeedKmh;
@@ -209,6 +229,7 @@ struct stateSim {
 	int currentSessionIndex;
 	int sessionsCoint;
 	float trackLengthM;
+	float speedLimitKmh;
 }
 
 struct stateUi {
