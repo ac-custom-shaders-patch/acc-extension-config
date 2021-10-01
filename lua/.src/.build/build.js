@@ -132,7 +132,7 @@ function getTypeInfo(type, customTypes) {
     };
   }
 
-  if (type === 'float' || type === 'int' || type === 'uint') {
+  if (type === 'float' || type === 'double' || type === 'int' || type === 'uint') {
     return {
       name: 'number',
       default: null,

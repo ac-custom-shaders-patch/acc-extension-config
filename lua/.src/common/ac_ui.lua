@@ -102,3 +102,41 @@ ui.pushStyleVar = function(var_id, value)
     ffi.C.lj_pushStyleVar_v2__ui(var_id, value)
   end
 end
+
+local function smoothInterpolation(value, speed, target, dt)
+  if dt >= 0.1 or math.abs(value - target) < 0.0001 then
+    return target, 0
+  end
+  for i = 1, 10 do
+		local lag1 = 0.98
+		local lag2 = 0.6
+		local dir = target - value
+		local lag = lag1 + (lag2 - lag1) * speed * speed
+		local delta = dir * math.lagMult(lag, dt / 10)
+		local localSpeed = math.saturate(10 * (delta / dt) / dir)
+    speed = math.lerp(localSpeed, speed, 1 / (1 + dt * 4))
+			value = value + delta
+  end
+  return value, speed
+end
+
+ui.SmoothInterpolation = function(initialValue)
+  local value = initialValue
+  local speed = 0
+  return function(target)
+    value, speed = smoothInterpolation(value, speed, target, ac.getUiState().dt)
+    return value
+  end
+end
+
+ui.FadingElement = function(drawCallback, initialState)
+  local value = ui.SmoothInterpolation(initialState and 1 or 0)
+  return function(state)
+    local alpha = value(state and 1 or 0)
+    if alpha > 0.002 then
+      ffi.C.lj_pushStyleVar_v1__ui(ui.StyleVar.Alpha, alpha)
+      drawCallback()
+      ffi.C.lj_popStyleVar__ui(1)
+    end
+  end
+end

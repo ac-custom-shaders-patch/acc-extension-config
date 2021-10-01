@@ -13,19 +13,20 @@ typedef struct {
 } audioevent;
 ]]
 
-ac.AudioEvent = function (s, reverbResponse) 
-  local created = ffi.C.lj_audioevent_new(tostring(s), reverbResponse and true or false) 
-  return ffi.gc(created, ffi.C.lj_audioevent_gc) 
-end
+local __audioEventKeepAlive = {}
 
-__audioEventKeepAlive = {}
+ac.AudioEvent = function (s, reverbResponse) 
+  local created = ffi.C.lj_audioevent_new(tostring(s), reverbResponse and true or false)
+  __audioEventKeepAlive[#__audioEventKeepAlive + 1] = created
+  return ffi.gc(created, ffi.C.lj_audioevent_gc)
+end
 
 ffi.metatype('audioevent', {
   __index = function(self, key) 
     if key == 'setPosition' then return function (s, pos, dir, up, vel) 
       ffi.C.lj_audioevent_set_pos(s, pos, dir or vec3.new(0, 0, 1), up or vec3.new(0, 1, 0), vel or vec3.new(0, 0, 0)) 
     end end
-    if key == 'keepAlive' then return function (s) __audioEventKeepAlive[#__audioEventKeepAlive + 1] = s end end
+    if key == 'keepAlive' then return function () end end
     if key == 'setParam' then return ffi.C.lj_audioevent_set_param end
     if key == 'isValid' then return function (s) return s.host_ ~= nil and s.nativeEvent_ ~= nil end end
     if key == 'isPlaying' then return ffi.C.lj_audioevent_is_playing end

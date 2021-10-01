@@ -1,4 +1,4 @@
-ac.getCurrentTime(): <double>
+ac.getCurrentTime(): number
 ac.getDaySeconds(): number
 ac.getDayOfTheYear(): number
 ac.getTimeMultiplier(): number

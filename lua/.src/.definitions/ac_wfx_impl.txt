@@ -1,4 +1,4 @@
-ac.getCurrentTime(): <double>
+ac.getCurrentTime(): number
 ac.getDaySeconds(): number
 ac.getDayOfTheYear(): number
 ac.getTimeMultiplier(): number
@@ -18,10 +18,14 @@ ac.getTimeZoneBaseOffset(): number
 ac.getConditionsSet(): ac.ConditionsSet
 ac.getConditionsSetTo(r: ac.ConditionsSet)
 ac.getPpFilter(): string
+ac.setAsyncTextureLoading(active: boolean)
 ac.getSkyAbsorption(dir: vec3): rgb
 ac.setBrightnessMult(v: number)
 ac.setOverallSkyBrightnessMult(v: number)
 ac.setVAOExponent(v: number)
+ac.adjustTrackVAO(exponent: number = 0.7, from: number = 0, to: number = 1)
+ac.adjustDynamicAOSamples(exponent: number = 0.7, from: number = 0, to: number = 1)
+ac.getVAOMinMax(): vec2
 ac.setTrackHeatFactor(v: number)
 ac.getSkyAbsorptionTo(r: rgb, dir: vec3)
 ac.fixHeading(dir: vec3): vec3
@@ -69,6 +73,9 @@ ac.setCameraOcclusionDepthBoost(v: number)
 ac.setSunColor(c: rgb)
 ac.setSkyStarsMap(v: string)
 ac.setSkyMoonTexture(v: string)
+ac.getSkyStarsMapState(): ac.TextureState
+ac.getSkyMoonTextureState(): ac.TextureState
+ac.unloadTexture(v: string)
 ac.setSkyColor(c: rgb)
 ac.setSkyAnisotropicIntensity(v: number)
 ac.setSkyMultiScatterPhase(v: number)
@@ -113,6 +120,7 @@ ac.setSkyV2SunIntensityFactor(side: ac.SkyRegion, v: number)
 ac.setSkyV2SunIntensityFalloffSteepness(side: ac.SkyRegion, v: number)
 ac.setSkyV2Turbidity(side: ac.SkyRegion, v: number)
 ac.setSkyV2SunShapeMult(side: ac.SkyRegion, v: number)
+ac.setSkyV2SunSaturation(side: ac.SkyRegion, v: number)
 ac.setSkyV2BackgroundLight(side: ac.SkyRegion, v: number)
 ac.setSkyV2Saturation(side: ac.SkyRegion, v: number)
 ac.setSkyV2Gamma(side: ac.SkyRegion, v: number)
@@ -151,6 +159,7 @@ ac.setPpSepia(v: number)
 ac.setPpSaturation(v: number)
 ac.setPpBrightness(v: number)
 ac.setPpContrast(v: number)
+ac.setColorTexturesGamma(v: number)
 ac.setPpTonemapFunction(v: ac.TonemapFunction)
 ac.setPpTonemapExposure(v: number)
 ac.setPpTonemapGamma(v: number)
