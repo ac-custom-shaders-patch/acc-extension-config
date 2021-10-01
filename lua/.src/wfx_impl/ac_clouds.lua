@@ -1,101 +1,93 @@
 ffi.cdef [[
-  typedef struct {     
-    rgb ambientColor;
-    float frontlitMultiplier;
+typedef struct {     
+  rgb ambientColor;
+  float frontlitMultiplier;
 
-    float frontlitDiffuseConcentration;
-    float backlitExponent;
-    float backlitOpacityExponent;
-    float backlitOpacityMultiplier;
+  float frontlitDiffuseConcentration;
+  float backlitExponent;
+  float backlitOpacityExponent;
+  float backlitOpacityMultiplier;
 
-    float backlitMultiplier;
-    float specularPower;
-    float specularExponent;
-    float fogMultiplier;
+  float backlitMultiplier;
+  float specularPower;
+  float specularExponent;
+  float fogMultiplier;
 
-    rgb baseColor;
-    rgb extraDownlit;
-    float lightSaturation;
-    float ambientConcentration;
-    float contourExponent;
-    float contourIntensity;
-    bool useSceneAmbient;
-    float receiveShadowsOpacity;
-    float alphaSmoothTransition;
-  } cloudmaterial;
+  rgb baseColor;
+  rgb extraDownlit;
+  float lightSaturation;
+  float ambientConcentration;
+  float contourExponent;
+  float contourIntensity;
+  bool useSceneAmbient;
+  float receiveShadowsOpacity;
+  float alphaSmoothTransition;
+  float normalFacingExponent;
+} cloudmaterial;
 
-  typedef struct { 
-    struct {
-      int __id;
-      vec3 position;
-      vec2 size;
-      rgb color;
-      float opacity;
-      float cutoff;
-      float horizontalHeading;
-      bool horizontal;
-      bool flipHorizontal;
-      bool flipVertical;
-      bool customOrientation;
-      bool noTilt;
-      bool flipHorizontalShading;
-      vec3 up;
-      vec3 side;
-    };
-    
-    vec2 noiseOffset;
-    float shadowOpacity;
-    bool useNoise;
-    bool occludeGodrays;
-    bool useCustomLightColor;
-    bool useCustomLightDirection;
-    uint8_t version;
-    bool passedFrustumTest;
-
-    cloudmaterial* __material;
-    rgb extraDownlit;
-    rgb customLightColor;
-    vec3 customLightDirection;
-
-    vec2 procMap;
-    vec2 procScale;
-    vec2 procNormalScale;
-    float procShapeShifting;
-    float procSharpnessMult;
-
-    vec2 texStart;
-    vec2 texSize;
-    float orderBy;
-    float fogMultiplier;
-    float extraFidelity;
-    float receiveShadowsOpacityMult;
-  } cloud;
-
-  typedef struct {
-    float _pad;
-		float perlinFrequency;
-		int perlinOctaves;
-		float worleyFrequency;
-		float shapeMult;
-		float shapeExp;
-		float shape0Mip;
-		float shape0Contribution;
-		float shape1Mip;
-		float shape1Contribution;
-		float shape2Mip;
-		float shape2Contribution;
-  } cloud_map_settings;
-
-  cloud* lj_cloud_new();
-  void lj_cloud_set_texture(cloud* self, const char*);
-  void lj_cloud_set_noise_texture(cloud* self, const char*);
-  void lj_cloud_gc(cloud*);
-
-  cloudmaterial* lj_cloudmaterial_new();
-  void lj_cloudmaterial_gc(cloudmaterial*);
+typedef struct { 
+  struct {
+    int __id;
+    vec3 position;
+    vec2 size;
+    rgb color;
+    float opacity;
+    float cutoff;
+    float horizontalHeading;
+    bool horizontal;
+    bool flipHorizontal;
+    bool flipVertical;
+    bool customOrientation;
+    bool noTilt;
+    bool flipHorizontalShading;
+    vec3 up;
+    vec3 side;
+  };
   
-  void lj_set_clouds__impl(void*);
-  void lj_set_corrections__impl(void*);
+  vec2 noiseOffset;
+  float shadowOpacity;
+  bool useNoise;
+  bool occludeGodrays;
+  bool useCustomLightColor;
+  bool useCustomLightDirection;
+  uint8_t version;
+  bool passedFrustumTest;
+
+  cloudmaterial* __material;
+  rgb extraDownlit;
+  rgb customLightColor;
+  vec3 customLightDirection;
+
+  vec2 procMap;
+  vec2 procScale;
+  vec2 procNormalScale;
+  float procShapeShifting;
+  float procSharpnessMult;
+
+  vec2 texStart;
+  vec2 texSize;
+  float orderBy;
+  float fogMultiplier;
+  float extraFidelity;
+  float receiveShadowsOpacityMult;
+  float normalYExponent;
+  float topFogBoost;
+} cloud;
+
+typedef struct {
+  float _pad;
+  float perlinFrequency;
+  int perlinOctaves;
+  float worleyFrequency;
+  float shapeMult;
+  float shapeExp;
+  float shape0Mip;
+  float shape0Contribution;
+  float shape1Mip;
+  float shape1Contribution;
+  float shape2Mip;
+  float shape2Contribution;
+} cloud_map_settings;
 ]]
 
 -- ac.SkyCloudMaterial, simple thing
@@ -110,7 +102,9 @@ local __cloudExtraData = {}
 ffi.metatype('cloud', {
   __index = function(self, key) 
     if key == 'setTexture' then return ffi.C.lj_cloud_set_texture__impl end
+    if key == 'getTextureState' then return ffi.C.lj_cloud_get_texture_state__impl end
     if key == 'setNoiseTexture' then return ffi.C.lj_cloud_set_noise_texture__impl end
+    if key == 'getNoiseTextureState' then return ffi.C.lj_cloud_get_noise_texture_state__impl end
     if key == 'material' then return self.__material end
     if key == 'extras' then 
       if __cloudExtraData[self.__id] == nil then __cloudExtraData[self.__id] = {} end
