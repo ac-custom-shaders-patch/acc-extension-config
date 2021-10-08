@@ -37,10 +37,12 @@ function update(dt, cameraIndex)
   if calculateVelocityHere then
     -- Altenative approach, using coordinates and time delta
     if lastCarPos ~= carPos then
-      local delta = lastCarPos - carPos
-      local deltaLength = #delta
-      if deltaLength > 5 then delta = delta / deltaLength * 5 end
-      carVelocity:update(-delta / dt)
+      if lastCarPos ~= vec3() then
+        local delta = lastCarPos - carPos
+        local deltaLength = #delta
+        if deltaLength > 5 then delta = delta / deltaLength * 5 end
+        carVelocity:update(-delta / dt)
+      end
       lastCarPos = carPos
     end
   else
@@ -53,7 +55,7 @@ function update(dt, cameraIndex)
   -- ac.debug('carVelocity', carVelocity)
 
   -- Normalize car velocity:
-  local carVelocityDir = math.normalize(carVelocity.val)
+  local carVelocityDir = math.normalize(carVelocity.val + carDir * 0.01)
 
   -- Get rotation coefficient, from -1 to 1, based on X-component of local velocity (that’s what dot is for)
   -- and taking absolute speed into account as well:

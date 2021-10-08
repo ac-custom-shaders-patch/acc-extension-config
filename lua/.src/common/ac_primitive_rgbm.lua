@@ -35,7 +35,7 @@ return {
     end,
     __unm = function(v) return v * -1 end,
     __len = function(v) return v:value() end,
-    __eq = function(v, o) return o ~= nil and v.rgb == o.rgb and v.mult == o.mult end,
+    __eq = function(v, o) return o ~= nil and ffi.istype('rgbm', o) and v.rgb == o.rgb and v.mult == o.mult end,
     __lt = function(v, o) return v:value() < o:value() end,
     __le = function(v, o) return v:value() <= o:value() end,
     __index = {
@@ -47,14 +47,14 @@ return {
         if type(r) ~= 'number' then return rgbm(0, 0, 0, 1) end
         if type(g) ~= 'number' then return rgbm(r, r, r, 1) end
         if type(b) ~= 'number' then return rgbm(r, r, r, g) end
-        return rgbm(r, g, b, __num_fallback(m, 1))
+        return rgbm(r, g, b, __util.num_or(m, 1))
       end,
 
       from0255 = function(r, g, b, a) 
         if type(r) ~= 'number' then r = 0 end
         if type(g) ~= 'number' then g = r end
         if type(b) ~= 'number' then b = g end
-        return rgbm(r / 255, g / 255, b / 255, __num_fallback(a, 1))
+        return rgbm(r / 255, g / 255, b / 255, __util.num_or(a, 1))
       end,
 
       isrgbm = function(r) return ffi.istype('rgbm', r) end,
@@ -64,7 +64,7 @@ return {
       unpack = function(v) return v.rgb, v.mult end,
 
       set = function(v, rgb, mult)
-        if rgbm.isrgbm(r) then rgb, mult = r.rgb, r.mult end
+        if rgbm.isrgbm(rgb) then rgb, mult = rgb.rgb, rgb.mult end
         v.rgb = rgb
         v.mult = mult
         return v

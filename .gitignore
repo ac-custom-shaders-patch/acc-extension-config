@@ -40,10 +40,12 @@ config/*.ini.off
 module_*.ini
 lua/.src/ac_module_*
 lua/.src/.out
+lua/.src/.definitions/ac_module_*
 lua/module-*
-*.pak
+std.zip
 
 textures/common/dev/*
+textures/people/.src
 vao-patches-cars
 textures/color_grading/__Sol*
 textures/gui/module_*

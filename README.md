@@ -1,5 +1,6 @@
 # Custom Shaders Patch configs
 
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/ac-custom-shaders-patch/acc-extension-config)
 [![More information: https://trello.com/b/xq54vHsX/ac-patch](https://img.shields.io/badge/trello-more%20info-brightgreen.svg)](https://trello.com/b/xq54vHsX/ac-patch) 
 [![Join the chat in Discord: https://discord.gg/buxkYNT](https://img.shields.io/badge/discord-join%20chat-brightgreen.svg)](https://discord.gg/W2KQCMH)
 [![Cars configs status](https://acstuff.ru/patch/cars-configs/warnings/icon?t=0)](https://acstuff.ru/patch/cars-configs/warnings/list)
@@ -24,7 +25,7 @@ Most of the stuff is adjustable with ini files: live, saving a car/track-config 
 
 If you’re using [AC Content Manager](https://acstuff.ru/app/) (lite version would work just as well), go to “Settings/Custom Shaders Patch”. From there, app would offer you to install or update the patch, as well as download configs. But, at the same time, you don’t have to worry about downloading configs: by default, Content Manager would download them automatically once needed.
 
-If you’re not using Content Manager, you can always get any version of CustomShadersPatch on the link above. Then, either move files from “MODS/Shaders Lights Patch” to AC root folder (so “dwrite.dll” would end up next to “acs.exe”, that’s the patch itself), or use [JSGME](https://www.racedepartment.com/downloads/jsgme-mod-enabler.13803/) to enable it. And, with manual approach, you would have to download configs automatically. Simply download the whole repo in a ZIP file (there is that green button in the upper right corner right here) and extract it so folder “tzdata” would end up in “assettocorsa/extension”.
+If you’re not using Content Manager, you can always get any version of CustomShadersPatch on the link above. Then, either move files from “MODS/Shaders Lights Patch” to AC root folder (so “dwrite.dll” would end up next to “acs.exe”, that’s the patch itself), or use [JSGME](https://www.racedepartment.com/downloads/jsgme-mod-enabler.13803/) to enable it. And, with manual approach, you would have to simply download the whole repo in a ZIP file (there is that green button in the upper right corner right here) and extract it so folder “tzdata” would end up in “assettocorsa/extension”.
 
 ## Content of this repo:
 

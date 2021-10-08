@@ -36,7 +36,7 @@ return {
     end,
     __unm = function(v) return vec4(-v.x, -v.y, -v.z, -v.w) end,
     __len = function(v) return v:length() end,
-    __eq = function(v, o) return o ~= nil and v.x == o.x and v.y == o.y and v.z == o.z and v.w == o.w end,
+    __eq = function(v, o) return o ~= nil and ffi.istype('vec4', o) and v.x == o.x and v.y == o.y and v.z == o.z and v.w == o.w end,
     __index = {
       new = function(x, y, z, w) 
         if vec3.isvec3(x) then return vec4(x.x, x.y, x.z, w or 0) end

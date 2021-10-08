@@ -65,7 +65,7 @@ return {
     end,
     __unm = function(v) return rgb(-v.r, -v.g, -v.b) end,
     __len = function(v) return v:value() end,
-    __eq = function(v, o) return o ~= nil and v.r == o.r and v.g == o.g and v.b == o.b end,
+    __eq = function(v, o) return o ~= nil and ffi.istype('rgb', o) and v.r == o.r and v.g == o.g and v.b == o.b end,
     __lt = function(v, o) return v:value() < o:value() end,
     __le = function(v, o) return v:value() <= o:value() end,
     __index = {
@@ -209,7 +209,6 @@ return {
 
       value = rgbValue,
       getValue = rgbValue,
-      hue = rgbHue,
       getHue = rgbHue,
       hue = rgbHue,
       getSaturation = rgbSaturation,
@@ -219,8 +218,8 @@ return {
 
       hsv = function(v) return hsv(v:hue(), v:saturation(), v:value()) end,
       toHsv = function(v) return hsv(v:hue(), v:saturation(), v:value()) end,
-      rgbm = function(v, m) return rgbm(v.r, v.g, v.b, __num_fallback(m, 1)) end,
-      toRgbm = function(v, m) return rgbm(v.r, v.g, v.b, __num_fallback(m, 1)) end,
+      rgbm = function(v, m) return rgbm(v.r, v.g, v.b, __util.num_or(m, 1)) end,
+      toRgbm = function(v, m) return rgbm(v.r, v.g, v.b, __util.num_or(m, 1)) end,
       vec3 = function(v) return vec3(v.r, v.g, v.b) end,
       toVec3 = function(v) return vec3(v.r, v.g, v.b) end,
     }

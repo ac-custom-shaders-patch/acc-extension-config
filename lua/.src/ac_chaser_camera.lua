@@ -1,11 +1,11 @@
--- source: extensions/chaser_camera/ac_ext_chaser_camera.cpp
+__source 'extensions/chaser_camera/ac_ext_chaser_camera.cpp'
 
-ffi.cdef [[
-DEFINITIONS
-]]
-SANE
-EXPORT
+require './common/ac_audio'
 
+-- automatically generated entries go here:
+__definitions()
+
+-- extra additions:
 ac.getCameraParameters = function (index)
   local parameters = ffi.C.lj_get_camera_params_as_vec3(index)
   return { distance = parameters.x, height = parameters.y, pitch = parameters.z }
