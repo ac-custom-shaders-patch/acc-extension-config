@@ -1,7 +1,7 @@
 function tileSize(resolution){
-  if (resolution < 40) return 16;
-  if (resolution < 120) return 8;
-  if (resolution < 500) return 4;
+  if (resolution < 40) return 32;
+  if (resolution < 120) return 16;
+  if (resolution < 500) return 8;
   return 2;
 }
 
@@ -199,8 +199,8 @@ namespace ImGui
         if (!loaded)
         {
             loaded = true;
-            const auto tex = hooks::ac_hooks_instance->get_custom_textures()->load_texture(
-                get_special_folder_path(utils::special_folder::ac_ext) / filename);
+            const auto tex = hooks::ac_hooks::textures()->load_texture(
+              known_path(utils::known_dir::ac_ext) / filename);
             view = tex ? tex->view : nullptr;
         }
         return view;
