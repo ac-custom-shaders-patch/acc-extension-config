@@ -1,6 +1,7 @@
 __source 'extensions/chaser_camera/ac_ext_chaser_camera.cpp'
 
 require './common/ac_audio'
+require './common/ac_storage'
 
 -- automatically generated entries go here:
 __definitions()

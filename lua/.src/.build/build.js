@@ -7,7 +7,7 @@ const minifyFfiDefinitions = true;
 const enumTypes = {};
 const luaTypes = {};
 const knownTypes = { 
-  regex: /^(void|char|int|u?int\d+_t|size_t|float|double|bool|vec[234]|mat3x3|rgbm?)$/, 
+  regex: /^(void|char|lua_string_ref|int|u?int\d+_t|size_t|float|double|bool|vec[234]|mat3x3|rgbm?|refbool|refnumber)$/, 
   ffiStructs: {},
   referencedTypes: {},
   ffiFunctions: {},
@@ -107,7 +107,7 @@ const isVectorType = (() => {
     }
 
     return {
-      createNew: (arg, localDefines) => `${arg.name} = __util.cast_${type}(${poolName(arg, localDefines)}, ${arg.name})`
+      createNew: (arg, localDefines, defaultValue) => `__util.cast_${type}(${poolName(arg, localDefines)}, ${arg.name}, ${defaultValue})`
     };
   }
 
@@ -123,12 +123,17 @@ const isVectorType = (() => {
   return type => vectorTypes[type];
 })();
 
+function isRefType(type) {
+  return type === 'refbool' || type === 'refnumber';
+}
+
 function getTypeInfo(type, customTypes) {
   if (type === 'const char*') {
     return {
       name: 'string',
       default: '""',
-      prepare: arg => `tostring(${arg.name})`
+      prepare: arg => `tostring(${arg.name})`,
+      forceExpression: true
     };
   }
 
@@ -136,7 +141,8 @@ function getTypeInfo(type, customTypes) {
     return {
       name: 'number',
       default: null,
-      prepare: arg => `tonumber(${arg.name}) or ${arg.default || 0}`
+      prepare: arg => `tonumber(${arg.name}) or ${arg.default || 0}`,
+      forceExpression: true
     };
   }
 
@@ -144,7 +150,8 @@ function getTypeInfo(type, customTypes) {
     return {
       name: 'boolean',
       default: null,
-      prepare: arg => arg.default == 'true' ? `(${arg.name} or ${arg.name} == nil) and true or false` : `${arg.name} and true or false`
+      prepare: arg => arg.default == 'true' ? `(${arg.name} or ${arg.name} == nil) and true or false` : `${arg.name} and true or false`,
+      forceExpression: true
     };
   }
 
@@ -165,7 +172,19 @@ function getTypeInfo(type, customTypes) {
     return {
       name: luaType,
       default: `${luaType}()`,
-      prepare: (arg, localDefines) => `if ffi.istype('${luaType}', ${arg.name}) == false then ${vectorType.createNew(arg, localDefines)} end`
+      prepare: (arg, localDefines, defaultValue) => vectorType.createNew(arg, localDefines, defaultValue),
+      forceExpression: true,
+      prepareHandlesDefault: true
+    };
+  }
+
+  if (isRefType(luaType)) {
+    return {
+      name: luaType,
+      default: `${luaType}()`,
+      prepare: (arg, localDefines, defaultValue) => `__util.secure_${luaType}(${arg.name}, ${defaultValue})`,
+      forceExpression: true,
+      prepareHandlesDefault: true
     };
   }
 
@@ -210,19 +229,45 @@ function isStatementPrepare(x){
 }
 
 function prepareParam(arg, wrapDefault, localDefines) {
-  if (arg.typeInfo.default == null) {
+  if (arg.default != null){
+    if (arg.typeInfo.name === 'boolean'){
+      return arg.default === 'false' ? `${arg.name} and true or false` : `${arg.name} ~= false`;
+    }
+
+    if (arg.typeInfo.name === 'number'){
+      return `tonumber(${arg.name}) or ${arg.default}`;
+    }
+
+    if (arg.typeInfo.name === 'string' && arg.default === 'nullptr'){
+      return `__util.str_opt(${arg.name})`;
+    }
+  } else if (arg.typeInfo.name === 'string'){
+    return `__util.str(${arg.name})`;
+  }
+
+  if (arg.typeInfo.default == null && arg.default == null) {
     return arg.typeInfo.prepare(arg, localDefines);
   }
 
-  let localPrepare = arg.typeInfo.prepare(arg, localDefines);
+  let defaultWrapped = wrapDefault(arg.default || arg.typeInfo.default);
+  let localPrepare = arg.typeInfo.prepare(arg, localDefines, defaultWrapped);
+
+  if (arg.typeInfo.prepareHandlesDefault){
+    return localPrepare;
+  }
+
   if (!isStatementPrepare(localPrepare)){
+    if (arg.typeInfo.forceExpression) {
+      return `${arg.name} ~= nil and (${localPrepare}) or (${defaultWrapped})`;
+    }
+
     localPrepare = `${arg.name} = ${localPrepare}`;
   }
 
   return `if ${arg.name} ~= nil then 
     ${localPrepare} 
   else
-    ${arg.name} = ${wrapDefault(arg.default || arg.typeInfo.default)} 
+    ${arg.name} = ${defaultWrapped} 
   end`;
 }
 
@@ -241,13 +286,14 @@ function wrapReturnDefinition(arg, customTypes) {
 }
 
 function needsWrappedResult(type) {
-  if (/const char\*/.test(type)) return true;
+  if (/const (?:char|lua_string_ref)\*/.test(type)) return true;
   return false;
 }
 
 function wrapResult(type) {
   if (type == 'void') return x => x;
   if (/const char\*/.test(type)) return x => `return ffi.string(${x})`;
+  if (/const lua_string_ref\*/.test(type)) return x => `return __util.strref(${x})`;
   return x => `return ${x}`;
 }
 
@@ -357,7 +403,7 @@ function getLuaCode(opts, definitionsCallback) {
     return value;
   }
 
-  prepared.replace(/\bLUAEXPORT\s+((?:const\s+)?\w+\*?)\s+(lj_\w+)\s*\((.*)/g, (_, resultType, name, argsLine) => {
+  prepared.replace(/\bLUAEXPORT\s+((?:const\s+)?\w+[*&]?)\s+(lj_\w+)\s*\((.*)/g, (_, resultType, name, argsLine) => {
     let ns = 'ac';
     if (/__(\w+)$/.test(name) && !opts.allows.includes(RegExp.$1)) {
       if (opts.namespaces.includes(RegExp.$1)) {
@@ -368,6 +414,7 @@ function getLuaCode(opts, definitionsCallback) {
     }
 
     const args = splitArgs(name, argsLine.split(/\)\s*(\{|$)/)[0].trim());
+    const comment = /\/\/\s+(.+)/.test(argsLine) ? ' // ' + RegExp.$1 : '';
     ffiDefinitions.push(`${typeToLua(resultType)} ${name}(${args.map(x => `${typeToLua(x.type)} ${x.name}`).join(', ')});`);
     if (notForExport(name)) return;
 
@@ -378,10 +425,10 @@ function getLuaCode(opts, definitionsCallback) {
         ${prepared.filter(x => !x.i).map(x => x.x).join(' ')} 
         ${wrapResult(resultType)(`ffi.C.${name}(${args.map((x, i) => prepared[i].i ? prepared[i].x : x.name).join(', ')})`)} 
       end`);
-      docDefinitions.push(`${ns}.${cleanName}(${args.map(x => wrapParamDefinition(x)).join(', ')})${wrapReturnDefinition(resultType, opts.customTypes)}`);
+      docDefinitions.push(`${ns}.${cleanName}(${args.map(x => wrapParamDefinition(x)).join(', ')})${wrapReturnDefinition(resultType, opts.customTypes)}${comment}`);
     } else {
       exportEntries.push(`${ns}.${cleanName} = ffi.C.${name}`);
-      docDefinitions.push(`${ns}.${cleanName}()${wrapReturnDefinition(resultType, opts.customTypes)}`);
+      docDefinitions.push(`${ns}.${cleanName}()${wrapReturnDefinition(resultType, opts.customTypes)}${comment}`);
     }
   });
 
@@ -487,13 +534,15 @@ function resolveRequires(code, filename, context = null) {
   if (mainNode) {
     resetTypes();
     context = {
-      toInsert: [],
+      toInsertPre: [],
+      toInsertPost: [],
       processed: {},
       definitions: {
         sources: [],
         states: [],
         allows: [],
         namespaces: [],
+        postCdefs: [],
         customTypes: {},
       }
     };
@@ -502,6 +551,7 @@ function resolveRequires(code, filename, context = null) {
       __states: context.definitions.states,
       __allow: context.definitions.allows,
       __namespace: context.definitions.namespaces,
+      __post_cdef: context.definitions.postCdefs
     };
   }
 
@@ -570,11 +620,13 @@ function resolveRequires(code, filename, context = null) {
     }
 
     let callSpecialName = null;
-    const callSpecialArg = isStringCall(x => /^__/.test(callSpecialName = x));
+    let callSpecialArg = isStringCall(x => /^__/.test(callSpecialName = x));
     const callSpecialList = context.specialCalls[callSpecialName];
     if (callSpecialList != null) {
       if (context.definitions == null) $.fail(`definitions are processed already (${callSpecialName}, ${callSpecialArg}, ${filename})`);
-      if (!callSpecialList.includes(callSpecialArg)) {
+      if (callSpecialArg === false){
+        context.toInsertPost.push(...p.expression.arguments[0].body);
+      } else if (!callSpecialList.includes(callSpecialArg)) {
         callSpecialList.push(callSpecialArg);
       }
       return null;
@@ -608,7 +660,7 @@ function resolveRequires(code, filename, context = null) {
       if (ready == null) return null;
 
       const resolved = resolveRequires($.readText(ready.filename), ready.filename, context);
-      context.toInsert.push({
+      context.toInsertPre.push({
         type: 'FunctionDeclaration',
         identifier: { type: 'Identifier', name: ready.fnName, isLocal: true },
         isLocal: true,
@@ -655,7 +707,7 @@ function resolveRequires(code, filename, context = null) {
 
   resolve(ast);
   if (mainNode) {
-    ast.body = context.toInsert.concat(ast.body);
+    ast.body = context.toInsertPre.concat(ast.body).concat(context.toInsertPost);
   }
 
   return ast;

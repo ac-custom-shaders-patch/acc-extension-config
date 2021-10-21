@@ -17,9 +17,10 @@ ac.getTimeZoneDstOffset(): number
 ac.getTimeZoneBaseOffset(): number
 ac.getConditionsSet(): ac.ConditionsSet
 ac.getConditionsSetTo(r: ac.ConditionsSet)
-ac.getPpFilter(): string
+ac.getPpFilter(): <lua_string_ref>
 ac.getInputWeatherType(): ac.WeatherType
 ac.getInputTemperatures(): ac.TemperatureParams
 ac.getInputWind(): ac.WindParams
 ac.getInputTrackState(): ac.TrackConditions
 ac.setConditionsSet(c: ac.ConditionsSet)
+web.encryptKey(key: string): <lua_string_ref>

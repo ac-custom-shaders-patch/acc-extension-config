@@ -1,13 +1,13 @@
-ac.debug(key: string, value: string)
+ac.debug(key: string, value: string = "<nil>")
 ac.log(value: string)
 ac.warn(value: string)
 ac.error(value: string)
-ac.dirname(): string
+ac.dirname(): <lua_string_ref>
 ac.getPatchVersion(): string
 ac.getPatchVersionCode(): number
-ac.getFolder(f: ac.FolderId): string
-ac.getTrackId(): string
-ac.getTrackLayout(): string
+ac.getFolder(f: ac.FolderId): <lua_string_ref>
+ac.getTrackId(): <lua_string_ref>
+ac.getTrackLayout(): <lua_string_ref>
 ac.getCameraPosition(): vec3
 ac.getCameraUp(): vec3
 ac.getCameraSide(): vec3
@@ -25,7 +25,7 @@ ac.getSunHeadingAngle(): number
 ac.getSoundSpeedMs(): number
 ac.isInteriorView(): boolean
 ac.isInReplayMode(): boolean
-ac.lapTimeToString(time: number): string
+ac.lapTimeToString(time: number): <lua_string_ref>
 ac.getAudioVolume(key: string): number
 ac.getCarSpeedKmh(carIndex: number): number
 ac.getGroundYApproximation(): number
@@ -34,10 +34,16 @@ ac.getGameDeltaT(): number
 ac.getConditionsTimeScale(): number
 ac.getWindVelocity(): vec3
 ac.getWindVelocityTo(r: vec3)
-ac.readDataFile(value: string): string
+ac.readDataFile(value: string): <lua_string_ref>
 ac.isWeatherFxActive(): boolean
 ac.getTrackCoordinatesDeg(): vec2
 ac.getTrackTimezoneBaseDst(): vec2
+ac.getMGUKDeliveryName(carIndex: number, programIndex: number = -1): <lua_string_ref>
+ac.getTyresName(carIndex: number, programIndex: number = -1): <lua_string_ref>
+ac.getDriverName(carIndex: number): <lua_string_ref>
+ac.getDriverNationCode(carIndex: number): <lua_string_ref>
+ac.getDriverNationality(carIndex: number): <lua_string_ref>
+ac.getDriverTeam(carIndex: number): <lua_string_ref>
 ac.hasTrackSpline(): boolean
 ac.worldCoordinateToTrackProgress(v: vec3): number
 ac.trackProgressToWorldCoordinate(v: number): vec3
@@ -50,9 +56,14 @@ ac.getJoystickAxisValue(joystick: number, axis: number): number
 ac.isJoystickAxisValue(joystick: number, axis: number): number
 ac.getJoystickDpadValue(joystick: number, dpad: number): number
 ac.isJoystickDpadValue(joystick: number, dpad: number): number
+ac.setClipboadText(text: string)
+ac.getTrackDataFilename(name: string): <lua_string_ref>
 ac.getSimState(): stateSim
 ac.getUiState(): stateUi
 ac.getCarState(index: number): stateCar
+ac.getSim(): stateSim
+ac.getUI(): stateUi
+ac.getCar(index: number): stateCar
 
 struct stateWheel {
 	float tyreRadius;
@@ -88,6 +99,7 @@ struct stateCar {
 	float shakeMultiplier;
 	vec3 aabbCenter;
 	vec3 aabbSize;
+	int index; // zero-based (0 for first car)
 	int gearCount;
 	int turboCount;
 	bool hShifter;
@@ -140,6 +152,7 @@ struct stateCar {
 	bool hornActive;
 	bool focused;
 	bool focusedOnInterior;
+	bool specialHideLabels;
 	bool hazardLights;
 	bool turningLeftLights;
 	bool turningRightLights;
@@ -156,6 +169,8 @@ struct stateCar {
 	float kersCharge;
 	float kersInput;
 	float kersCurrentKJ;
+	float kersMaxKJ;
+	float kersLoad;
 	float distanceDrivenTotalKm;
 	float distanceDrivenSessionKm;
 	float poweredWheelsSpeed;
@@ -182,8 +197,25 @@ struct stateCar {
 	bool absInAction;
 	bool tractionControlInAction;
 	bool hasUserBrakeBias;
+	bool hasEngineBrakeSettings;
+	bool hasCockpitMGUHMode;
+	bool hasCockpitERSDelivery;
+	bool hasCockpitERSRecovery;
+	bool drsPresent;
+	bool drsAvailable;
+	bool drsActive;
+	bool kersPresent;
+	bool kersHasButtonOverride;
+	bool kersButtonPressed;
+	bool mguhChargingBatteries;
+	int mgukDelivery; // starts with 0
+	int mgukDeliveryCount;
+	int mgukRecovery; // from 0 to 10 (for 100%)
 	int tractionControlMode; // 0 for disabled TC
 	int absMode; // 0 for disabled ABS
+	int brakeSettingsCount;
+	int engineBrakeSettingsCount;
+	int currentEngineBrakeSetting;
 	float speedLimiter;
 	float differentialPreload;
 	float awdFrontShare;
@@ -210,6 +242,7 @@ struct stateSim {
 	bool isFocusedOnInterior;
 	bool isSessionStarted;
 	bool controlsWithShifter;
+	bool virtualMirrorActive;
 	float ambientTemperature;
 	float roadTemperature;
 	float windSpeedKmh;
@@ -230,6 +263,15 @@ struct stateSim {
 	int sessionsCoint;
 	float trackLengthM;
 	float speedLimitKmh;
+	float fps;
+	float fpsCapped;
+	float physicsLate;
+	int cpuOccupancy;
+	float cpuTime;
+	int cameraMode;
+	int driveableCameraMode;
+	int carCameraMode;
+	float audioMasterVolume;
 }
 
 struct stateUi {
@@ -238,4 +280,9 @@ struct stateUi {
 	float dt;
 	bool isMouseLeftKeyClicked;
 	bool isMouseRightKeyClicked;
+	bool isMouseLeftKeyDown;
+	bool isMouseRightKeyDown;
+	bool ctrlDown;
+	bool shiftDown;
+	bool altDown;
 }

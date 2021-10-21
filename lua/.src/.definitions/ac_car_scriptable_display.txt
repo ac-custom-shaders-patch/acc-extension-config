@@ -3,22 +3,28 @@ ac.setTC(mode: number)
 ac.isTurboWastegateAdjustable(turboIndex: number): boolean
 ac.setTurboWastegate(wastegate: number, turboIndex: number = -1)
 ac.setBrakeBias(balance: number)
+ac.setEngineBrakeSetting(settingIndex: number)
+ac.setDRS(state: boolean)
+ac.setKERS(state: boolean)
+ac.setMGUHCharging(charging: boolean)
+ac.setMGUKDelivery(level: number)
+ac.setMGUKRecovery(level: number)
 ac.setHeadlights(active: boolean)
 ac.setHighBeams(active: boolean)
 ac.setExtraSwitch(index: number, value: boolean)
 ac.getRealMirrorUV(index: number): vec4
 ac.pauseRealMirror(mirrorIndex: number, pause: boolean)
 ac.boostFrameRate()
-ac.loadDisplayValue(key: string, defaultValue: string = ""): string
+ac.loadDisplayValue(key: string, defaultValue: string = ""): <lua_string_ref>
 ac.saveDisplayValue(key: string, value: string)
 ac.setDynamicTextureShift(name: string, opacity: number = 1, offset: vec2 = vec2(), scale: vec2 = vec2(1, 1))
 ac.setRenderingCameraActive(name: string, active: boolean)
 ac.estimateSatelliteOcclusion(): number
 ac.isMeshClicked(name: string, uvFrom: vec2 = vec2(), uvSize: vec2 = vec2(1, 1)): boolean
 ac.isMeshPressed(name: string, uvFrom: vec2 = vec2(), uvSize: vec2 = vec2(1, 1)): boolean
-ui.beginToolWindow(windowId: string, pos: vec2, size: vec2)
+ui.beginToolWindow(windowId: string, pos: vec2, size: vec2, noPadding: boolean)
 ui.endToolWindow()
-ui.beginTransparentWindow(windowId: string, pos: vec2, size: vec2)
+ui.beginTransparentWindow(windowId: string, pos: vec2, size: vec2, noPadding: boolean)
 ui.endTransparentWindow()
 ui.text(text: string)
 ui.textAligned(text: string, alignment: vec2, size: vec2 = vec2())
@@ -27,8 +33,11 @@ ui.textColored(text: string, color: rgbm)
 ui.icon24(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
 ui.icon32(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
 ui.icon64(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
+ui.flag(iconId: string, size: vec2, tintCol: rgbm = rgbm(1, 1, 1, 1))
 ui.getCursor(): vec2
 ui.setCursor(v: vec2)
+ui.setCursorTemp(v: vec2 = vec2(10, 20))
+ui.offsetCursor(v: vec2)
 ui.getCursorX(): number
 ui.setCursorX(v: number)
 ui.getCursorY(): number
@@ -36,6 +45,9 @@ ui.setCursorY(v: number)
 ui.offsetCursorX(v: number)
 ui.offsetCursorY(v: number)
 ui.sameLine(offsetFromStart: number = 0, spacing: number = -1)
+ui.availableSpaceX(): number
+ui.availableSpaceY(): number
+ui.availableSpace(): vec2
 ui.drawImage(filename: string, p1: vec2, p2: vec2, color: rgbm = rgbm(1, 1, 1, 1), uv1: vec2 = vec2(), uv2: vec2 = vec2(1, 1), keepAspectRatio: boolean = false)
 ui.drawImageQuad(filename: string, p1: vec2, p2: vec2, p3: vec2, p4: vec2, color: rgbm = rgbm(1, 1, 1, 1), uv1: vec2 = vec2(), uv2: vec2 = vec2(1, 0), uv3: vec2 = vec2(1, 1), uv4: vec2 = vec2(0, 1))
 ui.drawQuadFilled(p1: vec2, p2: vec2, p3: vec2, p4: vec2, color: rgbm = rgbm(1, 1, 1, 1))
@@ -53,10 +65,15 @@ ui.drawLine(p1: vec2, p2: vec2, color: rgbm, thickness: number = 1)
 ui.drawCircle(p1: vec2, radius: number, color: rgbm, numSegments: number = 12, thickness: number = 1)
 ui.drawCircleFilled(p1: vec2, radius: number, color: rgbm, numSegments: number = 12)
 ui.drawEllipseFilled(p1: vec2, radius: vec2, color: rgbm, numSegments: number = 12)
+ui.glowRectFilled(p1: vec2, p2: vec2, color: rgbm, noClip: boolean = false)
+ui.glowCircleFilled(p1: vec2, radius: number, color: rgbm, noClip: boolean = false)
+ui.glowEllipseFilled(p1: vec2, radius: vec2, color: rgbm, noClip: boolean = false)
 ui.beginTextureSaturationAdjustment()
 ui.endTextureSaturationAdjustment(value: number)
 ui.beginOutline()
-ui.endOutline(color: rgbm)
+ui.endOutline(color: rgbm, scale: number = 1)
+ui.beginSharpening()
+ui.endSharpening(sharpening: number = 1)
 ui.beginRotation()
 ui.endRotation(deg: number)
 ui.endPivotRotation(deg: number, pivot: vec2, offset: vec2 = vec2())
@@ -74,7 +91,59 @@ ui.mouseClicked(button: number = 0): boolean
 ui.mouseDown(button: number = 0): boolean
 ui.mouseDoubleClicked(button: number = 0): boolean
 ui.mousePos(): vec2
+ui.keyPressed(key: number): boolean
+ui.hotkeyCtrl(): boolean
+ui.hotkeyAlt(): boolean
+ui.hotkeyShift(): boolean
 ui.acText(text: string, letter: vec2, marginOffset: number = 0, color: rgbm = rgbm(1, 1, 1, 1))
 ui.pushACFont(name: string)
 ui.popACFont()
+ui.popID()
+ui.columns(columns: number = 1, border: boolean = true, id: string = nullptr)
+ui.nextColumns()
+ui.setColumnWidth(columnIndex: number, width: number)
+ui.button(label: string, size: vec2 = vec2(), flags: number = 0): boolean
+ui.invisibleButton(label: string, size: vec2 = vec2()): boolean
+ui.separator()
+ui.checkbox(label: string, checked: refbool): boolean
+ui.radioButton(label: string, checked: refbool): boolean
+ui.colorButton(label: string, color: rgbm, flags: number = 0, size: vec2 = vec2()): boolean
+ui.progressBar(fraction: number, size: vec2 = vec2(), overlay: string = nullptr)
+ui.setNextItemWidth(width: number)
+ui.slider(label: string, value: refnumber, min: number, max: number, format: string = "%.3"): boolean
+ui.beginCombo(label: string, previewValue: string, flags: number): boolean
+ui.selectable(label: string, selected: refbool, flags: number = 0, size: vec2 = vec2()): boolean
+ui.endCombo()
+ui.beginChild(id: string, size: vec2 = vec2(), border: boolean = false, flags: number = 128): boolean
+ui.endChild()
+ui.beginTabBar(id: string, flags: number = 0): boolean
+ui.beginTabItem(label: string, flags: number = 0): boolean
+ui.endTabItem()
+ui.endTabBar()
+ui.beginTreeNode(label: string, flags: number = 2): boolean
+ui.endTreeNode()
+ui.beginPopupContextItem(id: string, mouse: number = 1): boolean
+ui.endPopup()
+ui.header(text: string)
+ui.bulletText(text: string)
+ui.setTooltip(tooltip: string)
+ui.itemHovered(): boolean
 ac.loadSoundbank(soundbank: string, guids: string): boolean
+render.isVisible(center: vec3, radius: number): boolean
+render.setBlendMode(mode: render.BlendMode)
+render.setCullMode(mode: render.CullMode)
+render.setDepthMode(mode: render.DepthMode)
+render.glSetColor(color: rgbm)
+render.glBegin(primitiveType: render.GLPrimitiveType)
+render.glVertex(v: vec3)
+render.glVertexTextured(v: vec3, uv: vec2)
+render.glTexture(filename: string)
+render.glEnd()
+render.debugText(pos: vec3, text: string, color: rgbm = rgbm(1, 1, 1, 1), scale: number = 1)
+render.debugSphere(center: vec3, radius: number, color: rgbm = rgbm(3, 0, 0, 1))
+render.debugCross(center: vec3, size: number, color: rgbm = rgbm(3, 0, 0, 1))
+render.debugPoint(center: vec3, size: number, color: rgbm = rgbm(3, 0, 0, 1))
+render.debugPlane(center: vec3, dir: vec3, color: rgbm = rgbm(3, 0, 0, 1), size: number = 1)
+render.debugLine(from: vec3, to: vec3, color: rgbm = rgbm(3, 0, 0, 1))
+render.debugArrow(from: vec3, to: vec3, size: number = -1, color: rgbm = rgbm(3, 0, 0, 1))
+web.encryptKey(key: string): <lua_string_ref>

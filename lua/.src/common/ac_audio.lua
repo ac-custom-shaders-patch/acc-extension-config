@@ -4,6 +4,8 @@ ffi.cdef [[
 typedef struct {
   void* host_;
   void* nativeEvent_;
+  float transform_[16];
+  vec3 velocity_;
   float volume;
   float pitch;
   float cameraInteriorMultiplier;

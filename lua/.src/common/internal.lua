@@ -1,7 +1,33 @@
 -- Helper module for internal use, please do not use it in your code. Mainly meant
 -- for ensure types are correct when being passed to C++.
 
+ffi.cdef[[
+typedef struct {
+  union {
+    char ins[16];
+    const char* buf;
+  };
+  uint64_t p1;
+  uint64_t p2;
+} lua_string_ref;
+]]
+
 __util = {}
+
+function __util.strref(value)
+  if value == nil then return nil end
+  local ref = value[0]
+  return ffi.string(ref.p2 >= 0x10 and ref.buf or ref.ins, ref.p1)
+end
+
+function __util.str(value)
+  return value ~= nil and tostring(value) or ""
+end
+
+function __util.str_opt(value)
+  if value ~= nil then return tostring(value) end
+  return nil
+end
 
 function __util.cast_enum(value, min, max, def)
   if value == nil then return def end
@@ -10,7 +36,9 @@ function __util.cast_enum(value, min, max, def)
   return i
 end
 
-function __util.cast_vec2(ret, arg)
+function __util.cast_vec2(ret, arg, def)
+  if ffi.istype('vec2', arg) then return arg end
+  if arg == nil then return def end
   if type(arg) == 'cdata' then
     error('Cannot convert '..tostring(arg)..' to vec2')
   else
@@ -21,7 +49,9 @@ function __util.cast_vec2(ret, arg)
   return ret
 end
 
-function __util.cast_vec3(ret, arg)
+function __util.cast_vec3(ret, arg, def)
+  if ffi.istype('vec3', arg) then return arg end
+  if arg == nil then return def end
   if type(arg) == 'cdata' then
     if ffi.istype('rgb', arg) then
       ret.x = arg.r
@@ -43,7 +73,9 @@ function __util.cast_vec3(ret, arg)
   return ret
 end
 
-function __util.cast_vec4(ret, arg)
+function __util.cast_vec4(ret, arg, def)
+  if ffi.istype('vec4', arg) then return arg end
+  if arg == nil then return def end
   if type(arg) == 'cdata' then
     error('Cannot convert '..tostring(arg)..' to vec4')
   else
@@ -56,7 +88,9 @@ function __util.cast_vec4(ret, arg)
   return ret
 end
 
-function __util.cast_rgb(ret, arg)
+function __util.cast_rgb(ret, arg, def)
+  if ffi.istype('rgb', arg) then return arg end
+  if arg == nil then return def end
   if type(arg) == 'cdata' then
     if ffi.istype('rgbm', arg) then
       ret.r = arg.r * arg.mult
@@ -78,7 +112,9 @@ function __util.cast_rgb(ret, arg)
   return ret
 end
 
-function __util.cast_rgbm(ret, arg)
+function __util.cast_rgbm(ret, arg, def)
+  if ffi.istype('rgbm', arg) then return arg end
+  if arg == nil then return def end
   if type(arg) == 'cdata' then
     if ffi.istype('rgb', arg) then
       ret.r = arg.r
@@ -103,15 +139,11 @@ function __util.cast_rgbm(ret, arg)
   return ret
 end
 
-function __util.cast_mat3x3(ret, arg)
+function __util.cast_mat3x3(ret, arg, def)
+  if ffi.istype('mat3x3', arg) then return arg end
+  if arg == nil then return def end
   if type(arg) == 'cdata' then
-    if ffi.istype('mat3x3', arg) then
-      ret.row1:set(arg.row1)
-      ret.row2:set(arg.row2)
-      ret.row3:set(arg.row3)
-    else
-      error('Cannot convert '..tostring(arg)..' to mat3x3')
-    end
+    error('Cannot convert '..tostring(arg)..' to mat3x3')
   else
     local num = tonumber(arg) or 0
     ret.row1:set(num, num, num)
@@ -124,4 +156,41 @@ end
 function __util.num_or(v, f)
   if type(v) ~= 'number' then return f end
   return v
+end
+
+function __util.secure_refbool(arg, def)
+  if ffi.istype('refbool', arg) then return arg end
+  def.value = arg and true or false
+  return def
+end
+
+function __util.secure_refnumber(arg, def)
+  if ffi.istype('refnumber', arg) then return arg end
+  def.value = arg and true or false
+  return def
+end
+
+local __u_def_vec2 = vec2()
+function __util.ensure_vec2(arg)
+  return ffi.istype('vec2', arg) and arg or __u_def_vec2
+end
+
+local __u_def_vec3 = vec3()
+function __util.ensure_vec3(arg)
+  return ffi.istype('vec3', arg) and arg or __u_def_vec3
+end
+
+local __u_def_vec4 = vec4()
+function __util.ensure_vec4(arg)
+  return ffi.istype('vec4', arg) and arg or __u_def_vec4
+end
+
+local __u_def_rgb = rgb()
+function __util.ensure_rgb(arg)
+  return ffi.istype('rgb', arg) and arg or __u_def_rgb
+end
+
+local __u_def_rgbm = rgbm()
+function __util.ensure_rgbm(arg)
+  return ffi.istype('rgbm', arg) and arg or __u_def_rgbm
 end

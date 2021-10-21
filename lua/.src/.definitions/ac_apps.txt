@@ -16,6 +16,8 @@ render.debugPoint(center: vec3, size: number, color: rgbm = rgbm(3, 0, 0, 1))
 render.debugPlane(center: vec3, dir: vec3, color: rgbm = rgbm(3, 0, 0, 1), size: number = 1)
 render.debugLine(from: vec3, to: vec3, color: rgbm = rgbm(3, 0, 0, 1))
 render.debugArrow(from: vec3, to: vec3, size: number = -1, color: rgbm = rgbm(3, 0, 0, 1))
+render.mouseRay(): <ray>
+render.isPositioningHelperBusy(): boolean
 ui.beginToolWindow(windowId: string, pos: vec2, size: vec2, noPadding: boolean)
 ui.endToolWindow()
 ui.beginTransparentWindow(windowId: string, pos: vec2, size: vec2, noPadding: boolean)
@@ -122,3 +124,10 @@ ui.header(text: string)
 ui.bulletText(text: string)
 ui.setTooltip(tooltip: string)
 ui.itemHovered(): boolean
+ac.iconColor(): vec4
+ac.windowFading(): number
+ac.redirectVirtualMirror(active: boolean)
+ac.redirectDamageDisplayer(active: boolean)
+ac.redirectFuelWarningIndicator(active: boolean)
+ac.setAudioVolume(volume: number)
+web.encryptKey(key: string): <lua_string_ref>
