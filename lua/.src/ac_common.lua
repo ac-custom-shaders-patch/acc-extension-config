@@ -9,6 +9,7 @@ ac.skipSaneChecks = function() end
 require 'ffi'
 require './deps/vector'
 require './common/ac_primitive'
+require './common/function'
 require './common/math'
 require './common/table'
 require './common/timer'
@@ -20,13 +21,13 @@ require './common/ac_state'
 require './common/ac_trackconfig'
 require './common/ac_reftypes'
 
--- middleclass for creating new classes
+-- a simple wrapper for creating new classes, similar to middleclass (check that file for more info)
 class = require './common/class'
 
 -- for better compatibility
-print = ac.log
+function print(v) ac.log(v) end
 
--- calls fn() and then dispose() even if fn() would fail
+-- calls fn() and then catch() if fn() would fail, and finally() at the end, both catch and finally can be nil
 function try(fn, catch, finally)
   if not fn then 
     return finally()
@@ -56,26 +57,6 @@ function __handleError()
   __toDispose = {}
 end
 
--- a cheap way to get simple replies from asynchronous calls
-local __replyListeners = {}
-local __lastReplyID = 0
-function ac.expectReply(callback)
-  if not callback then return 0 end
-  local replyID = __lastReplyID + 1
-  __lastReplyID = replyID
-  table.insert(__replyListeners, { replyID = replyID, callback = callback })
-  return replyID
-end
-function __processMessage(replyID, ...)
-  for i = #__replyListeners, 1, -1 do
-    local l = __replyListeners[i]
-    if l.replyID == replyID then
-      l.callback(...)
-      table.remove(__replyListeners, i)
-    end
-  end
-end
-
 -- functions to exchange data with other scripts and Python apps, allow to transfer strings or numbers:
 function ac.store(key, value)
   key = tostring(key or "")
@@ -93,6 +74,11 @@ function ac.load(key)
   else
     return __util.strref(ffi.C.lj_load_string(key))
   end
+end
+
+-- for easy import of scripts from subdirectories
+function package.add(dir)
+  package.path = package.path .. ';' .. __dirname .. '/' .. dir .. '/?.lua'
 end
 
 -- automatically generated entries go here:

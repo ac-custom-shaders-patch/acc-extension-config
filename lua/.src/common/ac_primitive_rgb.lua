@@ -75,7 +75,12 @@ return {
         if hsv.ishsv(r) then return r:rgb() end
         if vec3.isvec3(r) then return rgb(r.x, r.y, r.z) end
         if vec4.isvec4(r) then return rgb(r.x * r.w, r.y * r.w, r.z * r.w) end
-        if type(r) ~= 'number' then r = 0 end
+        if type(r) ~= 'number' then 
+          if type(r) == 'table' then
+            return vec3(tonumber(r[1]) or 0, tonumber(r[2]) or 0, tonumber(r[3]) or 0)
+          end
+          r = 0 
+        end
         if type(g) ~= 'number' then g = r end
         if type(b) ~= 'number' then b = g end
         return rgb(r, g, b) 
@@ -93,6 +98,7 @@ return {
       type = function(x) return rgb end,
       clone = function(v) return rgb(v.r, v.g, v.b) end,
       unpack = function(v) return v.r, v.g, v.b end,
+      table = function(v) return {v.r, v.g, v.b} end,
 
       set = function(v, r, g, b)
         if rgb.isrgb(r) then r, g, b = r.r, r.g, r.b
@@ -121,6 +127,14 @@ return {
           out.g = v.g + u
           out.b = v.b + u
         end
+        return out
+      end,
+
+      addScaled = function(v, u, s, out)
+        out = out or v
+        out.r = v.r + u.r * s
+        out.g = v.g + u.g * s
+        out.b = v.b + u.b * s
         return out
       end,
 

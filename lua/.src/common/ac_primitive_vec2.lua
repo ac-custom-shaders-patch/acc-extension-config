@@ -39,7 +39,12 @@ return {
     __eq = function(v, o) return o ~= nil and ffi.istype('vec2', o) and v.x == o.x and v.y == o.y end,
     __index = {
       new = function(x, y) 
-        if type(x) ~= 'number' then x = 0 end
+        if type(x) ~= 'number' then 
+          if type(x) == 'table' then
+            return vec2(tonumber(x[1]) or 0, tonumber(x[2]) or 0)
+          end
+          x = 0 
+        end
         if type(y) ~= 'number' then y = x end
         return vec2(x, y)
       end,
@@ -49,6 +54,7 @@ return {
       type = function(x) return vec2 end,
       clone = function(v) return vec2(v.x, v.y) end,
       unpack = function(v) return v.x, v.y end,
+      table = function(v) return {v.x, v.y} end,
 
       set = function(v, x, y)
         if vec2.isvec2(x) then x, y = x.x, x.y
@@ -73,6 +79,13 @@ return {
           out.x = v.x + u
           out.y = v.y + u
         end
+        return out
+      end,
+
+      addScaled = function(v, u, s, out)
+        out = out or v
+        out.x = v.x + u.x * s
+        out.y = v.y + u.y * s
         return out
       end,
 

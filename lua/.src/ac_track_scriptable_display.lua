@@ -22,6 +22,16 @@ ac.TrackCondition = function (expression, offset, defaultValue)
     ffi.C.lj_trackcondition_gc__tsd)
 end
 
+function ac.findCarAtPlace(place)
+  local numberOfCars = ac.getSim().carsCount
+  for i = 0, numberOfCars - 1 do  -- getCar() needs IDs from 0 to N-1
+    local car = ac.getCar(i)
+    if car.racePosition == place then return car end
+  end
+  return nil -- couldn’t find anything
+end
+
+
 -- automatically generated entries go here:
 __definitions()
 

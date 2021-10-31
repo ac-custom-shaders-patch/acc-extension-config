@@ -267,7 +267,7 @@ ui.pushStyleVar = function(var_id, value)
   if type(value) == 'number' then
     ffi.C.lj_pushStyleVar_v1__ui(var_id, value)
   else
-    ffi.C.lj_pushStyleVar_v2__ui(var_id, __util.str(value))
+    ffi.C.lj_pushStyleVar_v2__ui(var_id, __util.ensure_vec2(value))
   end
 end
 
@@ -337,7 +337,7 @@ ui.toast = function(icon, message, undoCallback)
   if undoCallback == nil then
     ffi.C.lj_toast_inner__ui(__util.str(icon), __util.str(message), 0)
   else
-    ffi.C.lj_toast_inner__ui(__util.str(icon), __util.str(message), ac.expectReply(function (arg)
+    ffi.C.lj_toast_inner__ui(__util.str(icon), __util.str(message), __util.expectReply(function (arg)
       if arg then
         undoCallback()
       end

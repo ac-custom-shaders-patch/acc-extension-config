@@ -79,8 +79,8 @@ __post_cdef(function ()
   end
 
   local storedMetatable = {
-    __index = function(self, key) return self.__data__[key]:get() end,
-    __newindex = function(self, key, value) return self.__data__[key]:set(value) end,
+    __index = function(self, key) return (self.__data__[key] or error('Unknown key: '..key)):get() end,
+    __newindex = function(self, key, value) return (self.__data__[key] or error('Unknown key: '..key)):set(value) end,
   }
 
   local function storedItems(data)

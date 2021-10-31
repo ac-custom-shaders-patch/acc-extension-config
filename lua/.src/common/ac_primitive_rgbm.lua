@@ -44,7 +44,15 @@ return {
         if rgb.isrgb(r) then return rgbm(r.r, r.g, r.b, g or 1) end
         if vec4.isvec4(r) then return rgbm(r.x, r.y, r.z, r.w) end
         if vec3.isvec3(r) then return rgbm(r.x, r.y, r.z, 1) end
-        if type(r) ~= 'number' then return rgbm(0, 0, 0, 1) end
+        if type(r) ~= 'number' then 
+          if type(r) == 'table' then
+            return vec3(tonumber(r[1]) or 0, tonumber(r[2]) or 0, tonumber(r[3]) or 0, tonumber(r[4]) or 0)
+          end
+          if type(r) == 'string' then
+            return ffi.C.lj_rgbm_from_string(r)
+          end
+          return rgbm(0, 0, 0, 1) 
+        end
         if type(g) ~= 'number' then return rgbm(r, r, r, 1) end
         if type(b) ~= 'number' then return rgbm(r, r, r, g) end
         return rgbm(r, g, b, __util.num_or(m, 1))
@@ -62,6 +70,7 @@ return {
       type = function(x) return rgbm end,
       clone = function(v) return rgbm(v.r, v.g, v.b, v.mult) end,
       unpack = function(v) return v.rgb, v.mult end,
+      table = function(v) return {v.rgb.r, v.rgb.g, v.rgb.b, v.mult} end,
 
       set = function(v, rgb, mult)
         if rgbm.isrgbm(rgb) then rgb, mult = rgb.rgb, rgb.mult end
@@ -87,6 +96,13 @@ return {
           out.rgb = v.rgb + u
           out.mult = v.mult + u
         end
+        return out
+      end,
+
+      addScaled = function(v, u, s, out)
+        out = out or v
+        out.rgb:addScaled(u.rgb, s)
+        out.mult = v.mult + u.mult * s
         return out
       end,
 

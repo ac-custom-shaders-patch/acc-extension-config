@@ -102,7 +102,7 @@ function math.isNaN(x) return x ~= x end
 math.NaN = 0/0
 
 function math.lagMult(lag, dt)
-  return math.saturate((1.0 - lag) * dt * 60);
+  return math.saturateN((1.0 - lag) * dt * 60);
 end
 
 function math.applyLag(v, target, lag, dt) 

@@ -7,7 +7,7 @@ const minifyFfiDefinitions = true;
 const enumTypes = {};
 const luaTypes = {};
 const knownTypes = { 
-  regex: /^(void|char|lua_string_ref|int|u?int\d+_t|size_t|float|double|bool|vec[234]|mat3x3|rgbm?|refbool|refnumber)$/, 
+  regex: /^(void|char|ray|lua_string_ref|lua_string_cached_ref|int|u?int\d+_t|size_t|float|double|bool|vec[234]|mat3x3|mat4x4|rgbm?|refbool|refnumber)$/, 
   ffiStructs: {},
   referencedTypes: {},
   ffiFunctions: {},
@@ -56,6 +56,7 @@ function notForExport(t) {
 
 function baseTypeToLua(t){
   if (/^float(\d)$/.test(t)) return `vec${RegExp.$1}`;
+  if (/^float(\dx\d)$/.test(t)) return `mat${RegExp.$1}`;
   if (t === 'uint') return 'uint32_t';
   if (t === 'size_t') return 'uint64_t';
   if (enumTypes.hasOwnProperty(t)) return enumTypes[t].underlyingType || 'int';
@@ -118,6 +119,7 @@ const isVectorType = (() => {
     rgb: createType('rgb'),
     rgbm: createType('rgbm'),
     mat3x3: createType('mat3x3'),
+    mat4x4: createType('mat4x4'),
   };
 
   return type => vectorTypes[type];
@@ -162,7 +164,8 @@ function getTypeInfo(type, customTypes) {
       default: null,
       prepare: enumType.passThrough 
         ? arg => `tonumber(${arg.name}) or ${enumType.default}`
-        : arg => `__util.cast_enum(${arg.name}, ${enumType.min}, ${enumType.max}, ${enumType.default})`
+        : arg => `__util.cast_enum(${arg.name}, ${enumType.min}, ${enumType.max}, ${arg.default != null ? enumType.resolveValue(arg.default) : enumType.default})`,
+      prepareHandlesDefault: !enumType.passThrough
     };
   }
 
@@ -286,15 +289,16 @@ function wrapReturnDefinition(arg, customTypes) {
 }
 
 function needsWrappedResult(type) {
-  if (/const (?:char|lua_string_ref)\*/.test(type)) return true;
+  if (/const (?:char|lua_string_ref|lua_string_cached_ref)\*/.test(type)) return true;
   return false;
 }
 
 function wrapResult(type) {
-  if (type == 'void') return x => x;
-  if (/const char\*/.test(type)) return x => `return ffi.string(${x})`;
-  if (/const lua_string_ref\*/.test(type)) return x => `return __util.strref(${x})`;
-  return x => `return ${x}`;
+  if (type == 'void') return { callback: x => x, extraData: null };
+  if (/const char\*/.test(type)) return { callback: x => `return ffi.string(${x})`, extraData: null };
+  if (/const lua_string_ref\*/.test(type)) return { callback: x => `return __util.strref(${x})`, extraData: null };
+  if (/const lua_string_cached_ref\*/.test(type)) return { callback: (x, y) => `return __${y}_c:get(${x})`, extraData: y => `local __${y}_c = __util.strcref()` };
+  return { callback: x => `return ${x}`, extraData: null };
 }
 
 function extendArg(arg, fnName, allArgs, customTypes) {
@@ -421,9 +425,11 @@ function getLuaCode(opts, definitionsCallback) {
     const cleanName = name.replace(/^lj_|__\w+$/g, '');
     if (args.length > 0 || needsWrappedResult(resultType)) {
       const prepared = args.map(x => prepareParam(x, wrapDefault, localDefines)).map(x => ({ x, i: !isStatementPrepare(x) }));
-      exportEntries.push(`${ns}.${cleanName} = function(${args.map(x => x.name).join(', ')}) 
+      const wrapResultCallback = wrapResult(resultType);
+      const wrapResultPrefix = wrapResultCallback.extraData == null ? '' : wrapResultCallback.extraData(cleanName) + '\n';
+      exportEntries.push(`${wrapResultPrefix}${ns}.${cleanName} = function(${args.map(x => x.name).join(', ')}) 
         ${prepared.filter(x => !x.i).map(x => x.x).join(' ')} 
-        ${wrapResult(resultType)(`ffi.C.${name}(${args.map((x, i) => prepared[i].i ? prepared[i].x : x.name).join(', ')})`)} 
+        ${wrapResultCallback.callback(`ffi.C.${name}(${args.map((x, i) => prepared[i].i ? prepared[i].x : x.name).join(', ')})`, cleanName)} 
       end`);
       docDefinitions.push(`${ns}.${cleanName}(${args.map(x => wrapParamDefinition(x)).join(', ')})${wrapReturnDefinition(resultType, opts.customTypes)}${comment}`);
     } else {
@@ -614,6 +620,14 @@ function resolveRequires(code, filename, context = null) {
         if (args[0].max == null) args[0].max = Object.values(args[1]).reduce((a, b) => Math.max(a, b), Number.NEGATIVE_INFINITY);
         if (args[0].default == null) args[0].default = Object.values(args[1])[0];
         if (args[0].underlyingType == null) args[0].underlyingType = 'int';
+        args[0].resolveValue = function (value){
+          if (/::(\w+)$/.test(value)) {
+            const key = RegExp.$1;
+            for (let k in this) if (k.toLowerCase() == key) return this[k];
+          }
+          console.warn(JSON.stringify(this));
+          $.fail('Building script needs more work on mapping Lua enum names to C++ names');
+        }.bind(args[1]);
         enumTypes[args[0].cpp] = args[0];
         p.init[0] = p.init[0].arguments[1];
         return p;

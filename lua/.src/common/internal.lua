@@ -10,6 +10,13 @@ typedef struct {
   uint64_t p1;
   uint64_t p2;
 } lua_string_ref;
+
+typedef struct {
+  int key;
+  int phase;
+  lua_string_ref data;
+  uint64_t data_hash;
+} lua_string_cached_ref;
 ]]
 
 __util = {}
@@ -18,6 +25,29 @@ function __util.strref(value)
   if value == nil then return nil end
   local ref = value[0]
   return ffi.string(ref.p2 >= 0x10 and ref.buf or ref.ins, ref.p1)
+end
+
+local __mtstrcref = {
+  __index = {
+    get = function(self, value)
+      if value == nil then return nil end
+      local r = value[0]
+      local c = self.cache[r.key]
+      if c ~= nil and c.phase == r.phase then return c.str end
+      local s = ffi.string(r.data.p2 >= 0x10 and r.data.buf or r.data.ins, r.data.p1)
+      if c ~= nil then
+        c.phase = r.phase
+        c.str = s
+      else
+        self.cache[r.key] = { phase = r.phase, str = s }
+      end
+      return s
+    end
+  }
+}
+
+function __util.strcref()
+  return setmetatable({ cache = {} }, __mtstrcref)
 end
 
 function __util.str(value)
@@ -193,4 +223,24 @@ end
 local __u_def_rgbm = rgbm()
 function __util.ensure_rgbm(arg)
   return ffi.istype('rgbm', arg) and arg or __u_def_rgbm
+end
+
+-- a cheap way to get simple replies from asynchronous calls
+local __replyListeners = {}
+local __lastReplyID = 0
+function __util.expectReply(callback)
+  if not callback then return 0 end
+  local replyID = __lastReplyID + 1
+  __lastReplyID = replyID
+  table.insert(__replyListeners, { replyID = replyID, callback = callback })
+  return replyID
+end
+function __processMessage(replyID, ...)
+  for i = #__replyListeners, 1, -1 do
+    local l = __replyListeners[i]
+    if l.replyID == replyID then
+      l.callback(...)
+      table.remove(__replyListeners, i)
+    end
+  end
 end

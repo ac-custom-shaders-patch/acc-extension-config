@@ -35,3 +35,9 @@ render.GLPrimitiveType = __enum({ cpp = 'AC::GLPrimitiveType', max = 5 }, {
   Triangles = 2,
   Quads = 3
 })
+
+render.FontAlign = __enum({ cpp = 'AC::FontAlign', max = 2 }, {
+  Left = 0,
+  Right = 1,
+  Center = 2
+})

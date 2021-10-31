@@ -20,7 +20,7 @@ end
 
 local function requestCallback(callback)
   if callback == nil then return 0 end
-  return ac.expectReply(function (err, status, headers, response)
+  return __util.expectReply(function (err, status, headers, response)
     callback(err, { status = status, headers = parseHeaders(headers), body = response })
   end)
 end

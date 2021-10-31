@@ -1,4 +1,5 @@
 ac.debug(key: string, value: string = "<nil>")
+ac.setLogSilent(value: boolean = true)
 ac.log(value: string)
 ac.warn(value: string)
 ac.error(value: string)
@@ -39,11 +40,11 @@ ac.isWeatherFxActive(): boolean
 ac.getTrackCoordinatesDeg(): vec2
 ac.getTrackTimezoneBaseDst(): vec2
 ac.getMGUKDeliveryName(carIndex: number, programIndex: number = -1): <lua_string_ref>
-ac.getTyresName(carIndex: number, programIndex: number = -1): <lua_string_ref>
-ac.getDriverName(carIndex: number): <lua_string_ref>
-ac.getDriverNationCode(carIndex: number): <lua_string_ref>
-ac.getDriverNationality(carIndex: number): <lua_string_ref>
-ac.getDriverTeam(carIndex: number): <lua_string_ref>
+ac.getTyresName(carIndex: number, compoundIndex: number = -1): <lua_string_cached_ref>
+ac.getDriverName(carIndex: number): <lua_string_cached_ref>
+ac.getDriverNationCode(carIndex: number): <lua_string_cached_ref>
+ac.getDriverNationality(carIndex: number): <lua_string_cached_ref>
+ac.getDriverTeam(carIndex: number): <lua_string_cached_ref>
 ac.hasTrackSpline(): boolean
 ac.worldCoordinateToTrackProgress(v: vec3): number
 ac.trackProgressToWorldCoordinate(v: number): vec3
@@ -73,6 +74,7 @@ struct stateWheel {
 	float tyreWear;
 	float tyrePressure;
 	float tyreTemperature;
+	vec3 tyreTemperatureIMO;
 	float discTemperature;
 	float angularSpeed;
 	float loadK;
@@ -102,6 +104,8 @@ struct stateCar {
 	int index; // zero-based (0 for first car)
 	int gearCount;
 	int turboCount;
+	int tractionType; // 0 for rwd, 1 for fwd, 2 for awd, 3 for new awd, -1 for n/a
+	int enginePosition; // 0 for unspecified, 1 for front, 2 for rear, 3 for mid
 	bool hShifter;
 	bool adjustableTurbo;
 	bool brakesCockpitBias;

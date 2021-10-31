@@ -41,7 +41,12 @@ return {
       new = function(x, y, z, w) 
         if vec3.isvec3(x) then return vec4(x.x, x.y, x.z, w or 0) end
         if vec3.isvec3(y) then return vec4(x or 0, y.x, y.y, y.z) end
-        if type(x) ~= 'number' then x = 0 end
+        if type(x) ~= 'number' then 
+          if type(x) == 'table' then
+            return vec4(tonumber(x[1]) or 0, tonumber(x[2]) or 0, tonumber(x[3]) or 0, tonumber(x[4]) or 0)
+          end
+          x = 0 
+        end
         if type(y) ~= 'number' then y = x end
         if type(z) ~= 'number' then z = y end
         if type(w) ~= 'number' then w = z end
@@ -53,6 +58,7 @@ return {
       type = function(x) return vec4 end,
       clone = function(v) return vec4(v.x, v.y, v.z, v.w) end,
       unpack = function(v) return v.x, v.y, v.z, v.w end,
+      table = function(v) return {v.x, v.y, v.z, v.w} end,
 
       set = function(v, x, y, z, w)
         if vec4.isvec4(x) then x, y, z, w = x.x, x.y, x.z, x.w
@@ -85,6 +91,15 @@ return {
           out.z = v.z + u
           out.w = v.w + u
         end
+        return out
+      end,
+
+      addScaled = function(v, u, s, out)
+        out = out or v
+        out.x = v.x + u.x * s
+        out.y = v.y + u.y * s
+        out.z = v.z + u.z * s
+        out.w = v.w + u.w * s
         return out
       end,
 

@@ -41,7 +41,12 @@ return {
     __eq = function(v, o) return o ~= nil and ffi.istype('vec3', o) and v.x == o.x and v.y == o.y and v.z == o.z end,
     __index = {
       new = function(x, y, z) 
-        if type(x) ~= 'number' then x = 0 end
+        if type(x) ~= 'number' then
+          if type(x) == 'table' then
+            return vec3(tonumber(x[1]) or 0, tonumber(x[2]) or 0, tonumber(x[3]) or 0)
+          end
+          x = 0 
+        end
         if type(y) ~= 'number' then y = x end
         if type(z) ~= 'number' then z = y end
         return vec3(x, y, z) 
@@ -52,6 +57,7 @@ return {
       type = function(x) return vec3 end,
       clone = function(v) return vec3(v.x, v.y, v.z) end,
       unpack = function(v) return v.x, v.y, v.z end,
+      table = function(v) return {v.x, v.y, v.z} end,
 
       set = function(v, x, y, z)
         if vec3.isvec3(x) then x, y, z = x.x, x.y, x.z 
@@ -63,9 +69,10 @@ return {
       end,
 
       setLerp = function(v, a, b, k)
-        v.x = math.lerp(a.x, b.x, k)
-        v.y = math.lerp(a.y, b.y, k)
-        v.z = math.lerp(a.z, b.z, k)
+        local ki = 1 - k
+        v.x = a.x * ki + b.x * k
+        v.y = a.y * ki + b.y * k
+        v.z = a.z * ki + b.z * k
         return v
       end,
 
@@ -80,6 +87,14 @@ return {
           out.y = v.y + u
           out.z = v.z + u
         end
+        return out
+      end,
+
+      addScaled = function(v, u, s, out)
+        out = out or v
+        out.x = v.x + u.x * s
+        out.y = v.y + u.y * s
+        out.z = v.z + u.z * s
         return out
       end,
 
