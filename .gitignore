@@ -49,3 +49,5 @@ textures/people/.src
 vao-patches-cars
 textures/color_grading/__Sol*
 textures/gui/module_*
+internal/lua-sdk/*
+config-ext/*
