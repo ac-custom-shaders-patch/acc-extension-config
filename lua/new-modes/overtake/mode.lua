@@ -22,7 +22,7 @@ local requiredSpeed = 80
 ac.setStartMessage('Get to '..requiredSpeed..' km/h to begin the Overtake Run')
 
 -- This function is called before event activates. Once it returns true, it’ll run:
-function prepare(dt)
+function script.prepare(dt)
   ac.debug('speed', ac.getCarState(1).speedKmh)
   return ac.getCarState(1).speedKmh > 60
 end
@@ -36,8 +36,7 @@ local dangerouslySlowTimer = 0
 local carsState = {}
 local wheelsWarningTimeout = 0
 
--- Event function which actually does all the important work:
-function update(dt)
+function script.update(dt)
   if timePassed == 0 then
     addMessage('Let’s go!', 0)
   end
@@ -159,7 +158,7 @@ function addMessage(text, mood)
   end
 end
 
-function updateMessages(dt)
+local function updateMessages(dt)
   comboColor = comboColor + dt * 10 * comboMeter
   if comboColor > 360 then comboColor = comboColor - 360 end
   for i = 1, #messages do
@@ -195,7 +194,7 @@ function updateMessages(dt)
 end
 
 local speedWarning = 0
-function drawUI()
+function script.drawUI()
   local uiState = ac.getUiState()
   updateMessages(uiState.dt)
 
@@ -207,7 +206,7 @@ function drawUI()
   local colorAccent = rgbm.new(hsv(speedRelative * 120, 1, 1):rgb(), 1)
   local colorCombo = rgbm.new(hsv(comboColor, math.saturate(comboMeter / 10), 1):rgb(), math.saturate(comboMeter / 4))
 
-  function speedMeter(ref)
+  local function speedMeter(ref)
     ui.drawRectFilled(ref + vec2(0, -4), ref + vec2(180, 5), colorDark, 1)
     ui.drawLine(ref + vec2(0, -4), ref + vec2(0, 4), colorGrey, 1)
     ui.drawLine(ref + vec2(requiredSpeed, -4), ref + vec2(requiredSpeed, 4), colorGrey, 1)

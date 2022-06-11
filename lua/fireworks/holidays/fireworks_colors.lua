@@ -62,6 +62,19 @@ function ColorIndependenceDay()
   return randomColor()
 end
 
+function ColorCanadaDay()
+  function randomColor()
+    local r = math.random()
+    if r > 0.95 then return rgb(1, 0, 1) end
+    if r > 0.85 then return rgb(1, 0.5, 0) end
+    if r > 0.4 then return rgb(1, 1, 1) end
+    return rgb(1, 0, 0)
+  end
+
+  if math.random() > 0.2 then return { randomColor(), randomColor() } end
+  return randomColor()
+end
+
 function ColorSame(fn)
   local ret = fn and fn() or rgb(1, 1, 0) 
   return function ()

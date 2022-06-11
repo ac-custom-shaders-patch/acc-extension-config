@@ -90,8 +90,8 @@ local tasks = {
       return false
     end,
     cross = vec2(65, 140),
-    triggerRadius = ac.getTrackId() == 'driver' and 8 or 12,
-    paths = ac.getTrackId() == 'driver' 
+    triggerRadius = ac.getTrackID() == 'driver' and 8 or 12,
+    paths = ac.getTrackID() == 'driver' 
       and createSlalomPaths({
         { vec3(-15.5, 0, 22.25), vec3(-15.5, 0, 7.75), vec3(-15.5, 0, -7.25), vec3(-15.5, 0, -22.25) },
         { vec3(15.5, 0, 22.25), vec3(15.5, 0, 7.75), vec3(15.5, 0, -7.25), vec3(15.5, 0, -22.25) }
@@ -287,13 +287,13 @@ local tasks = {
       return leftToPass == 0
     end,
     cross = vec2(65, 140),
-    points = ac.getTrackId() == 'driver' 
+    points = ac.getTrackID() == 'driver' 
       and { vec3(25, 0, -25), vec3(-25, 0, -25), vec3(25, 0, 25), vec3(-25, 0, 25) }
       or { vec3(35, 5, -30), vec3(-35, 5, -30), vec3(35, 5, 30), vec3(-35, 5, 30) },
     pointsPassed = { false, false, false, false },
     triggerRadius = 10,
-    exclusionAreaCenter = ac.getTrackId() == 'driver' and vec3(0, 0, 0) or vec3(0, 5, 0),
-    exclusionAreaRadius = ac.getTrackId() == 'driver' and 16 or 22,
+    exclusionAreaCenter = ac.getTrackID() == 'driver' and vec3(0, 0, 0) or vec3(0, 5, 0),
+    exclusionAreaRadius = ac.getTrackID() == 'driver' and 16 or 22,
   },
 }
 
@@ -304,14 +304,14 @@ local hitCooldown = 0
 local messageToShow = nil
 local messageCooldown = 0
 local messageAlpha = 0
-local available = ac.getTrackId() == 'driver' or ac.getTrackId() == 'acm_parking_interview'
+local available = ac.getTrackID() == 'driver' or ac.getTrackID() == 'acm_parking_interview'
 
-function showMessage(message)
+local function showMessage(message)
   messageToShow = message
   messageCooldown = 2
 end
 
-function update(dt)
+function script.update(dt)
   ac.debug('available', available)
   if not available then return end
 
@@ -366,10 +366,10 @@ function update(dt)
 end
 
 local flashingRed = 0
-function drawUI()
+function script.drawUI()
   if not available then return end
 
-  local uiState = ac.getUiState()
+  local uiState = ac.getUI()
   flashingRed = flashingRed + uiState.dt
 
   local needlePos = vec2(97, 172)
@@ -413,7 +413,7 @@ function drawUI()
   end
 end
 
-function draw3D()
+function script.draw3D()
   -- local car = ac.getCarState(1)
   -- local slalom = tasks[3]
   -- local path = slalom.paths[1]

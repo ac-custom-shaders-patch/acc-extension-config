@@ -31,9 +31,8 @@ function update(dt, intensity, holidayType)
     intensity = math.min(intensity, 0.05)
   end
 
-  ac.debug('items', piecesSize)
-  ac.debug('holiday', holidayType)
-  ac.debug('intensity', intensity)
-
+  -- ac.debug('items', piecesSize)
+  -- ac.debug('holiday', holidayType)
+  -- ac.debug('intensity', intensity)
   -- runGC()
 end

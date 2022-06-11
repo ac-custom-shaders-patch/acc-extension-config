@@ -1,7 +1,7 @@
 
 function SpawnExplosion(s, o, P, cb)
   local size = o.size or 1
-  local count = o.count or 10 * size
+  local count = o.count or (10 * size)
   for i = 1, count do
     local offset = randomVec3()
     cb{ 
@@ -14,7 +14,7 @@ end
 
 function SpawnDelayedExplosion(s, o, P, cb)
   local size = o.spawnSize or s.size or 1
-  local count = o.count or 10 * size
+  local count = o.count or (10 * size)
   for i = 1, count do
     local offset = randomVec3()
     cb{ 
@@ -26,7 +26,7 @@ end
 
 function SpawnBurst(s, o, P, cb)
   local size = o.spawnSize or s.size or 1
-  local count = o.count or 5 * size
+  local count = o.count or (5 * size)
   for i = 1, count do
     local offset = randomVec3()
     cb{ 

@@ -12,9 +12,37 @@ local startingFuel = 1
 -- Event doesn’t start right away, instead, here’s a message to show before the start:
 ac.setStartMessage('Go to pits and set fuel to 1 liter')
 
+--[[
+-- Some testing:
+
+local light = ac.LightSource(ac.LightType.Regular)
+light.position = vec3(-152.69, -7.95+20, -375.96)
+light.direction = vec3(0, 0, 1)
+light.spot = 0
+light.spotSharpness = 0.99
+light.color = rgb(0, 1000, 0)
+light.range = 101
+light.shadows = true
+light.fadeAt = 500
+light.fadeSmooth = 200
+
+-- ac.loadSoundbank(__dirname.."/sfx/nord_altta.bank")
+ac.loadSoundbank("sfx/nord_altta.bank")
+local sound = ac.AudioEvent("nord_altta/checkpoint_fast", true)
+sound:setPosition(vec3(-152.69, -7.95, -375.96))
+sound.inAutoLoopMode = true
+sound.volume = 10
+sound.cameraInteriorMultiplier = 1.0
+sound.cameraExteriorMultiplier = 1
+sound.cameraTrackMultiplier = 1
+sound:start()
+ac.debug("valid", sound:isValid()) 
+
+]]
+
 -- This function is called before event activates. Once it returns true, it’ll run:
-function prepare(dt)
-  local state = ac.getCarState(1)
+function script.prepare(dt)
+  local state = ac.getCar(0)
   return state.fuel > startingFuel - 0.01 and state.fuel <= startingFuel and state.speedKmh < 10
 end
 
@@ -22,8 +50,8 @@ end
 local metersDriven = 0
 local startingFuel = 0
 
-function calculateScore()
-  local state = ac.getCarState(1)
+local function calculateScore()
+  local state = ac.getCar(0)
   local litersSpent = startingFuel - state.fuel
   if litersSpent < 0.01 or metersDriven < 0.01 then
     return '--.- MPG (--.- L/100km)'
@@ -33,8 +61,8 @@ function calculateScore()
   return (math.ceil(scoreMpg * 10)/10)..' MPG ('..(math.ceil(scoreL100k * 10)/10)..' L/100km)'
 end
 
-function update(dt)
-  local state = ac.getCarState(1)
+function script.update(dt)
+  local state = ac.getCar(0)
 
   if metersDriven == 0 then
     ac.setSystemMessage('Economy Run', 'Drive as far from here as possible')
@@ -52,7 +80,7 @@ end
 
 
 local speedWarning = 0
-function drawUI()
+function script.drawUI()
   local uiState = ac.getUiState()
 
   ui.beginTransparentWindow('economyScore', vec2(uiState.windowSize.x * 0.5 - 100, 100), vec2(300, 400))
