@@ -1,0 +1,312 @@
+[ABOUT]
+AUTHOR = BV Tzenamo
+VERSION = v1.0
+DATE_RELEASE = 2022 apr 28
+
+[LIGHTING]
+SPECULAR_MULT=0.1
+LIT_MULT=1.0
+CAR_LIGHTS_LIT_MULT=1.0
+
+[LIGHT_POLLUTION]
+RELATIVE_POSITION = 0.76, 0, 0.78
+DENSITY = 0.15
+RADIUS_KM = 1.0
+COLOR = 1.0, 0.55, 0.16
+ACTIVE = 1
+
+[INCLUDE: common/conditions.ini]
+[INCLUDE: common/materials_track.ini]
+[INCLUDE: common/grass_fx.ini]
+
+[TYRES_FX]
+GRASS_COLOR_A = 52, 80, 48, 0.006
+GRASS_COLOR_B = 42, 51, 34, 0.006
+DIRT_COLOR_A = 153, 136, 101, 0.004
+DIRT_COLOR_B = 81, 72, 56, 0.004
+
+[CONDITION_0]
+NAME = SHARP_SUN_A
+INPUT = SUN
+LUT = (|0=0|85=0|85=1|180=1)
+LAG = 0
+
+[CONDITION_1]
+NAME = SMOOTH_SUN_A
+INPUT = SUN
+LUT = (|0=0|85=0|85=1|180=1)
+LAG = 0.97
+
+[CONDITION_2]
+NAME = SHARP_SUN_B
+INPUT = SUN
+LUT = (|0=0|88=0|88=1|180=1)
+LAG = 0
+
+[CONDITION_3]
+NAME = SMOOTH_SUN_B
+INPUT = SUN
+LUT = (|0=0|88=0|88=1|180=1)
+LAG = 0.97
+
+[CONDITION_4]
+NAME = NIGHT_SMOOTH
+INPUT = TIME
+LUT = (|0=1|25200=1|25200=0|64800=0|64800=1|86400=1|)
+LAG = 0.97
+
+[CONDITION_5]
+NAME = SEASON_SUMMER
+INPUT = YEAR_PROGRESS
+LUT = (|0=1|0.45=0|0.6=0.85|0.7=0|0.75=0|0.8=1|1=1|)
+LAG = 0
+
+[CONDITION_6]
+NAME = SEASON_WINTER
+INPUT = YEAR_PROGRESS
+LUT = (|0=0.75|0.075=1|0.2=0|0.8=0|0.9=0.5|1=0.75|)
+LAG = 0
+
+[CONDITION_7]
+NAME = SEASON_AUTUMN
+INPUT = YEAR_PROGRESS
+LUT = (|0=1|0.2=0|0.45=0|0.6=0.25|0.7=0|0.75=0|0.8=1|1=1|)
+LAG = 0
+
+[CONDITION_8]
+NAME = SEASON_MUD
+INPUT = YEAR_PROGRESS
+LUT = (|-1=0|-1=0|0=0|0.1=0|0.2=0.65|0.3=0|0.71=0|0.8=0.7|0.9=0|1=0|)
+LAG = 0
+
+[REFLECTIONS_FX]
+MULTILAYER_REFLECTIONS_MULT=2
+
+[MATERIAL_ADJUSTMENT_0]
+MATERIALS = panorama1,hill,terr1,Material,fu2,terr2,Material_004,bokor,fa-dupli,fa55,fa59,fa-logo,r-vir1,soveny1,Material_009,bazalttrees,redfa1,redfabig_001,fu55,Material_005,trees31,Material_007,redfabig_001,road-edge,redfa1,soveny1,r-vir1,torzs_001,Material_010,wall10,gridgrass,logotrees,futo,pit-edge
+CONDITION = SEASON_SUMMER
+KEY_0 = seasonSummer
+VALUE_0 = 1.0
+OFF_VALUE_0 = 0
+KEY_1 = boh
+VALUE_1 = 1
+OFF_VALUE_1 = 0
+ACTIVE = 0
+DESCRIPTION = summer non specular
+
+[MATERIAL_ADJUSTMENT_1]
+MATERIALS = panorama1,hill,terr1,Material,fu2,terr2,Material_004,bokor,fa-dupli,fa55,fa59,fa-logo,r-vir1,soveny1,Material_009,bazalttrees,redfa1,redfabig_001,fu55,Material_005,road,Material_003,trees31,sziklafal2,Material_002,Material_001,cliff,beugro1,_dszikla1,sziklafal1,bazalt1_001,Material_007,road-edge,korakat1,soveny1,r-vir1,torzs_001,utlevel,Material_010,wall10,gridgrass,logotrees,redfabig_001,Material_009_001.redfa1,futo
+CONDITION = SEASON_WINTER
+KEY_0 = seasonWinter
+VALUE_0 = 0.8
+OFF_VALUE_0 = 0
+KEY_1 = boh
+VALUE_1 = 1
+OFF_VALUE_1 = 0
+ACTIVE = 1
+DESCRIPTION = winter trees
+
+[MATERIAL_ADJUSTMENT_2]
+MATERIALS = panorama1,hill,terr1,Material,fu2,terr2,Material_004,bokor,fa-dupli,fa55,fa59,fa-logo,r-vir1,soveny1,Material_009,bazalttrees,redfa1,redfabig_001,fu55,Material_005,trees31,Material_007,redfabig_001,road-edge,redfa1,soveny1,r-vir1,torzs_001,Material_010,wall10,gridgrass,logotrees,futo
+CONDITION = SEASON_AUTUMN
+KEY_0 = seasonAutumn
+VALUE_0 = 0.55
+OFF_VALUE_0 = 0
+ACTIVE = 1
+DESCRIPTION = autumn trees
+
+[MATERIAL_ADJUSTMENT_3]
+MATERIALS = panorama1,hill,terr1,Material,fu2,terr2,Material_004,bokor,fa-dupli,fa55,fa59,fa-logo,r-vir1,soveny1,Material_009,bazalttrees,redfa1,redfabig_001,fu55,Material_005,trees31,Material_007,redfabig_001,road-edge,redfa1,soveny1,r-vir1,torzs_001,Material_010,wall10,gridgrass,logotrees,futo
+CONDITION = SEASON_MUD
+KEY_0 = seasonMud
+VALUE_0 = 0.8
+OFF_VALUE_0 = 0
+KEY_1 = boh
+VALUE_1 = 1
+OFF_VALUE_1 = 0
+ACTIVE = 1
+DESCRIPTION = mud non specular
+
+[MATERIAL_ADJUSTMENT_4]
+MATERIALS = pit2,pit-edge,pit_gwnia
+CONDITION = SEASON_WINTER
+KEY_0 = seasonWinter
+VALUE_0 = 0.2
+OFF_VALUE_0 = 0
+KEY_1 = boh
+VALUE_1 = 1
+OFF_VALUE_1 = 0
+ACTIVE = 1
+DESCRIPTION = winter road
+
+[SHADER_REPLACEMENT_...]
+MATERIALS=fa-dupli,redfa1,utlevel,fa55,logotrees
+PROP_0=ksAmbient, 0.3
+PROP_1=ksDiffuse, 0.0
+
+[SHADER_REPLACEMENT_...]
+MATERIALS=Material_004,bokor,redfabig_001,Material_009_001,torzs_001,trees31,fa-logo,fa59,Material_005
+PROP_0=ksAmbient, 0.3
+PROP_1=ksDiffuse, 0.1
+
+
+[SHADER_REPLACEMENT_...]
+MATERIALS=cliff,beugro1,_dszikla1,korakat1,Material_003,sziklafal2,Material_001,Material_002,sziklafal1,terr1,terr2,fu2,Material,road-edge,bazalt1_001
+PROP_0=ksAmbient, 0.4
+PROP_1=ksDiffuse, 0.2
+
+[GRASS_FX]
+GRASS_MATERIALS = fu,road-edge,fu2,Material,gridgrass,pit-edge,road-edge,terr2,terr1,terr2
+OCCLUDING_MATERIALS_ALPHA =
+OCCLUDING_MATERIALS = 
+OCCLUDING_MESHES_ALPHA = 
+OCCLUDING_MESHES = 1road_19,1road_9
+ORIGINAL_GRASS_MATERIALS = 
+ORIGINAL_GRASS_MESHES = 
+MASK_BLUR = 2
+SHAPE_SIZE = 3.0
+SHAPE_TIDY = 0.25
+SHAPE_WIDTH = 1.15
+TEXTURE = grass_fx/highlands_darker.dds
+TEXTURE_GRID = 8, 0
+ 
+[GRASS_FX_AREA_0]
+CENTER = 0, 0
+SIZE = 100000, 100000
+MODE = ADD
+ 
+[GRASS_FX_TEXTURE_GROUP_0]
+ ; flower grass
+PIECE_0 = 1, 1
+PIECE_1 = 2, 1
+PIECE_1_CHANCE = 25
+PIECE_2 = 1, 2, 2, 1
+PIECE_2_CHANCE = 0.5
+ ;PIECE_3=3, 1
+PIECE_4 = 0.5, 0.5
+PIECE_4_CHANCE = 0.5
+PIECE_4_SIZE_MULT = 0.1,0.1
+ 
+[GRASS_FX_TEXTURE_GROUP_1]
+ ; extra grass converted to sparse tall grass
+PIECE_0 = 6, 1
+PIECE_0_CHANCE = 0.5
+PIECE_0_SIZE_MULT = 1.0,1.25
+PIECE_1 = 7, 1
+PIECE_1_CHANCE = 0.5
+PIECE_1_SIZE_MULT = 1.0,1.2
+PIECE_2 = 8, 1
+PIECE_2_CHANCE = 0.5
+PIECE_2_SIZE_MULT = 1.0,1.2
+ 
+[GRASS_FX_TEXTURE_GROUP_2]
+ ; reeds & tall grass
+PIECE_0 = 4, 1, 1, 2
+PIECE_0_CHANCE = 0.1
+PIECE_0_WIND = 0.2
+PIECE_0_SIZE_MULT = 0.5,1
+PIECE_2 = 8, 3
+PIECE_3 = 8, 2
+ 
+[GRASS_FX_CONFIGURATION_A]
+SHAPE_SIZE = 3.5
+SHAPE_WIDTH = 1.25
+MASK_MAIN_THRESHOLD = 0
+MASK_RED_THRESHOLD = 1.5
+MASK_MIN_LUMINANCE = 0
+MASK_MAX_LUMINANCE = 2
+TEXTURE_BASE_CHANCE = 0.01
+TEXTURE_GROUP_0_CHANCE = 0.02
+TEXTURE_GROUP_1_CHANCE = 0.003
+TEXTURE_GROUP_2_CHANCE = 0.008
+ 
+[GRASS_FX_CONFIGURATION_B]
+SHAPE_SIZE = 0.01
+SHAPE_WIDTH = 0.01
+SHAPE_TIDY = 1
+MASK_MAIN_THRESHOLD = 0
+MASK_RED_THRESHOLD = 0.85
+MASK_MIN_LUMINANCE = 0
+MASK_MAX_LUMINANCE = 2
+ 
+[GRASS_FX_ADJUSTMENT_1]
+MATERIALS = fu,road-edge,fu2,Material,gridgrass,pit-edge,road-edge,terr2,terr1,terr2
+USE_MULTILAYER_MASK = 0
+USE_MULTIMAP_DETAIL_MASK = 0
+ ;MASK_BASE=1
+MASK_R = -24
+MASK_G = 15
+MASK_B = -0.25
+MASK_A = -0
+MAP = A
+
+
+[LIGHT_SERIES_0]
+MESHES = street-lamp_feny
+OFFSET = 0,9,0
+CLUSTER_THRESHOLD = 28
+COLOR = 215,147,41,0.09
+SPOT = 150
+RANGE = 35
+RANGE_GRADIENT_OFFSET = 0
+FADE_AT = 500
+FADE_SMOOTH = 50
+DIFFUSE_CONCENTRATION = 1
+SPOT_SHARPNESS = 0,1
+DIRECTION = 0,-1,0
+CONDITION = NIGHT_SMOOTH
+ACTIVE = 1
+
+[MATERIAL_ADJUSTMENT_5]
+ACTIVE = 1
+DESCRIPTION = all the street lights glow
+MATERIALS = lights
+KEY_0 = ksEmissive
+VALUE_0 = 121,156,255,2.1
+VALUE_0_OFF = 0
+KEY_1 = ksAlphaRef
+VALUE_1 = -193
+VALUE_1_OFF = ORIGINAL
+CONDITION = NIGHT_SMOOTH
+
+[Material_Water]
+Materials=water
+UseAlphaFromNormal=0
+UseRecommendedTextures=1
+UseRecommendedDetailTexture=1
+UseNormalMapTwice=1
+Type=POND
+
+[WIND]
+TREES_NORMALIZATION=0.1, 1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;asphalt lights
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[CONDITION_...]
+NAME = BLINK
+INPUT = ONE
+FLASHING_FREQUENCY = 3
+FLASHING_SMOOTHNESS = 0
+FLASHING_SKIP_OFF_STATE = 0
+FLASHING_NOISE_AMPLITUDE = 0
+FLASHING_MIN_VALUE = 0.0
+FLASHING_SYNCED = 1
+
+[MATERIAL_ADJUSTMENT_...]
+ACTIVE = 1
+DESCRIPTION = heli green
+MATERIALS = utlamp
+KEY_0 = ksEmissive
+VALUE_0 = 0,255,0,0.5
+VALUE_0_OFF = 0
+CONDITION = BLINK
+
+
+[RAIN_FX]
+PUDDLES_MATERIALS = road,pit2,pit-edge,pit_gwnia
+SOAKING_MATERIALS = pit2,pit-edge,pit_gwnia
+SMOOTH_MATERIALS = cliff,Material_003,Material_002,sziklafal2,beugro1,_dszikla1
+ROUGH_MATERIALS = fu,road-edge,fu2,Material,gridgrass,road-edge,terr2,terr1
+LINES_MATERIALS = 
