@@ -9,7 +9,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - Alessandro Micali: nicely done grass tyre texture;
 - Blamer: great app for setting up track lights and more;
 - Bombadil: new chaser camera script;
-- Chr0m3 (Chr0m3 Motorsport): tyre wear triggering tyres blowing;
+- Chr0m3 (Chr0m3 Motorsport): tyre wear triggering tyres blowing, a way to fix misconfigured car soundbanks;
 - Dmitrii A: proper Gamepad FX implementation;
 - leBluem: improvements for python apps, documentation;
 - Levels: new chaser camera script;
@@ -27,6 +27,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - Grass idea [from GRID](http://blog.codemasters.com/wp-content/uploads/2014/10/Rendering-Fields-of-Grass-using-DirectX11-in-GRID-Autosport.pdf) by Richard Kettlewell (Codemasters);
 - Lighting algorithm based on [a great idea](https://worldoffries.wordpress.com/2015/02/19/simple-alternative-to-clustered-shading-for-thousands-of-lights/) by Luke Mamacos;
 - Sky shader forked from [this shader](https://www.shadertoy.com/view/Ml2cWG) made by robobo1221;
+- VRWorks by NVIDIA;
 - 8K star map from NASA.
 
 [b]Separate thanks to people preparing configs:[/b]
@@ -44,12 +45,21 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - SMAA.
 
 [b]Plus, other open-source software:[/b]
+- [AnimatedGIF](https://github.com/bitbank2/AnimatedGIF);
 - [Dear ImGui](https://github.com/ocornut/imgui);
 - [gta5_fsr](https://github.com/NarutoUA/gta5_fsr);
+- [json.lua](https://github.com/rxi/json.lua);
+- [meshoptimizer](https://github.com/zeux/meshoptimizer);
+- [minhook fork from ReShade](https://github.com/crosire/reshade);
+- [miniball](https://github.com/hbf/miniball);
+- [miniz](https://github.com/richgel999/miniz);
+- [moodycamel::ConcurrentQueue](https://github.com/cameron314/concurrentqueue);
+- [NanoRT](https://github.com/lighttransport/nanort);
 - [ODE physics engine](http://ode.org/);
 - [OpenResty’s fork of LuaJIT](https://github.com/openresty/luajit2);
-- [meshoptimizer](https://github.com/zeux/meshoptimizer);
-- [minhook fork from ReShade](https://github.com/crosire/reshade).
+- [tinyexpr](https://github.com/codeplea/tinyexpr);
+- [xatlas](https://github.com/jpcy/xatlas);
+- [xxHash](https://github.com/Cyan4973/xxHash).
 
 [b]And icons:[/b]
 - Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/);

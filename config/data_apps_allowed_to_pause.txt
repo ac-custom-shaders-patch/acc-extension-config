@@ -16,7 +16,6 @@
 ; disable whole thing.
 ;
 
-AccExt?
 CamTool_2
 D Extra
 D Tachometer

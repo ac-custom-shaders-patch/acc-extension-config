@@ -1,0 +1,8 @@
+; List of apps which wouldn’t get virtual tyres when calling ac.getCarTyreCompound. Instead,
+; they’ll get name of a tyre virtual tyre was based on.
+; (Virtual tyres are tyres not existing in tyres.ini, but created on-fly during loading, to
+; be able to add more tyres without patching Kunos cars.)
+
+camber-extravaganza
+
+; proTyres doesn’t need to be here, data for it is prepared by Small Tweaks module
