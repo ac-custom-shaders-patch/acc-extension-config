@@ -47,6 +47,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 [b]Plus, other open-source software:[/b]
 - [AnimatedGIF](https://github.com/bitbank2/AnimatedGIF);
 - [Dear ImGui](https://github.com/ocornut/imgui);
+- [DualSense-Windows](https://github.com/Ohjurot/DualSense-Windows);
 - [gta5_fsr](https://github.com/NarutoUA/gta5_fsr);
 - [json.lua](https://github.com/rxi/json.lua);
 - [meshoptimizer](https://github.com/zeux/meshoptimizer);
