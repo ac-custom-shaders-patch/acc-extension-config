@@ -42,9 +42,8 @@ If you’re looking to make a new Weather FX script, please feel free to use [th
 ## Destination folders:
 
 ```
-c:\Steam\steamapps\common\assettocorsa\extension\ or
-c:\Progam Files\Steam\steamapps\common\assettocorsa\extension\ or 
-%userprofile%\Documents\Assetto Corsa\cfg\extension\
+C:\Progam Files\Steam\steamapps\common\assettocorsa\extension\  or
+X:\Steam\steamapps\common\assettocorsa\extension\
 \---extension
     +---config
     |   +---cars
@@ -58,6 +57,9 @@ c:\Progam Files\Steam\steamapps\common\assettocorsa\extension\ or
     |   \---tracks
     |       \---common
     \---vao-patches
+
+user options saved in (defaults in above folder):
+%userprofile%\Documents\Assetto Corsa\cfg\extension\
 ```
 Be aware, that sometimes the cfg-maker did not name files properly, i.e. for this track-light-config — “config\tracks\ks_nurburgring.ini” — all these files are required too:
 
