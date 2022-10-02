@@ -61,6 +61,6 @@ result.rainWater = result.rainIntensity
 
 ac.setConditionsSet(result)
 
-function update(dt)
+function script.update(dt)
   -- ac.setConditionsSet(result)
 end
