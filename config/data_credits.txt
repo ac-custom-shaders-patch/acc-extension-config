@@ -50,6 +50,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - [Dear ImGui](https://github.com/ocornut/imgui);
 - [DualSense-Windows](https://github.com/Ohjurot/DualSense-Windows);
 - [gta5_fsr](https://github.com/NarutoUA/gta5_fsr);
+- [JoyShockLibrary](https://github.com/JibbSmart/JoyShockLibrary);
 - [json.lua](https://github.com/rxi/json.lua);
 - [libdeflate](https://github.com/ebiggers/libdeflate);
 - [kd-tree](https://github.com/gishi523/kd-tree);
