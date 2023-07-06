@@ -33,6 +33,8 @@ ks_highlands/6: hamzah
 ks_red_bull_ring/1: demonized
 ks_nordschleife/1: demonized
 ks_nordschleife/2: demonized
+ks_nordschleife/3: corych
+ks_nordschleife/4: corych
 lilski_watkins_glen/1: demonized
 magione/1: MadMat
 magione/2: MadMat
