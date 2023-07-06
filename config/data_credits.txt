@@ -9,6 +9,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - Alessandro Micali: nicely done grass tyre texture;
 - Blamer: great app for setting up track lights and more;
 - Bombadil: new chaser camera script;
+- ChatGPT: help with searches and some specific tips;
 - Chr0m3 (Chr0m3 Motorsport): tyre wear triggering tyres blowing, a way to fix misconfigured car soundbanks;
 - Dmitrii A: proper Gamepad FX implementation;
 - leBluem: improvements for python apps, documentation;
@@ -46,25 +47,35 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 
 [b]Plus, other open-source software:[/b]
 - [AnimatedGIF](https://github.com/bitbank2/AnimatedGIF);
+- [BakingLab](https://github.com/TheRealMJP/BakingLab);
+- [cpp-lru-cache](https://github.com/lamerman/cpp-lru-cache);
 - [CTTI](https://github.com/Manu343726/ctti);
 - [Dear ImGui](https://github.com/ocornut/imgui);
+- [Delegate](https://github.com/bdiamand/Delegate);
 - [DualSense-Windows](https://github.com/Ohjurot/DualSense-Windows);
+- [Embree](https://github.com/embree/embree);
 - [gta5_fsr](https://github.com/NarutoUA/gta5_fsr);
+- [HIDAPI](https://github.com/libusb/hidapi);
 - [JoyShockLibrary](https://github.com/JibbSmart/JoyShockLibrary);
 - [json.lua](https://github.com/rxi/json.lua);
 - [libdeflate](https://github.com/ebiggers/libdeflate);
 - [kd-tree](https://github.com/gishi523/kd-tree);
+- [MaskedOcclusionCulling](https://github.com/GameTechDev/MaskedOcclusionCulling);
 - [meshoptimizer](https://github.com/zeux/meshoptimizer);
 - [minhook fork from ReShade](https://github.com/crosire/reshade);
 - [miniball](https://github.com/hbf/miniball);
 - [miniz](https://github.com/richgel999/miniz);
 - [moodycamel::ConcurrentQueue](https://github.com/cameron314/concurrentqueue);
+- [moodycamel::ReaderWriterQueue](https://github.com/cameron314/readerwriterqueue);
 - [NanoRT](https://github.com/lighttransport/nanort);
 - [obfy](https://github.com/fritzone/obfy);
 - [ODE physics engine](http://ode.org/);
 - [OpenResty’s fork of LuaJIT](https://github.com/openresty/luajit2);
 - [RandomLib](http://randomlib.sourceforge.net/);
+- [robin_hood unordered map & set](https://github.com/martinus/robin-hood-hashing);
 - [tinyexpr](https://github.com/codeplea/tinyexpr);
+- [utf-cpp](https://github.com/ww898/utf-cpp);
+- [ValveFileVDF](https://github.com/TinyTinni/ValveFileVDF);
 - [xatlas](https://github.com/jpcy/xatlas);
 - [xxHash](https://github.com/Cyan4973/xxHash).
 

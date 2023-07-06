@@ -1,19 +1,6 @@
--- Whole thing is still at very early stage of development, a lot might and possibly
--- will change. Currently whole thing is limited to sort of original drifting mode 
--- level. Observe things that happen, draw some extra UI, score user,
--- decide when session ends.
-
 -- This mode in particular is meant for Track Day with AI Flood on large tracks. Set
 -- AIs to draw some slow cars, get yourself that Red Bull monstrousity and try to 
 -- score some points.
-
--- Key points for future:
--- • Integration with CM’s Quick Drive section, with settings and everything;
--- • These modes might need to be able to force certain CSP parameters — here, for example, 
---   it should be AI flood parameters;
--- • To ensure competitiveness, they might also need to collect some data, verify integrity 
---   and possibly record short replays?
--- • Remote future: control scene, AIs, spawn extra geometry and so on.
 
 -- Event configuration:
 local requiredSpeed = 80
@@ -36,14 +23,47 @@ local dangerouslySlowTimer = 0
 local carsState = {}
 local wheelsWarningTimeout = 0
 
+-- For various reasons, this is the most questionable part, some UI. I don’t really like
+-- this way though. So, yeah, still thinking about the best way to do it.
+local messages = {}
+local glitter = {}
+local glitterCount = 0
+
+local function addMessage(text, mood)
+  for i = math.min(#messages + 1, 4), 2, -1 do
+    messages[i] = messages[i - 1]
+    messages[i].targetPos = i
+  end
+  messages[1] = { text = text, age = 0, targetPos = 1, currentPos = 1, mood = mood }
+  if mood == 1 then
+    for i = 1, 60 do
+      local dir = vec2(math.random() - 0.5, math.random() - 0.5)
+      glitterCount = glitterCount + 1
+      glitter[glitterCount] = { 
+        color = rgbm.new(hsv(math.random() * 360, 1, 1):rgb(), 1), 
+        pos = vec2(80, 140) + dir * vec2(40, 20),
+        velocity = dir:normalize():scale(0.2 + math.random()),
+        life = 0.5 + 0.5 * math.random()
+      }
+    end
+  end
+end
+
 function script.update(dt)
   if timePassed == 0 then
     addMessage('Let’s go!', 0)
   end
 
-  local player = ac.getCarState(1)
+  local player = ac.getCar(0)
+  if not player then
+    return
+  end
+  
   if player.engineLifeLeft < 1 then
-    ac.endSession('Overtake score: ' .. totalScore)
+    ac.endSession('Overtake score: ' .. totalScore, true, {
+      summary = 'Score: ' .. totalScore,
+      message = '• Final score: '..totalScore
+    })
     return
   end
 
@@ -52,7 +72,7 @@ function script.update(dt)
   local comboFadingRate = 0.5 * math.lerp(1, 0.1, math.lerpInvSat(player.speedKmh, 80, 200)) + player.wheelsOutside
   comboMeter = math.max(1, comboMeter - dt * comboFadingRate)
 
-  local sim = ac.getSimState()
+  local sim = ac.getSim()
   while sim.carsCount > #carsState do
     carsState[#carsState + 1] = {}
   end
@@ -68,7 +88,10 @@ function script.update(dt)
 
   if player.speedKmh < requiredSpeed then 
     if dangerouslySlowTimer > 3 then      
-      ac.endSession('Overtake score: ' .. totalScore)
+      ac.endSession('Overtake score: ' .. totalScore, true, {
+        summary = 'Score: ' .. totalScore,
+        message = '• Final score: '..totalScore
+      })
     else
       if dangerouslySlowTimer == 0 then addMessage('Too slow!', -1) end
       ac.setSystemMessage('Overtake Run', 'You’re going too slow: '..(math.ceil(dangerouslySlowTimer * 10) / 10)..'/3')
@@ -80,19 +103,19 @@ function script.update(dt)
     dangerouslySlowTimer = 0
   end
 
-  for i = 2, ac.getSimState().carsCount do 
-    local car = ac.getCarState(i)
+  for i = 2, ac.getSim().carsCount do 
+    local car = ac.getCar(i - 1) or error()
     local state = carsState[i]
 
-    if car.pos:closerToThan(player.pos, 10) then
+    if car.position:closerToThan(player.position, 10) then
       local drivingAlong = math.dot(car.look, player.look) > 0.2
       if not drivingAlong then
         state.drivingAlong = false
 
-        if not state.nearMiss and car.pos:closerToThan(player.pos, 3) then
+        if not state.nearMiss and car.position:closerToThan(player.position, 3) then
           state.nearMiss = true
 
-          if car.pos:closerToThan(player.pos, 2.5) then
+          if car.position:closerToThan(player.position, 2.5) then
             comboMeter = comboMeter + 3
             addMessage('Very close near miss!', 1)
           else
@@ -110,7 +133,7 @@ function script.update(dt)
       end
 
       if not state.overtaken and not state.collided and state.drivingAlong then
-        local posDir = (car.pos - player.pos):normalize()
+        local posDir = (car.position - player.position):normalize()
         local posDot = math.dot(posDir, car.look)
         state.maxPosDot = math.max(state.maxPosDot, posDot)
         if posDot < -0.5 and state.maxPosDot > 0.5 then
@@ -128,32 +151,6 @@ function script.update(dt)
       state.collided = false
       state.drivingAlong = true
       state.nearMiss = false
-    end
-  end
-end
-
--- For various reasons, this is the most questionable part, some UI. I don’t really like
--- this way though. So, yeah, still thinking about the best way to do it.
-local messages = {}
-local glitter = {}
-local glitterCount = 0
-
-function addMessage(text, mood)
-  for i = math.min(#messages + 1, 4), 2, -1 do
-    messages[i] = messages[i - 1]
-    messages[i].targetPos = i
-  end
-  messages[1] = { text = text, age = 0, targetPos = 1, currentPos = 1, mood = mood }
-  if mood == 1 then
-    for i = 1, 60 do
-      local dir = vec2(math.random() - 0.5, math.random() - 0.5)
-      glitterCount = glitterCount + 1
-      glitter[glitterCount] = { 
-        color = rgbm.new(hsv(math.random() * 360, 1, 1):rgb(), 1), 
-        pos = vec2(80, 140) + dir * vec2(40, 20),
-        velocity = dir:normalize():scale(0.2 + math.random()),
-        life = 0.5 + 0.5 * math.random()
-      }
     end
   end
 end
@@ -195,7 +192,7 @@ end
 
 local speedWarning = 0
 function script.drawUI()
-  local uiState = ac.getUiState()
+  local uiState = ac.getUI()
   updateMessages(uiState.dt)
 
   local speedRelative = math.saturate(math.floor(ac.getCarState(1).speedKmh) / requiredSpeed)
@@ -217,7 +214,7 @@ function script.drawUI()
     end
   end
 
-  ui.beginTransparentWindow('overtakeScore', vec2(uiState.windowSize.x * 0.5 - 600, 100), vec2(400, 400))
+  ui.beginTransparentWindow('overtakeScore', vec2(uiState.windowSize.x * 0.5 - 600, 100), vec2(400, 400), false)
   ui.beginOutline()
 
   ui.pushStyleVar(ui.StyleVar.Alpha, 1 - speedWarning)
@@ -229,7 +226,9 @@ function script.drawUI()
   ui.pushFont(ui.Font.Huge)
   ui.text(totalScore .. ' pts')
   ui.sameLine(0, 40)
-  ui.beginRotation()
+  if comboMeter > 20 then
+    ui.beginRotation()
+  end
   ui.textColored(math.ceil(comboMeter * 10) / 10 .. 'x', colorCombo)
   if comboMeter > 20 then
     ui.endRotation(math.sin(comboMeter / 180 * 3141.5) * 3 * math.lerpInvSat(comboMeter, 20, 30) + 90)

@@ -18,7 +18,7 @@ local lookDirection = smoothing(0, 3)
 -- Will be called each frame:
 -- Note: `dt` is time passed since last frame, `cameraIndex` is 1 or 2, depending on which camera is
 -- chosen.
-function update(dt, cameraIndex)
+function script.update(dt, cameraIndex)
 
   smoothing.setDT(dt)
 
@@ -64,7 +64,7 @@ function update(dt, cameraIndex)
   local velocityX = math.clamp(math.dot(carRight, carVelocityDir) * math.pow(#carVelocity.val, 0.5) / 10, -1, 1)
 
   -- Camera angle for given coefficient:
-  local cameraAngle = -velocityX * math.radians(maximumCameraAngle[cameraIndex]) * 2
+  local cameraAngle = -velocityX * math.rad(maximumCameraAngle[cameraIndex]) * 2
 
   -- Extra thing for joystick support:
   local joystickLook = ac.getJoystickLook()

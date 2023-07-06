@@ -72,9 +72,15 @@ function script.update(dt)
   metersDriven = metersDriven + state.speedKmh * dt / 3.6
 
   if state.engineLifeLeft < 1 then
-    ac.endSession('You broke the car', false)
+    ac.endSession('You broke the car', false, {
+      summary = 'Car ended up broken',
+      message = string.format('• Your score: %s\nYou broke the car', calculateScore())
+    })
   elseif state.fuel < 0.01 and state.speedKmh < 10 then
-    ac.endSession('Economy score: '..calculateScore())
+    ac.endSession('Economy score: '..calculateScore(), true, {
+      summary = calculateScore(),
+      message = string.format('• Your score: %s', calculateScore())
+    })
   end
 end
 

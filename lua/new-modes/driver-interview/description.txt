@@ -1,0 +1,3 @@
+Recreation of a starting mission from a classic Driver (1999) videogame. I recommend to use [url="https://www.racedepartment.com/downloads/driver-the-interview.38965/"]this track from RaceDepartment[/url] by starblind94 or [url="https://assettocorsamods.net/resources/the-parking-interview.58/"]this one from AssettoCorsaMods.net[/url] by luchian. As for the car, [url="https://www.assettoworld.com/car/buick-gsx"]this one[/url] should work the best.
+
+You can also try the original game from your browser [url="https://www.retrogames.cc/psx-games/driver-you-are-the-wheelman.html"]here[/url].

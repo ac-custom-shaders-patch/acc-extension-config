@@ -9,6 +9,103 @@
 -- All the tasks seem to work here, definitely passable with that Buick, not sure about other cars. But I’m not 
 -- sure if it can all be done in a minute though.
 
+local aiCarPositions = {
+  {vec3(28, -10, 4), vec3(1, 0, 0.01), {'material:Carpaint', 'color::#313839'}},
+  {vec3(30, -10, 25), vec3(-1, 0, 0.01), {'material:EXT_OCC_Skin_00', 'color::#242029'}},
+  {vec3(12, -10, 24), vec3(1, 0, 0.02), {'{material:EXT_Carpaint, material:EXT_caliper}', 'color::#182829'}},
+  {vec3(-31, -10, 28), vec3(-1, 0, -0.04), {'{material:EXT_body, material:EXT_HOOD}', 'color::#291831'}},
+  {vec3(-30, -10, 2), vec3(-1, 0, 0.05), {'material:EXT_CARPAINT', 'color::#423929'}},
+  {vec3(-12.5, -10, -24), vec3(-1, 0, -0.03), {'material:Carpaint', 'color::#121614'}},
+}
+
+if ac.getTrackID() ~= 'driver' then
+  local transform = mat4x4.translation(vec3(0, 8, 3.5))
+    :mulSelf(mat4x4.rotation(-math.pi / 2, vec3(0, 1, 0)))
+    :mulSelf(mat4x4.scaling(vec3.new(1.24)))
+
+  for i = 1, #aiCarPositions do
+    aiCarPositions[i][1] = transform:transformPoint(aiCarPositions[i][1])
+    aiCarPositions[i][2] = transform:transformVector(aiCarPositions[i][2])
+  end
+end
+
+local aiCars = ac.getSim().carsCount - 1
+if aiCars > 0 then
+  for i = 1, aiCars do
+    physics.setAICarPosition(i, aiCarPositions[i][1], aiCarPositions[i][2])
+    physics.setAINoInput(i, true, true)
+    ac.setDriverVisible(i, false)
+    ac.setTargetCar(i)
+    ac.setHeadlights(false)
+    ac.setBrakingLightsThreshold(10)
+    ac.hideCarLabels(i)
+    if aiCarPositions[i][3] then
+      ac.findNodes('carRoot:'..tostring(i)):findMeshes(aiCarPositions[i][3][1])
+        :setMaterialTexture('txDetail', aiCarPositions[i][3][2])
+    end
+  end
+  ac.setTargetCar(0)
+end
+  
+setTimeout(function ()
+  ac.setHeadlights(true)
+  ac.setAppsHidden(true)
+end, 0.1)
+
+if ac.load('.driver.initialized') == nil then
+  ac.store('.driver.initialized', 1)
+
+  local carNode = ac.findNodes('carRoot:0')  
+  carNode:findMeshes('material:EXT_CARPAINT'):setMaterialTexture('txDetail', 'color::#151528')
+  carNode:findMeshes('material:EXT_LIVERY'):setVisible(false)
+  carNode:findAny('{ ( material:RT_DriverSuit, material:RT_Gloves, material:RT_1975_Glass, material:RT_1975_Stoffa ) & driverPiece:yes }')
+    :setMaterialProperty('ksAmbient', 0.02)
+    :setMaterialProperty('ksDiffuse', 0.02)
+    :setMaterialProperty('ksSpecular', 0.02)
+  carNode:findMeshes('{ ( material:RT_1975_Plastica, material:RT_1975_Calotta ) & driverPiece:yes }')
+    :setMaterialTexture('txDiffuse', 'color::#111')
+  carNode:findMeshes('{ DRIVER:HELMET_1975_SUB? }'):setVisible(false)
+  carNode:findMeshes('{ material:RT_DRIVER_Face }'):setMaterialProperty('ksDiffuse', 0.1)
+  ac.findNodes('?Meccanico_PALETTA?'):setVisible(false)
+  ac.setTrackCoordinatesDeg(vec2(1.61, 54.98))
+  ac.setTrackTimezoneOffset(1 * 60 * 60)
+  ac.setWeatherTimeMultiplier(0)
+  
+  local function getEyesPos(carIndex)
+    local neck = ac.findNodes('carRoot:0'):findNodes('DRIVER:RIG_Nek')
+    local eyesPos = neck:getWorldTransformationRaw():transformPoint(vec3(0, 0.13, 0.14))
+    return ac.getCar(carIndex).worldToLocal:transformPoint(eyesPos)
+  end
+  
+  setTimeout(function ()
+    local cameraParams = ac.getOnboardCameraParams(0)
+    cameraParams.position = getEyesPos()
+    ac.setOnboardCameraParams(0, cameraParams, false)
+  end, 1)
+
+  local camera = ac.grabCamera('Mode')
+  if camera then
+    local cameraAnimation, cameraInterval = 0, 0
+    cameraInterval = setInterval(function ()
+      local car = ac.getCar(0) or error()
+      cameraAnimation = cameraAnimation + ac.getGameDeltaT()
+      camera.transform.position = car.position + car.look * math.sin(cameraAnimation) * 4 + car.side * math.cos(cameraAnimation) * 4 + car.up * 2
+      camera.transform.look = car.position + car.up * 0.5 - camera.transform.position
+      camera.transform.up = vec3(0, 1, 0)
+      camera.ownShare = math.lerpInvSat(cameraAnimation, 4, 2) ^ 0.5
+      camera.cameraRestoreThreshold = 0.25
+      if cameraAnimation > 4 then
+        clearInterval(cameraInterval)
+        camera:dispose()
+      end
+    end, 0)
+  end
+end
+
+local settings = ac.INIConfig.scriptSettings():mapSection('SETTINGS', {
+  TRAINING_MODE = false
+})
+
 -- Helper functions:
 local function createSlalomPaths(columnRows, targetRadius)
   local function createPath(row, flipSide, flipDirection)
@@ -311,6 +408,25 @@ local function showMessage(message)
   messageCooldown = 2
 end
 
+local function smokeEffect()
+  local emitter = ac.Particles.Smoke({
+    color = rgbm(0.05, 0.05, 0.05, 0.5),
+    colorConsistency = 1,
+    thickness = 0,
+    life = 4,
+    size = 0.1,
+    spreadK = 2,
+    growK = 0,
+    targetYVelocity = 0.5,
+    flags = ac.Particles.SmokeFlags.DisableCollisions
+  })
+  setInterval(function ()
+    -- script.update will stop firing once event is finished, but intervals will keep going
+    local car = ac.getCar(0) or error()
+    emitter:emit(car.position + car.look * 2.3 + car.up * 0.6 + car.side * ((math.random() - 0.5) * 1.6), vec3(), 0.5)
+  end, 0)
+end
+
 function script.update(dt)
   ac.debug('available', available)
   if not available then return end
@@ -328,7 +444,7 @@ function script.update(dt)
     end
   end
 
-  timePassed = timePassed + dt
+  timePassed = timePassed + (settings.TRAINING_MODE and dt * 0.1 or dt)
 
   local notFinished = 0
   for i = 1, #tasks do
@@ -353,15 +469,34 @@ function script.update(dt)
 
   if carHits == 4 then
     -- Might seem a bit rude, but I’m just copying messages from original game
-    ac.endSession('The car’s wrecked. Get out of my sight.', false)
+    local actualTime = timePassed * (settings.TRAINING_MODE and 10 or 1)
+    smokeEffect()
+    ac.endSession('The car’s wrecked. Get out of my sight.', false, {
+      summary = 'Wrecked car',
+      message = string.format('• [b]The car’s wrecked.[/b]\n• [b]Time: %.1f s[/b]\n• [b]Left to complete: %.0f[/b]\n\nYou need to be more careful.', actualTime, notFinished)
+    })
   end
 
   if timePassed > 60 then
-    ac.endSession('You ran out of time!', false)
+    ac.endSession('You ran out of time!', false, {
+      summary = 'Time is over',
+      message = string.format('• [b]Time is out.[/b]\n• [b]Left to complete: %.0f[/b]\n\nYou need to be faster.', notFinished)
+    })
   end
 
   if notFinished == 0 then
-    ac.endSession('That’s it, you get the job. Your time: '..(math.floor(timePassed * 10) / 10)..'s')
+    local actualTime = timePassed * (settings.TRAINING_MODE and 10 or 1)
+    if settings.TRAINING_MODE and actualTime > 60 then
+      ac.endSession(string.format('Great, now do it for real. Your time: %.1f s', actualTime), true, {
+        summary = 'Successful training run',
+        message = string.format('• [b]You’re done it![/b]\n• [b]Time: %.1f s[/b]\n\nNow it’s time to do it without the training mode.', actualTime)
+      })
+    else
+      ac.endSession(string.format('That’s it, you get the job. Your time: %.1f s', actualTime), true, {
+        summary = 'Successful run!',
+        message = string.format('• [b]You’re done it![/b]\n• [b]Time: %.1f s[/b]\n\nThat’s awesome, can’t believe somebody did it.', timePassed)
+      })
+    end
   end
 end
 
@@ -370,44 +505,45 @@ function script.drawUI()
   if not available then return end
 
   local uiState = ac.getUI()
+  local scale = (ui.availableSpaceY() / 800 + ui.availableSpaceX() / 1440) / 2
   flashingRed = flashingRed + uiState.dt
 
-  local needlePos = vec2(97, 172)
+  local needlePos = vec2(97, 172):scale(scale)
   local needleAngle = math.pi * 2 * timePassed / 60
   local flashing = timePassed > 45 and 0.6 + 0.4 * math.sin(flashingRed * 9) or 1
-  ui.beginTransparentWindow('driverStopwatch', vec2(80, 80), vec2(250, 300))
-  ui.drawImage('stopwatch.png', vec2(), vec2(191, 259), rgbm(1, flashing, flashing, 1))
-  ui.drawLine(needlePos, needlePos + 60 * vec2(math.sin(needleAngle), -math.cos(needleAngle)), rgbm(0, 0, 0, 1), 1)
+  ui.beginTransparentWindow('driverStopwatch', vec2(80, 80):scale(scale), vec2(250, 300):scale(scale))
+  ui.drawImage('stopwatch.png', vec2(), vec2(191, 259):scale(scale), rgbm(1, flashing, flashing, 1))
+  ui.drawLine(needlePos, needlePos + 60 * scale * vec2(math.sin(needleAngle), -math.cos(needleAngle)), rgbm(0, 0, 0, 1), 1)
   ui.endTransparentWindow()
 
   local penColor = rgbm(0.5, 0, 0, 1)
   local penThickness = 2
-  ui.beginTransparentWindow('driverList', vec2(uiState.windowSize.x - 300 - 80, 80), vec2(300, 300))
-  ui.drawImage('tasks.png', vec2(), vec2(284, 267))
+  ui.beginTransparentWindow('driverList', vec2(uiState.windowSize.x - 380 * scale, 80 * scale), vec2(300, 300):scale(scale))
+  ui.drawImage('tasks.png', vec2(), vec2(284, 267):scale(scale))
   for i = 1, #tasks do
     local task = tasks[i]
     if task.complete ~= nil then
       local animation = math.saturate(task.complete * 2)
-      ui.drawLine(vec2(task.cross.x, 30 + i * 23.3), 
-        vec2(math.lerp(task.cross.x, task.cross.y, animation), 30 + i * 23.3 + (task.cross.y - task.cross.x) * animation * 0.02), 
+      ui.drawLine(vec2(task.cross.x, 30 + i * 23.3):scale(scale), 
+        vec2(math.lerp(task.cross.x, task.cross.y, animation), 30 + i * 23.3 + (task.cross.y - task.cross.x) * animation * 0.02):scale(scale), 
         penColor, penThickness)
     end
   end
   for i = 1, carHits do
-    local pivot = vec2(50 * i, 15)
-    ui.drawLine(pivot, pivot + vec2(18, 22), penColor, penThickness)
-    ui.drawLine(pivot + vec2(0, 21), pivot + vec2(20, 2), penColor, penThickness)
+    local pivot = vec2(50 * i, 15):scale(scale)
+    ui.drawLine(pivot, pivot + vec2(18, 22):scale(scale), penColor, penThickness)
+    ui.drawLine(pivot + vec2(0, 21):scale(scale), pivot + vec2(20, 2):scale(scale), penColor, penThickness)
   end
   ui.endTransparentWindow()
 
   if messageAlpha > 0 then
     ui.pushStyleVar(ui.StyleVar.Alpha, messageAlpha)
-    ui.beginTransparentWindow('driverMessage', vec2(uiState.windowSize.x * 0.5 - 400, uiState.windowSize.y * 0.65), vec2(800, 400))
+    ui.beginTransparentWindow('driverMessage', vec2(uiState.windowSize.x * 0.5 - 400 * scale, uiState.windowSize.y * 0.6 - 200 * scale), vec2(800, 400):scale(scale))
     ui.beginOutline()    
-    ui.pushFont(ui.Font.Huge)
-    ui.textAligned(messageToShow, vec2(0.5), vec2(800, 0))
-    ui.popFont()
-    ui.endOutline(rgbm(0, 0, 0, 1))
+    ui.pushDWriteFont('font.ttf')
+    ui.dwriteTextAligned(messageToShow, 30 * scale, ui.Alignment.Center, ui.Alignment.Center, vec2(800, 400):scale(scale))
+    ui.popDWriteFont()
+    ui.endOutline(rgbm(0, 0, 0, 1), 10)
     ui.endTransparentWindow()
     ui.popStyleVar()
   end
