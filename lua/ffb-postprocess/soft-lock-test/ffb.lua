@@ -28,9 +28,7 @@ local forceFactor = settings:get('CUSTOM_SOFT_LOCK', 'FORCE_FACTOR', 1)
 local speedFactor = settings:get('CUSTOM_SOFT_LOCK', 'SPEED_FACTOR', 1)
 local lockDamper = settings:get('CUSTOM_SOFT_LOCK', 'DAMPER', 0)
 
-function script.update(ffbValue, ffbDamper, steerInput, steerInputSpeed)
-  -- ffbValue = 0
-  -- ffbDamper = 0
+function script.update(ffbValue, ffbDamper, steerInput, steerInputSpeed, dt)
   local lock = math.lerpInvSat(math.abs(steerInput) - 1, -pad, pad)
   if lock ~= 0 then
     if math.sign(ffbValue) ~= math.sign(steerInput) then
