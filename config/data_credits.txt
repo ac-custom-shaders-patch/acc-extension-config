@@ -14,19 +14,24 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - Dmitrii A: proper Gamepad FX implementation;
 - leBluem: improvements for python apps, documentation;
 - Levels: new chaser camera script;
+- Nikita Kulikovskiy: presets for VR;
 - Peter Boese: incredible Weather FX implementation, Sol;
 - Scott Shaw: amazing tyre damages textures;
 - Silent: per-set textures for Tyres FX;
-- Tsuka1427: invaluable help with core functionality of Custom Shaders Patch.
+- Tsuka1427: invaluable help with core functionality of Custom Shaders Patch;
+- Yokai: fix for the default chaser camera script.
 
 [b]Thanks for a lot of testing to:[/b]
 - AlleyViper, atrip3, clutch, __EASY__, Rusty.
 
 [b]Using:[/b]
-- Clouds noise texture based [on demo](https://www.shadertoy.com/view/3dVXDc) by piyushslayer;
-- GPU-accelerated particles based [on this article](https://wickedengine.net/2017/11/07/gpu-based-particle-simulation/) by turanszkij;
+- Lens flare based on [example](https://www.shadertoy.com/view/4sX3Rs) by mu6k;
+- Single pass DOF based on [this article](https://blog.voxagon.se/2018/05/04/bokeh-depth-of-field-in-single-pass.html) by Dennis Gustafsson;
+- Clouds noise texture based on [demo](https://www.shadertoy.com/view/3dVXDc) by piyushslayer;
+- GPU-accelerated particles based on [this article](https://wickedengine.net/2017/11/07/gpu-based-particle-simulation/) by turanszkij;
 - Grass idea [from GRID](http://blog.codemasters.com/wp-content/uploads/2014/10/Rendering-Fields-of-Grass-using-DirectX11-in-GRID-Autosport.pdf) by Richard Kettlewell (Codemasters);
 - Lighting algorithm based on [a great idea](https://worldoffries.wordpress.com/2015/02/19/simple-alternative-to-clustered-shading-for-thousands-of-lights/) by Luke Mamacos;
+- Minimal AgX implementation from [this helpful post](https://iolite-engine.com/blog_posts/minimal_agx_implementation) by Benjamin Wrensch;
 - Old sky shader forked from [this shader](https://www.shadertoy.com/view/Ml2cWG) made by robobo1221;
 - VRWorks by NVIDIA;
 - 8K star map from NASA.
@@ -38,27 +43,29 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - ACZeldaFan17, AssettoDrive.net, Gunnar333, ItsDraik, JavireTwo, MadMat, T-Top, demonized, exydeus, hamzah, kelnor34, maymate, nptc.
 
 [b]Special effects used:[/b]
-- ASSAO by Intel;
-- CMAA2 by Intel;
-- FidelityFX by AMD;
-- FXAA by NVIDIA;
-- HBAO+ by NVIDIA;
+- ASSAO and CMAA2 by Intel;
+- FidelityFX and FSR by AMD;
+- FXAA and HBAO+ by NVIDIA;
 - SMAA.
 
 [b]Plus, other open-source software:[/b]
 - [AnimatedGIF](https://github.com/bitbank2/AnimatedGIF);
 - [BakingLab](https://github.com/TheRealMJP/BakingLab);
+- [Chromium Embedded Framework (CEF) form by OBS](https://github.com/obsproject/cef);
 - [cpp-lru-cache](https://github.com/lamerman/cpp-lru-cache);
+- [Crypto++](https://www.cryptopp.com/);
 - [CTTI](https://github.com/Manu343726/ctti);
 - [Dear ImGui](https://github.com/ocornut/imgui);
 - [Delegate](https://github.com/bdiamand/Delegate);
 - [DualSense-Windows](https://github.com/Ohjurot/DualSense-Windows);
 - [Embree](https://github.com/embree/embree);
+- [fmtlib/fmt](https://github.com/fmtlib/fmt);
 - [gta5_fsr](https://github.com/NarutoUA/gta5_fsr);
 - [HIDAPI](https://github.com/libusb/hidapi);
 - [JoyShockLibrary](https://github.com/JibbSmart/JoyShockLibrary);
 - [json.lua](https://github.com/rxi/json.lua);
 - [libdeflate](https://github.com/ebiggers/libdeflate);
+- [libwebp](https://chromium.googlesource.com/webm/libwebp);
 - [kd-tree](https://github.com/gishi523/kd-tree);
 - [MaskedOcclusionCulling](https://github.com/GameTechDev/MaskedOcclusionCulling);
 - [meshoptimizer](https://github.com/zeux/meshoptimizer);
@@ -73,13 +80,16 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - [OpenResty’s fork of LuaJIT](https://github.com/openresty/luajit2);
 - [RandomLib](http://randomlib.sourceforge.net/);
 - [robin_hood unordered map & set](https://github.com/martinus/robin-hood-hashing);
+- [SQLite](https://www.sqlite.org/);
 - [tinyexpr](https://github.com/codeplea/tinyexpr);
 - [utf-cpp](https://github.com/ww898/utf-cpp);
 - [ValveFileVDF](https://github.com/TinyTinni/ValveFileVDF);
+- [X1nput](https://github.com/araghon007/X1nput);
 - [xatlas](https://github.com/jpcy/xatlas);
 - [xxHash](https://github.com/Cyan4973/xxHash).
 
-[b]And icons:[/b]
+[b]And resources:[/b]
+- Emoji made by [Twitter](https://github.com/twitter/twemoji);
 - Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/);
 - Icons made by [fjstudio](https://www.flaticon.com/authors/fjstudio) from [www.flaticon.com](https://www.flaticon.com/);
 - Icons made by [Those Icons](https://www.flaticon.com/authors/those-icons) from [www.flaticon.com](https://www.flaticon.com/);
