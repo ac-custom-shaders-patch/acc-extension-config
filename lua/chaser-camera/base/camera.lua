@@ -24,9 +24,9 @@ function script.update(dt, cameraIndex)
 
   -- Get AC camera parameters with some corrections to be somewhat compatible:
   local cameraParameters = ac.getCameraParameters(cameraIndex)
-  local distance = cameraParameters.distance + 0.8
-  local height = cameraParameters.height 
-  local pitchAngle = -cameraParameters.pitch
+  local distance = cameraParameters.distance + 1.6
+  local height = cameraParameters.height - 0.3
+  local pitchAngle = cameraParameters.pitch - 5
 
   -- Get car position and vectors:
   local carPos = ac.getCarPosition()
@@ -62,7 +62,7 @@ function script.update(dt, cameraIndex)
   local velocityX = math.clamp(math.dot(carRight, carVelocityDir) * math.pow(#carVelocity.val, 0.5) / 10, -1, 1)
 
   -- Camera angle for given coefficient:
-  local cameraAngle = -velocityX * math.rad(maximumCameraAngle[cameraIndex])
+  local cameraAngle = -velocityX * math.radians(maximumCameraAngle[cameraIndex])
 
   -- Extra thing for joystick support:
   local joystickLook = ac.getJoystickLook()
