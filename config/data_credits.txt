@@ -51,6 +51,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 [b]Plus, other open-source software:[/b]
 - [AnimatedGIF](https://github.com/bitbank2/AnimatedGIF);
 - [BakingLab](https://github.com/TheRealMJP/BakingLab);
+- [bc7enc](https://github.com/richgel999/bc7enc_rdo);
 - [Chromium Embedded Framework (CEF) form by OBS](https://github.com/obsproject/cef);
 - [cpp-lru-cache](https://github.com/lamerman/cpp-lru-cache);
 - [Crypto++](https://www.cryptopp.com/);
@@ -66,6 +67,8 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - [json.lua](https://github.com/rxi/json.lua);
 - [libdeflate](https://github.com/ebiggers/libdeflate);
 - [libwebp](https://chromium.googlesource.com/webm/libwebp);
+- [LuaSec](https://github.com/lunarmodules/luasec);
+- [LuaSocket](https://lunarmodules.github.io/luasocket/index.html);
 - [kd-tree](https://github.com/gishi523/kd-tree);
 - [MaskedOcclusionCulling](https://github.com/GameTechDev/MaskedOcclusionCulling);
 - [meshoptimizer](https://github.com/zeux/meshoptimizer);
@@ -78,6 +81,7 @@ First of all, of course, we’d first like to thank the Kunos developers for all
 - [obfy](https://github.com/fritzone/obfy);
 - [ODE physics engine](http://ode.org/);
 - [OpenResty’s fork of LuaJIT](https://github.com/openresty/luajit2);
+- [OpenSSL](https://github.com/openssl/openssl);
 - [RandomLib](http://randomlib.sourceforge.net/);
 - [robin_hood unordered map & set](https://github.com/martinus/robin-hood-hashing);
 - [SQLite](https://www.sqlite.org/);
