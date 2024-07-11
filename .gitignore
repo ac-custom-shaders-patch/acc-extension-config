@@ -75,3 +75,8 @@ lua/online
 lua/tfx
 lua/tools
 lua/pp-filters
+internal/configs/rain.zip
+lua/tools-off
+internal/patch.lua
+internal/user.lua
+internal/shader-tpl_
