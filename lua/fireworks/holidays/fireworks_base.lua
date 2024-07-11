@@ -14,7 +14,7 @@ Group = {
 
 function Group:new(p1, p2)
   if #piecesList > 1000 then error('Too much') end
-  o = {}
+  local o = {}
   setmetatable(o, self)
   self.__index = self
   fillProps(o, p1)
@@ -55,7 +55,7 @@ end
 
 function Group:spawn(P)
   currentSource.index = self.sourceIndex
-  if spawnAllAtOnce then
+  if self.spawnAllAtOnce then
     for i = 1, #self.chained do
       self.chained[i](self, P, {})
     end
@@ -123,7 +123,7 @@ Piece = {
 
 function Piece:new(p1, p2)
   if #piecesList > 1000 then error('Too much') end
-  o = {}
+  local o = {}
   setmetatable(o, self)
   self.__index = self
   fillProps(o, p1)
@@ -139,7 +139,7 @@ end
 function Piece:inheritChain(chained)
   if chained ~= nil then
     for i = 2, #chained do
-      o.chained[#o.chained + 1] = chained[i]
+      self.chained[#self.chained + 1] = chained[i]
     end
   end
 end
@@ -200,7 +200,7 @@ end
 
 function Piece:spawn(P)
   currentSource.index = self.sourceIndex
-  if spawnAllAtOnce then
+  if self.spawnAllAtOnce then
     for i = 1, #self.chained do
       self.chained[i](self, P, {})
     end

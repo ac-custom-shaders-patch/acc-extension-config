@@ -4,8 +4,10 @@ Pyro = {
   pos = vec3()
 }
 
+local sim = ac.getSim()
+
 function Pyro:new(p1)
-  o = {}
+  local o = {}
   setmetatable(o, self)
   self.__index = self
   fillProps(o, p1)
@@ -51,9 +53,9 @@ function Pyro:update(dt, allowToSpawn, intensity, holidayType)
     return
   end
 
-  local posC = self.pos - ac.getCameraPosition()
+  local posC = self.pos - sim.cameraPosition
   local distanceToCamera = #posC
-  local pyroInFront = math.dot(posC / distanceToCamera, -ac.getCameraDirection())
+  local pyroInFront = math.dot(posC, sim.cameraLook) / distanceToCamera
   if distanceToCamera < 50 or distanceToCamera > 1000 + 500 * pyroInFront then
     self.spawnDelay = 1
     return

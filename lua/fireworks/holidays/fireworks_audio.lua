@@ -19,7 +19,7 @@ function Audio:set(pos, event, timeout, distanceToCamera, volumeMult, pitchMult)
   end
   
   if self.event == nil then
-    self.event = ac.AudioEvent(event, true)
+    self.event = ac.AudioEvent(event, true, false)
     self.event.cameraInteriorMultiplier = 1
     self.event.cameraExteriorMultiplier = 1
     self.event.cameraTrackMultiplier = 1

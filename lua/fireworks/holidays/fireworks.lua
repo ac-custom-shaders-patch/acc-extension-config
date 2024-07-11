@@ -12,7 +12,29 @@ for i = 1, ac.getFireworksSpotCount() do
 end
 local pyrosSize = #pyros
 
-function update(dt, intensity, holidayType)
+local customPyros = {}
+ac.onSharedEvent('csp.fireworksCustomEmit', function (data, senderName) 
+  if type(data) == 'table' then
+    local u = senderName..'/'..(data.key or '')
+    if vec3.isvec3(data.pos) then
+      if customPyros[u] then
+        customPyros[u].pos = data.pos
+      else
+        pyros[#pyros + 1] = Pyro:new{ pos = data.pos, sourceIndex = #pyros }
+        customPyros[u] = pyros[#pyros]
+        pyrosSize = pyrosSize + 1
+      end
+      customPyros[u].intensityOverride = data.intensity
+      customPyros[u].holidayTypeOverride = data.holidayType
+    elseif customPyros[u] then
+      table.removeItem(pyros, customPyros[u])
+      customPyros[u] = nil
+      pyrosSize = pyrosSize - 1
+    end
+  end
+end, true)
+
+function script.update(dt, intensity, holidayType)
   audioPoolPrepare(dt)
   
   local piecesSize = #piecesList
@@ -22,9 +44,15 @@ function update(dt, intensity, holidayType)
     end
   end
 
-  local allowToSpawn = intensity > 0 and piecesSize < 150
+  local allowToSpawnBase = piecesSize < 150
+  local allowToSpawn = intensity > 0 and allowToSpawnBase
   for i = 1, pyrosSize do
-    pyros[i]:update(dt, allowToSpawn, intensity, holidayType)
+    local p = pyros[i]
+    if p.intensityOverride then
+      p:update(dt, allowToSpawnBase, p.intensityOverride, p.holidayTypeOverride)
+    else
+      p:update(dt, allowToSpawn, intensity, holidayType)
+    end
   end
 
   if holidayType == ac.HolidayType.Halloween then

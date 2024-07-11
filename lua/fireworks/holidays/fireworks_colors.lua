@@ -1,5 +1,5 @@
 function ColorGeneric()
-  function randomColor()
+  local function randomColor()
     local r = math.random()
     if r > 0.9 then return rgb(1, 0, 0) end
     if r > 0.8 then return rgb(1, 0.5, 0) end
@@ -18,7 +18,7 @@ function ColorGeneric()
 end
 
 function ColorChristmas()
-  function randomColor()
+  local function randomColor()
     return math.random() > 0.95
       and (math.random() > 0.5 
         and rgb(0, 1, 0) 
@@ -35,7 +35,7 @@ function ColorChristmas()
 end
 
 function ColorVictoryDay()
-  function randomColor()
+  local function randomColor()
     local r = math.random()
     if r > 0.99 then return rgb(0, 0.5, 1) end
     if r > 0.98 then return rgb(0, 1, 0.5) end
@@ -50,7 +50,7 @@ function ColorVictoryDay()
 end
 
 function ColorIndependenceDay()
-  function randomColor()
+  local function randomColor()
     local r = math.random()
     if r > 0.6 then return rgb(1, 1, 1) end
     if r > 0.4 then return rgb(1, 0, 0) end
@@ -63,7 +63,7 @@ function ColorIndependenceDay()
 end
 
 function ColorCanadaDay()
-  function randomColor()
+  local function randomColor()
     local r = math.random()
     if r > 0.95 then return rgb(1, 0, 1) end
     if r > 0.85 then return rgb(1, 0.5, 0) end
