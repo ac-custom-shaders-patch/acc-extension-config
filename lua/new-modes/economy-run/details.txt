@@ -1,1 +1,0 @@
-This is more of a basic example on how to make new modes rather than anything actually playable: fuel consumption in AC without features of extended physics is way too basic for something like this.
